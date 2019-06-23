@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/*
+Route::get('/verAmbitos', function () {
+    return view('pages/ambitos');
+});
+
+*/
+
+Route::resource('ambitos','AmbitoController');
+
