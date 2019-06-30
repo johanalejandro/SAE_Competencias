@@ -14,8 +14,8 @@ class CreateSectorsTable extends Migration
     public function up()
     {
         Schema::create('sectors', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedInteger('ambito_id');
+            $table->bigIncrements('id_sector');
+            $table->unsignedInteger('id_ambito');
             $table->timestamps();
             $table->string('tipoSector');
 

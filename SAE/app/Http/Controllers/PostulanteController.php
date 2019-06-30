@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Postulante;
 use Illuminate\Http\Request;
-use App\Ambito;
 
-
-class AmbitoController extends Controller
+class PostulanteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,6 @@ class AmbitoController extends Controller
     public function index()
     {
         //
-        $listadoAmbitos = Ambito::all();
-        return view('pages.ambitos') ->with('ambitos',$listadoAmbitos);
     }
 
     /**
@@ -44,10 +41,10 @@ class AmbitoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Postulante  $postulante
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Postulante $postulante)
     {
         //
     }
@@ -55,10 +52,10 @@ class AmbitoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Postulante  $postulante
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Postulante $postulante)
     {
         //
     }
@@ -67,10 +64,10 @@ class AmbitoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Postulante  $postulante
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Postulante $postulante)
     {
         //
     }
@@ -78,10 +75,10 @@ class AmbitoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Postulante  $postulante
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Postulante $postulante)
     {
         //
     }

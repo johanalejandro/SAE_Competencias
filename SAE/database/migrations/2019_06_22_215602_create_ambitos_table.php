@@ -14,7 +14,7 @@ class CreateAmbitosTable extends Migration
     public function up()
     {
         Schema::create('ambitos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id_ambito');
             $table->timestamps();
             $table->string('nombreAmbito');
         });
