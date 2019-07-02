@@ -13,7 +13,6 @@ export default class SeleccionarAmbito extends Component {
                 <div className="d-flex flex-column align-items-center w-100 mx-4">
                         <h2>Ámbito a postular</h2>
                         <h3>Seleccione el/los  ámbito(s) que desea postular</h3>
-                        
                         <div className="card w-100">
 
                             <div className="flex-row justify-content-between">
