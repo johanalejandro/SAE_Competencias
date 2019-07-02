@@ -12,4 +12,7 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Example');
+require('./components/Postulante/Postulacion');
+require('./components/Postulante/ExpertoPrerrequisito');
+require('./components/Postulante/SeleccionarSector');
+require('./components/Postulante/SeleccionarAmbito');

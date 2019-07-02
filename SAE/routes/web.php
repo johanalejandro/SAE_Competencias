@@ -11,16 +11,17 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/postulacion', function () {
     return view('welcome');
 });
 
-/*
-Route::get('/verAmbitos', function () {
-    return view('pages/ambitos');
+Route::get('/sectores', function () {
+    return view('pages/seleccionarSector');
 });
 
-*/
+Route::get('/ambito', function () {
+    return view('pages/seleccionarAmbito');
+});
 
 Route::resource('ambitos','AmbitoController');
 
