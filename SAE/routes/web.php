@@ -23,5 +23,10 @@ Route::get('/ambito', function () {
     return view('pages/seleccionarAmbito');
 });
 
+Route::get('/ambitosSAE', function () {
+    $ambitos = DB::table('ambitos')->get();
+    return $ambitos;
+});
+
 Route::resource('ambitos','AmbitoController');
 

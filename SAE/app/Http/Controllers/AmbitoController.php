@@ -17,7 +17,8 @@ class AmbitoController extends Controller
     {
         //
         $listadoAmbitos = Ambito::all();
-        return view('pages.ambitos') ->with('ambitos',$listadoAmbitos);
+        //return view('pages.seleccionarAmbito') ->with('ambitos',$listadoAmbitos);
+        return response()->json($listadoAmbitos);
     }
 
     /**
