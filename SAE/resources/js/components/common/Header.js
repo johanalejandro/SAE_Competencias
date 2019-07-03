@@ -8,9 +8,9 @@ export default class Header extends Component {
         return (
                 <div className="d-flex flex-row justify-content-center items-align-center">
                     <div className="w-40">
-                        <Img imageType="header"/>
+                        <Img className="w-auto px-2" imageType="header"/>
                     </div>
-                    <div className="jumbotron w-60">
+                    <div className="jumbotron w-60 mh-header">
                         <h1>{this.props.title}</h1>  
                         {this.props.subtitle?(
                             <p>{this.props.subtitle}</p>

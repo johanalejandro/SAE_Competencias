@@ -8,7 +8,7 @@ export default class Postulacion extends Component {
     render() {
         return (
             <React.Fragment>
-            <Header title="Aplicación para certificarse como evaluador y/o experto técnico"/>
+            <Header title="Certificarse como evaluador y/o experto técnico"/>
             <div className="containersae d-flex flex-row justify-content-around align-items-center">
                 <div className="d-flex flex-row justify-content-center align-items-center">
                     <div className="col-md-12">
@@ -20,7 +20,8 @@ export default class Postulacion extends Component {
                                 <div className="card-body">
                                     <Img imageType="evaluador"/>
                                 </div>
-                                <button onClick={this.goToEvaluador} className="btn-primary-sae w-75 mb-3">Evaluador</button>
+                                <a href="/ambito"><button className="btn-primary-sae w-75 mb-3">Evaluador</button></a>
+                                
                             </div>
                         </div>
                     </div>
@@ -35,7 +36,7 @@ export default class Postulacion extends Component {
                                 <div className="card-body">
                                     <Img imageType="experto"/>
                                 </div>
-                                <button href="/sector/" className="btn-primary-sae w-75 mb-3">Experto</button>
+                                <button className="btn-primary-sae w-75 mb-3">Experto</button>
                             </div> 
                         </div>
                     </div>
