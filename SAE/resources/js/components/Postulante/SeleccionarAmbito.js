@@ -51,7 +51,6 @@ export default class SeleccionarAmbito extends Component {
 
         return (
             <React.Fragment>
-            <Header title="Opciones de Postulación"/>
             <div className="containersae d-flex flex-row justify-content-center align-items-center">
                 <div className="d-flex flex-column align-items-center w-100 mx-4">
                         <h2>Ámbito a postular</h2>

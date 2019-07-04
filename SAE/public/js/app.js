@@ -62348,9 +62348,7 @@ __webpack_require__(/*! ./components/Postulante/Postulacion */ "./resources/js/c
 
 __webpack_require__(/*! ./components/Postulante/ExpertoPrerrequisito */ "./resources/js/components/Postulante/ExpertoPrerrequisito.js");
 
-__webpack_require__(/*! ./components/Postulante/SeleccionarSector */ "./resources/js/components/Postulante/SeleccionarSector.js");
-
-__webpack_require__(/*! ./components/Postulante/SeleccionarAmbito */ "./resources/js/components/Postulante/SeleccionarAmbito.js");
+__webpack_require__(/*! ./components/Postulante/FormularioPostulacion */ "./resources/js/components/Postulante/FormularioPostulacion.js");
 
 /***/ }),
 
@@ -62560,6 +62558,126 @@ if (document.getElementById('experto-prerrequisito')) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Postulante/FormularioPostulacion.js":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/Postulante/FormularioPostulacion.js ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Postulacion; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _common_Img__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/Img */ "./resources/js/components/common/Img.js");
+/* harmony import */ var _common_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/Header */ "./resources/js/components/common/Header.js");
+/* harmony import */ var _SeleccionarAmbito__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SeleccionarAmbito */ "./resources/js/components/Postulante/SeleccionarAmbito.js");
+/* harmony import */ var _SeleccionarSector__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SeleccionarSector */ "./resources/js/components/Postulante/SeleccionarSector.js");
+/* harmony import */ var _SeleccionarAlcance__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SeleccionarAlcance */ "./resources/js/components/Postulante/SeleccionarAlcance.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+
+
+
+
+var Postulacion =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Postulacion, _Component);
+
+  function Postulacion() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, Postulacion);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Postulacion)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      tipo: "ambitos"
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleChangeTipo", function (_ref) {
+      var target = _ref.target;
+
+      _this.setState({
+        tipo: target.id
+      });
+    });
+
+    return _this;
+  }
+
+  _createClass(Postulacion, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        title: "Opciones de Postulaci\xF3n"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column align-items-center w-25"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "ambitos",
+        className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4",
+        onClick: this.handleChangeTipo
+      }, "\xC1mbitos"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "sectores",
+        className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4",
+        onClick: this.handleChangeTipo
+      }, "Sectores"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "alcances",
+        className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4",
+        onClick: this.handleChangeTipo
+      }, "Alcances")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "cardSAE containersae w-100 w-75"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "cardSAE-body"
+      }, this.state.tipo === "ambitos" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SeleccionarAmbito__WEBPACK_IMPORTED_MODULE_4__["default"], null) : this.state.tipo === "sectores" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SeleccionarSector__WEBPACK_IMPORTED_MODULE_5__["default"], null) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SeleccionarAlcance__WEBPACK_IMPORTED_MODULE_6__["default"], null)))));
+    }
+  }]);
+
+  return Postulacion;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+
+
+if (document.getElementById('postulation-form')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Postulacion, null), document.getElementById('postulation-form'));
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/Postulante/Postulacion.js":
 /*!***********************************************************!*\
   !*** ./resources/js/components/Postulante/Postulacion.js ***!
@@ -62632,7 +62750,7 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Img__WEBPACK_IMPORTED_MODULE_2__["default"], {
         imageType: "evaluador"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "/ambito"
+        href: "/postulacion-formulario"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn-primary-sae w-75 mb-3"
       }, "Evaluador")))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -62663,6 +62781,84 @@ function (_Component) {
 if (document.getElementById('select-postulation-type')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Postulacion, null), document.getElementById('select-postulation-type'));
 }
+
+/***/ }),
+
+/***/ "./resources/js/components/Postulante/SeleccionarAlcance.js":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/Postulante/SeleccionarAlcance.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SeleccionarSector; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var SeleccionarSector =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(SeleccionarSector, _Component);
+
+  function SeleccionarSector() {
+    _classCallCheck(this, SeleccionarSector);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(SeleccionarSector).apply(this, arguments));
+  }
+
+  _createClass(SeleccionarSector, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "container"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row justify-content-center"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-8"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-header"
+      }, "Seleccionar Sector"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-body"
+      }, "I'm an example component!")))));
+    }
+  }]);
+
+  return SeleccionarSector;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+
+
+if (document.getElementById('seleccionar-sector')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SeleccionarSector, null), document.getElementById('seleccionar-sector'));
+}
+
+;
 
 /***/ }),
 
@@ -62795,9 +62991,7 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        title: "Opciones de Postulaci\xF3n"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "containersae d-flex flex-row justify-content-center align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-column align-items-center w-100 mx-4"

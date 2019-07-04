@@ -14,5 +14,4 @@ require('./bootstrap');
 
 require('./components/Postulante/Postulacion');
 require('./components/Postulante/ExpertoPrerrequisito');
-require('./components/Postulante/SeleccionarSector');
-require('./components/Postulante/SeleccionarAmbito');
+require('./components/Postulante/FormularioPostulacion');

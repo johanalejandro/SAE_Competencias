@@ -1,9 +1,21 @@
+.h-4{
+  height: 4rem !important;
+}
+
 .w-15{
-  width: 15%;
+  width: 15% !important;
+}
+
+.h-15{
+  height: 15% !important;
 }
 
 .w-20 {
     width: 20% !important;
+}
+
+.h-20 {
+  height: 20% !important;
 }
 
 .w-30 {
@@ -95,4 +107,45 @@ h3{
 .text-normal{
   font-size: 18px;
   color: #636771;
+}
+
+.cardSAE{
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-clip: border-box;
+}
+
+.cardSAE-body{
+  padding: 1.25rem;
+}
+
+.cardSAE > hr {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.card-list{
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+          flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.125);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.125);
+  border-left: 0.5px solid rgba(0, 0, 0, 0.125);
+}
+.card-list-body{
+  margin-bottom: 0.75rem;
+}
+
+.card-list > hr {
+  margin-right: 0;
+  margin-left: 0;
 }

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Ambito</title>
+        <title>Postulación</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -83,7 +83,7 @@
 
             <div class="mx-6 content mt-6">
 
-                    <div id="seleccionar-ambito">
+                    <div id="postulation-form">
 
                     </div>
 

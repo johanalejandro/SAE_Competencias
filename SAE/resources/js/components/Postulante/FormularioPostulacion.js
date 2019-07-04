@@ -2,47 +2,56 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Img from '../common/Img'
 import Header from '../common/Header'
+import SeleccionarAmbito from './SeleccionarAmbito';
+import SeleccionarSector from './SeleccionarSector';
+import SeleccionarAlcance from './SeleccionarAlcance';
 
 export default class Postulacion extends Component {
+
+    state = {
+        tipo: "ambitos",
+    }
+
+    handleChangeTipo = ({target}) => {
+        this.setState({
+            tipo: target.id,
+        })
+    }
 
     render() {
         return (
             <React.Fragment>
-            <Header title="Certificarse como evaluador y/o experto técnico"/>
-            <div className="containersae d-flex flex-row justify-content-around align-items-center">
-                <div className="d-flex flex-row justify-content-center align-items-center">
-                    <div className="col-md-12">
-                        <div className="card w-100">
-                            <div className="card-header">Postular a evaluador</div>
-
-                            <div className="flex-row justify-content-between">
-
-                                <div className="card-body">
-                                    <Img imageType="evaluador"/>
-                                </div>
-                                <a href="/ambito"><button className="btn-primary-sae w-75 mb-3">Evaluador</button></a>
-                                
+            <Header title="Opciones de Postulación"/>
+            <div className="d-flex flex-row" >
+                <div className="d-flex flex-column align-items-center w-25">
+                            <div id="ambitos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                        Ámbitos
                             </div>
-                        </div>
+                            <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                        Sectores
+                            </div>
+                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                        Alcances
+                            </div>
+                </div>
+                    
+                <div className="cardSAE containersae w-100 w-75">
+                        
+                    <div className="cardSAE-body">
+                        {this.state.tipo === "ambitos"?(
+                            <SeleccionarAmbito/>
+                        ):(
+                            this.state.tipo === "sectores"?(
+                                <SeleccionarSector/>
+                            ):(
+                                <SeleccionarAlcance/>
+                            )
+                        )}
+
                     </div>
                 </div>
-
-                <div className="d-flex flex-row justify-content-center align-items-center">
-                    <div className="col-md-12">
-                        <div className="card w-100">
-                            <div className="card-header">Postular a experto</div>
-
-                            <div className="flex-row justify-content-between">
-                                <div className="card-body">
-                                    <Img imageType="experto"/>
-                                </div>
-                                <button className="btn-primary-sae w-75 mb-3">Experto</button>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-
             </div>
+            
             </React.Fragment>
         );
     }
