@@ -80,7 +80,7 @@
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
-                        @if (Route::has('regmt-4ister'))
+                        @if (Route::has('register'))
                             <a href="{{ route('register') }}">Register</a>
                         @endif
                     @endauth
@@ -89,7 +89,9 @@
 
             <div class="mx-6 content mt-6">
 
-                <div id="select-postulation-type"></div>
+                    <div id="postulation-form">
+
+                    </div>
 
             </div>
         </div>

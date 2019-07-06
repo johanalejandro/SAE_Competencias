@@ -13,3 +13,16 @@ trim_trailing_whitespace = false
 
 [*.yml]
 indent_size = 2
+
+// Set the default
+editor.formatOnSave: true,
+// Enable per-language
+[*.js]: {
+    editor.formatOnSave: true
+}
+
+[*.php]:{
+    editor.formatOnSave: true
+}
+
+

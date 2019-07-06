@@ -11,16 +11,22 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/postulacion', function () {
     return view('welcome');
 });
 
-/*
-Route::get('/verAmbitos', function () {
-    return view('pages/ambitos');
+Route::get('/sectores', function () {
+    return view('pages/seleccionarSector');
 });
 
-*/
+Route::get('/postulacion-formulario', function () {
+    return view('pages/formPostulacion');
+});
+
+Route::get('/ambitosSAE', function () {
+    $ambitos = DB::table('ambitos')->get();
+    return $ambitos;
+});
 
 Route::resource('ambitos','AmbitoController');
 
