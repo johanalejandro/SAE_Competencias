@@ -63362,8 +63362,8 @@ module.exports = "/images/sae.png?749860837e93f2c2e4ec61bce173ca8b";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\User\Desktop\Integradora\SAE_Competencias\SAE\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\User\Desktop\Integradora\SAE_Competencias\SAE\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\User\Desktop\Integradora\SAE_ESPOL\SAE\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\User\Desktop\Integradora\SAE_ESPOL\SAE\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
