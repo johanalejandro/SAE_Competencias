@@ -35,7 +35,8 @@ class PostulanteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $postulante = Postulante::create(['nombres' => $request->nombre,'apellidos' => $request->apellido,'ciudad'=>$request->ciudad,'genero'=>$request->genero,'email'=>$request->email,'cedula'=>$request->cedula,'fechaNacimiento'=>$request->fechaNacimiento,'telefono'=>$request->telefono,'provincia'=>$request->provincia,'estado'=>$request->estado,'fechaHabilitacion'=>$request->fechaHabilitacion]);
+        //return redirect('/tasks/'.$task->id);
     }
 
     /**

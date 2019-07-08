@@ -23,6 +23,11 @@ Route::get('/postulacion-formulario', function () {
     return view('pages/formPostulacion');
 });
 
+Route::get('/solicitud-postulacion', function () {
+    return view('pages/solicitud_postulacion_datos_personales');
+});
+
+
 Route::get('/ambitosSAE', function () {
     $ambitos = DB::table('ambitos')->get();
     return $ambitos;
