@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('ambito','AmbitoController');//localhost:[port]/api/ambito
+
+Route::resource('sector','SectorController');

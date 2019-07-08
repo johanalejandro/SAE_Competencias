@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Sector;
+
 class SectorController extends Controller
 {
     /**
@@ -14,6 +16,9 @@ class SectorController extends Controller
     public function index()
     {
         //
+        $listadoSectores = Sector::all();
+        //return view('pages.seleccionarAmbito') ->with('ambitos',$listadoAmbitos);
+        return response()->json($listadoSectores);
     }
 
     /**
