@@ -19,4 +19,8 @@ class Postulante extends Model
         return $this->hasMany('App\educacionFormal');
 
     }
+
+    public function solicitudPostulacions(){
+        return $this->hasMany('App\solicitudPostulacion');
+    }
 }
