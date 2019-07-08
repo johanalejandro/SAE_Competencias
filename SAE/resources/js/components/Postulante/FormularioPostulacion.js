@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Img from '../common/Img'
 import Header from '../common/Header'
 import SeleccionarAmbito from './SeleccionarAmbito';
 import SeleccionarSector from './SeleccionarSector';

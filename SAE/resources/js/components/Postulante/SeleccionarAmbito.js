@@ -81,7 +81,7 @@ export default class SeleccionarAmbito extends Component {
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <button onClick={this.goToSector} className="btn-primary-sae w-20">Siguiente</button>
+                <button className="btn-primary-sae w-20">Siguiente</button>
             </div>
             </React.Fragment>
         );

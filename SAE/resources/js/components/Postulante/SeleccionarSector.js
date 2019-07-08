@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import SectorItem from './SectorItem'
 
 export default class SeleccionarSector extends Component {
 
@@ -10,13 +11,13 @@ export default class SeleccionarSector extends Component {
     }
 
     componentWillMount(){
-        /*axios.get('/api/sector').then(response =>{
+        axios.get('/api/sector').then(response =>{
             this.setState({
                 sectores: response.data,
             })
         }).catch(error => {
             console.log("===ERROR: ",error);
-        });*/
+        });
     }
 
     handleCheckBoxChange = ({target}) => {
@@ -55,8 +56,8 @@ export default class SeleccionarSector extends Component {
 
                                 <div className="card-body">
                                     <ul className="mb-0">
-                                        {/*this.state.sectors.map((sector) => (
-                                            <sectorItem
+                                        {this.state.sectores.map((sector) => (
+                                            <SectorItem
                                                 sector={sector}
                                                 id={sector.id_sector}
                                                 handlesectorChange={this.handlesectorChange}
@@ -64,7 +65,7 @@ export default class SeleccionarSector extends Component {
                                                 key={sector.id_sector}
                                                 checkedItems={this.state.checkedItems}
                                             />
-                                        ))*/}
+                                        ))}
 
                                     </ul>
                                     
@@ -75,7 +76,7 @@ export default class SeleccionarSector extends Component {
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <button onClick={this.goToAlcance} className="btn-primary-sae w-20">Siguiente</button>
+                <button className="btn-primary-sae w-20">Siguiente</button>
             </div>
             </React.Fragment>)
 }
