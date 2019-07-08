@@ -4,11 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         <title>Postulación</title>
 
@@ -71,8 +66,13 @@
             }
         </style>
     </head>
-    <body>
-        <div class="full-height bg-light">
+    <body class="bg-light">
+    <div class="text-white bg-light">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -80,12 +80,14 @@
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
-                        @if (Route::has('register'))
+                        @if (Route::has('regmt-4ister'))
                             <a href="{{ route('register') }}">Register</a>
                         @endif
                     @endauth
                 </div>
             @endif
+        </div>
+            <div class="bg-light">
 
             <div class="mx-6 content mt-6">
 

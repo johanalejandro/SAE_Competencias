@@ -1,14 +1,9 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-light">
-    <head>
+    <head class="bg-light">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
 
         <title>Postulación</title>
 
@@ -71,8 +66,13 @@
             }
         </style>
     </head>
-    <body>
-        <div class="full-height bg-light">
+    <body class="bg-light">
+        <div class="text-white bg-light">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -86,6 +86,8 @@
                     @endauth
                 </div>
             @endif
+        </div>
+        <div class="bg-light">
 
             <div class="mx-6 content mt-6">
 
