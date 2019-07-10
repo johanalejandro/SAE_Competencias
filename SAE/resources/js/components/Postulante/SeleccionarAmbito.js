@@ -4,7 +4,7 @@ import Img from '../common/Img';
 import Header from '../common/Header';
 import axios from 'axios';
 import AmbitoItem from './AmbitoItem'
-import {clone} from 'lodash';
+import {clone, isEmpty, pull} from 'lodash';
 
 export default class SeleccionarAmbito extends Component {
 
@@ -40,7 +40,7 @@ export default class SeleccionarAmbito extends Component {
                 ambitosArray: cloned,
             })
         }else{
-            const cloned = cloneArray.filter((item) => item === ambito);
+            const cloned = pull(cloneArray,ambito);
             this.setState({
                 ambitosArray: cloned,
             })
@@ -61,7 +61,8 @@ export default class SeleccionarAmbito extends Component {
 
                                 <div className="card-body">
                                     <ul className="mb-0">
-                                        {this.state.ambitos.map((ambito) => (
+                                        {!isEmpty(this.state.ambitos)?(
+                                            this.state.ambitos.map((ambito) => (
                                             <AmbitoItem
                                                 ambito={ambito}
                                                 id={ambito.id_ambito}
@@ -70,7 +71,7 @@ export default class SeleccionarAmbito extends Component {
                                                 key={ambito.id_ambito}
                                                 checkedItems={this.state.checkedItems}
                                             />
-                                        ))}
+                                        ))):(null)}
 
                                     </ul>
                                     
@@ -81,7 +82,12 @@ export default class SeleccionarAmbito extends Component {
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <button className="btn-primary-sae w-20">Siguiente</button>
+                <button name="sectores" className="btn-primary-sae w-20" 
+                    onClick={(evt)=>{
+                        this.props.handleChangeTipo(evt);
+                        this.props.updateAmbitos(this.state.ambitosArray);
+                        }}
+                >Siguiente</button>
             </div>
             </React.Fragment>
         );

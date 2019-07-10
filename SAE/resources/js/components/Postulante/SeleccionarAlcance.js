@@ -77,6 +77,7 @@ export default class SeleccionarSector extends Component {
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
                 <button className="btn-primary-sae w-20">Siguiente</button>
+                <a href="/solicitud-postulacion"><button className="btn-primary-sae w-20">Evaluador</button></a>
             </div>
             </React.Fragment>
         );

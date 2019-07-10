@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import SectorItem from './SectorItem'
+import {clone, isEmpty, difference} from 'lodash';
 
 export default class SeleccionarSector extends Component {
 
@@ -10,10 +11,28 @@ export default class SeleccionarSector extends Component {
         checkedItems: new Map(),
     }
 
-    componentWillMount(){
+    componentDidMount(){
         axios.get('/api/sector').then(response =>{
+            const sectorsResponse = clone(response.data);
+            const ambitosSeleccionados = this.props.ambitosArray;
+            console.log("ambitos seleccionados: ",ambitosSeleccionados);
+            console.log("todos los sectores: ",sectorsResponse);
+            let sectors = [];
+            const ids = ambitosSeleccionados.map((ambito) => {
+                return ambito.id_ambito;
+            })
+            for (let index = 0; index < sectorsResponse.length; index++) {
+                const sector = sectorsResponse[index];
+                for (let i = 0; i < ids.length; i++) {
+                    console.log(sector, ids[i]);
+                    if(ids[i]===sector.id_ambito){
+                        sectors.push(sector);
+                    }
+                }
+            }
+            console.log("sectores filtrados: ",sectors);
             this.setState({
-                sectores: response.data,
+                sectores: sectors,
             })
         }).catch(error => {
             console.log("===ERROR: ",error);
@@ -55,17 +74,20 @@ export default class SeleccionarSector extends Component {
                             <div className="flex-row justify-content-between">
 
                                 <div className="card-body">
-                                    <ul className="mb-0">
-                                        {this.state.sectores.map((sector) => (
-                                            <SectorItem
-                                                sector={sector}
-                                                id={sector.id_sector}
-                                                handlesectorChange={this.handlesectorChange}
-                                                handleCheckBoxChange={this.handleCheckBoxChange}
-                                                key={sector.id_sector}
-                                                checkedItems={this.state.checkedItems}
-                                            />
-                                        ))}
+                                    <ul className="mb-0 flex flex-row">
+                                        {!isEmpty(this.state.sectores)?(
+                                            this.state.sectores.map((sector) => (
+                                                <SectorItem
+                                                    sector={sector}
+                                                    id={sector.id_sector}
+                                                    handlesectorChange={this.handlesectorChange}
+                                                    handleCheckBoxChange={this.handleCheckBoxChange}
+                                                    key={sector.id_sector}
+                                                    checkedItems={this.state.checkedItems}
+                                                />
+                                            ))
+                                        ):(null)
+                                        }
 
                                     </ul>
                                     
@@ -76,7 +98,7 @@ export default class SeleccionarSector extends Component {
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <button className="btn-primary-sae w-20">Siguiente</button>
+                <button name="alcances" className="btn-primary-sae w-20" onClick={this.props.handleChangeTipo}>Siguiente</button>
             </div>
             </React.Fragment>)
 }

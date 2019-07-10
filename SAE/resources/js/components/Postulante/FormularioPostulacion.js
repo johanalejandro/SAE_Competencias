@@ -9,11 +9,36 @@ export default class Postulacion extends Component {
 
     state = {
         tipo: "ambitos",
+        ambitosArray: [],
+        sectoresArray: [],
     }
 
     handleChangeTipo = ({target}) => {
+        if(target.name){
+            this.setState({
+                tipo: target.name,
+            })
+        }
+        if(target.id){
+            this.setState({
+                tipo: target.id,
+            })
+        }
+    }
+
+    opcionesPostulacion = (ambitos,sectores,alcances) => {
+
+    }
+
+    updateAmbitos = (ambitos) => {
         this.setState({
-            tipo: target.id,
+            ambitosArray: ambitos,
+        })
+    }
+
+    updateSectores = (sectores) => {
+        this.setState({
+            sectoresArray: sectores,
         })
     }
 
@@ -23,27 +48,60 @@ export default class Postulacion extends Component {
             <Header title="Opciones de Postulación"/>
             <div className="d-flex flex-row" >
                 <div className="d-flex flex-column align-items-center w-25">
-                            <div id="ambitos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                            {this.state.tipo === "ambitos"?(
+                                <React.Fragment>
+                                    <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"}>
                                         Ámbitos
-                            </div>
-                            <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                    </div>
+                                    <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
                                         Sectores
-                            </div>
-                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                    </div>
+                                    <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
                                         Alcances
-                            </div>
+                                    </div>                                    
+                                </React.Fragment>
+
+                        ):(
+                            this.state.tipo === "sectores"?(
+                                <React.Fragment>
+                                    <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"}>
+                                        Ámbitos
+                                    </div>
+                                    <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current">
+                                        Sectores
+                                    </div>
+                                    <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4">
+                                        Alcances
+                                    </div>
+                                </React.Fragment>
+
+                            ):(
+                                <React.Fragment>
+                                    <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"}>
+                                        Ámbitos
+                                    </div>
+                                    <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 ">
+                                        Sectores
+                                    </div>
+                                    <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current">
+                                        Alcances
+                                    </div>
+                                </React.Fragment>
+
+                            )
+                        )}
                 </div>
                     
                 <div className="cardSAE containersae w-100 w-75">
                         
                     <div className="cardSAE-body">
                         {this.state.tipo === "ambitos"?(
-                            <SeleccionarAmbito/>
+                            <SeleccionarAmbito updateAmbitos={this.updateAmbitos} handleChangeTipo={this.handleChangeTipo}/>
                         ):(
                             this.state.tipo === "sectores"?(
-                                <SeleccionarSector/>
+                                <SeleccionarSector ambitosArray={this.state.ambitosArray} handleChangeTipo={this.handleChangeTipo}/>
                             ):(
-                                <SeleccionarAlcance/>
+                                <SeleccionarAlcance handleChangeTipo={this.handleChangeTipo}/>
                             )
                         )}
 
