@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import AlcanceItem from './AlcanceItem'
+import {clone, isEmpty, pull} from 'lodash';
 
 export default class SeleccionarSector extends Component {
 
@@ -10,22 +12,36 @@ export default class SeleccionarSector extends Component {
     }
 
     componentWillMount(){
-        /*
+    
         axios.get('/api/alcance').then(response =>{
+            const alcancesResponse = clone(response.data);
+            const sectoresSeleccionados = this.props.sectoresArray;
+            let alcances = [];
+            const ids = sectoresSeleccionados.map((sector) => {
+                return sector.id_sector;
+            })
+            for (let index = 0; index < alcancesResponse.length; index++) {
+                const alcance = alcancesResponse[index];
+                for (let i = 0; i < ids.length; i++) {
+                    if(ids[i]===alcance.id_sector){
+                        alcances.push(alcance);
+                    }
+                }
+            }
+            console.log("alcances filtrados: ",alcances);
             this.setState({
-                alcances: response.data,
+                alcances: alcances,
             })
         }).catch(error => {
             console.log("===ERROR: ",error);
-        });*/
+        });
     }
 
     handleCheckBoxChange = ({target}) => {
         const alcances = this.state.alcances;
-        const item = target.name;
         const id = target.id;
         const isChecked =target.checked;
-        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(id, isChecked) }));
         const alcance = alcances.find((alcance)=>{
             return alcance.id_alcance === parseInt(id);
         });
@@ -36,7 +52,7 @@ export default class SeleccionarSector extends Component {
                 alcancesArray: cloned,
             })
         }else{
-            const cloned = cloneArray.filter((item) => item === alcance);
+            const cloned = cloneArray.pull(cloneArray,alcance);
             this.setState({
                 alcancesArray: cloned,
             })
@@ -55,17 +71,20 @@ export default class SeleccionarSector extends Component {
                             <div className="flex-row justify-content-between">
 
                                 <div className="card-body">
-                                    <ul className="mb-0">
-                                        {/*this.state.alcances.map((alcance) => (
-                                            <alcanceItem
-                                                alcance={alcance}
-                                                id={alcance.id_alcance}
-                                                handlealcanceChange={this.handlealcanceChange}
-                                                handleCheckBoxChange={this.handleCheckBoxChange}
-                                                key={alcance.id_alcance}
-                                                checkedItems={this.state.checkedItems}
-                                            />
-                                        ))*/}
+                                    <ul className="mb-0 flex flex-row row">
+                                        {!isEmpty(this.state.alcances)?(
+                                            this.state.alcances.map((alcance) => (
+                                                <AlcanceItem
+                                                    alcance={alcance}
+                                                    id={alcance.id_alcance}
+                                                    handlesectorChange={this.handlesectorChange}
+                                                    handleCheckBoxChange={this.handleCheckBoxChange}
+                                                    key={alcance.id_alcance}
+                                                    checkedItems={this.state.checkedItems}
+                                                />
+                                            ))
+                                        ):(null)
+                                        }
 
                                     </ul>
                                     
@@ -76,8 +95,7 @@ export default class SeleccionarSector extends Component {
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <button className="btn-primary-sae w-20">Siguiente</button>
-                <a href="/solicitud-postulacion"><button className="btn-primary-sae w-20">Evaluador</button></a>
+                <a href="/solicitud-postulacion"><button className="btn-primary-sae w-100">Siguiente</button></a>
             </div>
             </React.Fragment>
         );

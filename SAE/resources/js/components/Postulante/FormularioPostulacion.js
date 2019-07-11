@@ -11,6 +11,7 @@ export default class Postulacion extends Component {
         tipo: "ambitos",
         ambitosArray: [],
         sectoresArray: [],
+        alcancesArray: [],
     }
 
     handleChangeTipo = ({target}) => {
@@ -26,8 +27,12 @@ export default class Postulacion extends Component {
         }
     }
 
-    opcionesPostulacion = (ambitos,sectores,alcances) => {
-
+    opcionesPostulacion = () => {
+        payloadOpciones = [];
+        payloadOpciones["ambitosSeleccionados"] = this.state.ambitosArray;
+        payloadOpciones["sectoresSeleccionados"]= this.state.sectoresArray;
+        payloadOpciones["alcancesSeleccionados"]= this.state.alcancesArray;
+        console.log("Opciones de Postulacion: ",payloadOpciones);
     }
 
     updateAmbitos = (ambitos) => {
@@ -39,6 +44,12 @@ export default class Postulacion extends Component {
     updateSectores = (sectores) => {
         this.setState({
             sectoresArray: sectores,
+        })
+    }
+
+    updateSectores = (alcances) => {
+        this.setState({
+            sectoresArray: alcances,
         })
     }
 
@@ -99,9 +110,9 @@ export default class Postulacion extends Component {
                             <SeleccionarAmbito updateAmbitos={this.updateAmbitos} handleChangeTipo={this.handleChangeTipo}/>
                         ):(
                             this.state.tipo === "sectores"?(
-                                <SeleccionarSector ambitosArray={this.state.ambitosArray} handleChangeTipo={this.handleChangeTipo}/>
+                                <SeleccionarSector ambitosArray={this.state.ambitosArray} updateSectores={this.updateSectores} handleChangeTipo={this.handleChangeTipo}/>
                             ):(
-                                <SeleccionarAlcance handleChangeTipo={this.handleChangeTipo}/>
+                                <SeleccionarAlcance sectoresArray={this.state.sectoresArray} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
                             )
                         )}
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Alcance;
+
 class AlcanceController extends Controller
 {
     /**
@@ -14,6 +16,9 @@ class AlcanceController extends Controller
     public function index()
     {
         //
+        $listadoAlcances = Alcance::all();
+        //return view('pages.seleccionarAmbito') ->with('ambitos',$listadoAmbitos);
+        return response()->json($listadoAlcances);
     }
 
     /**

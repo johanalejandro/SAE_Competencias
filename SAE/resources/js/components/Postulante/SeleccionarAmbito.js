@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Img from '../common/Img';
-import Header from '../common/Header';
 import axios from 'axios';
 import AmbitoItem from './AmbitoItem'
 import {clone, isEmpty, pull} from 'lodash';
@@ -18,7 +16,7 @@ export default class SeleccionarAmbito extends Component {
         axios.get('/api/ambito').then(response =>{
             this.setState({
                 ambitos: response.data,
-            })
+            });
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
@@ -30,6 +28,7 @@ export default class SeleccionarAmbito extends Component {
         const id = target.id;
         const isChecked =target.checked;
         this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+        console.log(this.state.checkedItems)
         const ambito = ambitos.find((ambito)=>{
             return ambito.id_ambito === parseInt(id);
         });
@@ -48,7 +47,7 @@ export default class SeleccionarAmbito extends Component {
     }
 
     render() {
-
+        console.log("ambitos escogidos: ",this.state.ambitosArray);
         return (
             <React.Fragment>
             <div className="containersae d-flex flex-row justify-content-center align-items-center">
