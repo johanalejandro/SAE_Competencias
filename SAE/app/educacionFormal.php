@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class educacionFormal extends Model
 {
     //
-    public $primaryKey = 'id_formacion';
+    protected $primaryKey = 'id_educacion';
 
      public function postulante()
     {

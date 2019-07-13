@@ -14,13 +14,16 @@ class CreateAlcancesTable extends Migration
     public function up()
     {
         Schema::create('alcances', function (Blueprint $table) {
-            $table->bigIncrements('id_alcance');
-            $table->unsignedInteger('id_sector');
+            $table->bigIncrements('id_alcance')->autoIncrement();
+            $table->unsignedBigInteger('id_sector');
             $table->string('nombreAlcance');
             $table->timestamps();
             $table->text('detalleAlcance');
             $table->text('normaRequerida');
             
+        });
+        Schema::table('alcances', function($table) {
+            $table->foreign('id_sector')->references('id_sector')->on('sectors');
         });
     }
 

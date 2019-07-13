@@ -14,8 +14,17 @@ class CreateEducacionFormalsTable extends Migration
     public function up()
     {
         Schema::create('educacion_formals', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id_educacion')->autoIncrement();
             $table->timestamps();
+            $table->unsignedBigInteger('id_postulante');
+            $table->text('archivoAnexo');
+            $table->text('nombreInstitucion');
+            $table->text('tituloObtenido');
+            $table->set('tipoFormacion',['Tercer Nivel', 'Cuarto Nivel','Doctorado(PHD)']);
+        });
+        Schema::table('educacion_formals', function($table) {
+            $table->foreign('id_postulante')->references('id_postulante')->on('postulantes');
+
         });
     }
 

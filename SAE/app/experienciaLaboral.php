@@ -7,11 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class experienciaLaboral extends Model
 {
     //
-    public $primaryKey = 'id_experiencia';
+    protected $primaryKey = 'id_experiencia';
 
     public function postulante()
     {
         return $this->belongsTo('App\Postulante');
+         
+    }
+
+       public function alcance()
+    {
+    	return $this->hasOne('App\Alcance');
+
          
     }
 

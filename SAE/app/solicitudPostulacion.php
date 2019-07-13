@@ -6,8 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class solicitudPostulacion extends Model
 {
-     public function postulante()
+	protected $primaryKey = 'id_solicitud';
+    
+    public function postulante()
     {
-        return $this->belongsTo('App\Postulante');
+        return $this->hasOne('App\Postulante');
     }
+    public function evaluacionPostulacion()
+    {
+        return $this->hasOne('App\evaluacionPostulacion');
+    }
+    public function usuario()
+    {
+        return $this->hasOne('App\User');
+    }
+
+
+    
+
+
 }

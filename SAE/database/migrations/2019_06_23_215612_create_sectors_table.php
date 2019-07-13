@@ -8,17 +8,20 @@ class CreateSectorsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
+     * Funcion up usada para añadir tablas
      * @return void
      */
     public function up()
     {
         Schema::create('sectors', function (Blueprint $table) {
-            $table->bigIncrements('id_sector');
-            $table->unsignedInteger('id_ambito');
+            $table->bigIncrements('id_sector')->autoIncrement();
+            $table->unsignedBigInteger('id_ambito');
             $table->timestamps();
             $table->string('tipoSector');
 
+        });
+        Schema::table('sectors', function($table) {
+        $table->foreign('id_ambito')->references('id_ambito')->on('ambitos');
         });
     }
 

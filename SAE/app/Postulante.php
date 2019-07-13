@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Postulante extends Model
 {
     //
-    public $primaryKey = 'id_postulante';
+    protected $primaryKey = 'id_postulante';
 
     public function experienciaLaborals()
     {
@@ -20,7 +20,11 @@ class Postulante extends Model
 
     }
 
-    public function solicitudPostulacions(){
-        return $this->hasMany('App\solicitudPostulacion');
+    public function solicitudPostulacion(){
+        return $this->belongsTo('App\solicitudPostulacion');
     }
+
+
+
+
 }

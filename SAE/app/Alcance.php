@@ -8,7 +8,7 @@ class Alcance extends Model
 {
     //
     protected $table ='alcances';
-    public $primaryKey = 'id_alcance';
+    protected $primaryKey = 'id_alcance';
 
     public function sector()
     {

@@ -14,7 +14,8 @@ class PostulanteController extends Controller
      */
     public function index()
     {
-        //
+        $listadoPostulante = Postulante::all();
+        return response()->json($listadoPostulante);
     }
 
     /**
@@ -35,8 +36,31 @@ class PostulanteController extends Controller
      */
     public function store(Request $request)
     {
-        $postulante = Postulante::create(['nombres' => $request->nombre,'apellidos' => $request->apellido,'ciudad'=>$request->ciudad,'genero'=>$request->genero,'email'=>$request->email,'cedula'=>$request->cedula,'fechaNacimiento'=>$request->fechaNacimiento,'telefono'=>$request->telefono,'provincia'=>$request->provincia,'estado'=>$request->estado,'fechaHabilitacion'=>$request->fechaHabilitacion]);
-        //return redirect('/tasks/'.$task->id);
+        /*Valido los campos */
+         $validatedData = $request->validate([
+          'nombres' => 'required',
+          'apellidos' => 'required',
+          'genero' => 'required',
+          'cedula' => 'required',
+          'email' => 'required',
+          'fechaNacimiento' => 'required',
+          'telefono' => 'required',
+          'provincia' => 'required',
+          'disponibilidadViajar' => 'required',
+        ]);
+        $postulante = Postulante::create([
+            'nombres'   =>  $validatedData->['nombre'],
+            'apellidos' =>  $validatedData->['apellido'],
+            'ciudad'    =>  $validatedData->['ciudad'],
+            'genero'   =>   $validatedData->['genero'],
+            'email'    =>   $validatedData->['email'],
+            'cedula'  =>    $validatedData->['cedula'],
+            'fechaNacimiento'=>$validatedData->['fechaNacimiento'],
+            'telefono'=>       $validatedData->['telefono'],
+            'provincia'=>     $validatedData->['provincia'],
+            'estado'=>        $validatedData->['estado'],
+            'fechaHabilitacion'=>$validatedData->['fechaHabilitacion']);
+        return response()->json('Postulante creado');
     }
 
     /**
