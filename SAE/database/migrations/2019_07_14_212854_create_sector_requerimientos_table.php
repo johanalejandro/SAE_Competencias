@@ -14,8 +14,13 @@ class CreateSectorRequerimientosTable extends Migration
     public function up()
     {
         Schema::create('sector_requerimientos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id_sector_requerimiento');
+            $table->unsignedBigInteger('id_sector');
+            $table->text('requerimiento');
             $table->timestamps();
+        });
+        Schema::table('sector_requerimientos', function($table) {
+            $table->foreign('id_sector')->references('id_sector')->on('sectors');
         });
     }
 

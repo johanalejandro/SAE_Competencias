@@ -19,13 +19,13 @@ class CreatePostulantesTable extends Migration
             $table->string('nombres',100);
             $table->string('apellidos',100);
             $table->string('ciudad',50);
-            $table->set('genero',['masculino', 'femenimo']);
+            $table->set('genero',['Masculino', 'Femenimo']);
             $table->string('email');
             $table->bigInteger('cedula');
             $table->date('fechaNacimiento');
             $table->bigInteger('telefono');
             $table->string('provincia');
-            $table->set('estado',['Por Habilitar', 'Habilitado','Deshabilitado','Por Asignar','Por Evaluar']);
+            $table->set('estado',['Por Habilitar', 'Habilitado','Deshabilitado','Por Asignar','Por Evaluar'])->default('Por Asignar');
             $table->date('fechaHabilitacion');
             $table->boolean('disponibilidadViajar');
 

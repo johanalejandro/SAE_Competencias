@@ -22,3 +22,15 @@ Route::resource('ambito','AmbitoController');//localhost:[port]/api/ambito
 Route::resource('sector','SectorController');
 
 Route::resource('alcance','AlcanceController');
+
+/* Api para tabla postulantes */
+
+Route::get('/postulantes', 'PostulanteController@index');
+
+Route::get('/postulantes/{id}', 'PostulanteController@show');
+
+Route::post('/postulantes', 'PostulanteController@store');
+
+/*Api para mostrar requerimientos segun sector (se pasa id de sector)*/
+
+Route::get('/sector/{id}', 'SectorRequerimiento@show');

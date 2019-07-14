@@ -8,6 +8,7 @@ class educacionFormal extends Model
 {
     //
     protected $primaryKey = 'id_educacion';
+    public $timestamps = true;
 
      public function postulante()
     {

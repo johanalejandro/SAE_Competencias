@@ -14,7 +14,7 @@ class SolicitudPostulacionController extends Controller
      */
     public function index()
     {
-         $listadoSolicitudes = solicitudPostulacion::all();
+        $listadoSolicitudes = solicitudPostulacion::all();
         return response()->json($listadoSectores);
     }
 

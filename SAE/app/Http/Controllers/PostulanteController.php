@@ -38,8 +38,8 @@ class PostulanteController extends Controller
     {
         /*Valido los campos */
          $validatedData = $request->validate([
-          'nombres' => 'required',
-          'apellidos' => 'required',
+          'nombres' => 'required|max:100',
+          'apellidos' => 'required|max:100',
           'genero' => 'required',
           'cedula' => 'required',
           'email' => 'required',
@@ -60,6 +60,7 @@ class PostulanteController extends Controller
             'provincia'=>     $validatedData->['provincia'],
             'estado'=>        $validatedData->['estado'],
             'fechaHabilitacion'=>$validatedData->['fechaHabilitacion']);
+        
         return response()->json('Postulante creado');
     }
 

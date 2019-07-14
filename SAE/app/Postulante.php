@@ -8,6 +8,7 @@ class Postulante extends Model
 {
     //
     protected $primaryKey = 'id_postulante';
+    public $timestamps = true;
 
     public function experienciaLaborals()
     {
@@ -23,6 +24,12 @@ class Postulante extends Model
     public function solicitudPostulacion(){
         return $this->belongsTo('App\solicitudPostulacion');
     }
+
+
+    protected $fillable = [
+        'nombres', 'apellidos', 'ciudad','genero','email','cedula','fechaNacimiento','telefono','provincia','estado','fechaHabilitacion','disponibilidadViajar'
+    ];
+
 
 
 

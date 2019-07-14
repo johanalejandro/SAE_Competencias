@@ -8,6 +8,7 @@ class experienciaLaboral extends Model
 {
     //
     protected $primaryKey = 'id_experiencia';
+    public $timestamps = true;
 
     public function postulante()
     {
@@ -15,7 +16,7 @@ class experienciaLaboral extends Model
          
     }
 
-       public function alcance()
+    public function alcance()
     {
     	return $this->hasOne('App\Alcance');
 

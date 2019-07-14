@@ -16,17 +16,15 @@ class CreateSolicitudPostulacionsTable extends Migration
         Schema::create('solicitud_postulacions', function (Blueprint $table) {
             $table->bigIncrements('id_solicitud');
             $table->timestamps();
-            $table->string('nombres',100);
-            $table->string('apellidos',100);
-            $table->string('ciudad',50);
-            $table->enum('genero',array('masculino', 'femenimo'));
-            $table->string('email');
-            $table->bigInteger('cedula');
-            $table->date('fechaNacimiento');
-            $table->bigInteger('telefono');
-            $table->string('provincia');
-            $table->enum('estado',array('Por Habilitar', 'Habilitado','Deshabilitado','Por Asignar','Por Evaluar'));
-            $table->date('fechaHabilitacion');
+            $table->unsignedBigInteger('id_usuario');
+            $table->unsignedBigInteger('id_evaluacion');
+            $table->unsignedBigInteger('id_postulante');
+        });
+        Schema::table('solicitud_postulacions', function($table) {
+            $table->foreign('id_usuario')->references('id_usuario')->on('users');
+            $table->foreign('id_evaluacion')->references('id_evaluacion')->on('evaluacion_postulacions');
+            $table->foreign('id_postulante')->references('id_postulante')->on('postulantes');
+
         });
     }
 

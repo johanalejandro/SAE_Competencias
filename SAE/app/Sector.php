@@ -18,4 +18,10 @@ class Sector extends Model
     {
         return $this->hasMany('App\Alcance');
     }
+
+    public function sectorRequerimientos()
+    {
+        return $this->hasMany('App\sectorRequerimiento');
+
+    }
 }

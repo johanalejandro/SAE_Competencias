@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\sectorRequerimiento;
 use Illuminate\Http\Request;
-use App\Ambito;
 
-
-class AmbitoController extends Controller
+class SectorRequerimientoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,6 @@ class AmbitoController extends Controller
     public function index()
     {
         //
-        $listadoAmbitos = Ambito::all();
-        return response()->json($listadoAmbitos);
     }
 
     /**
@@ -44,21 +41,23 @@ class AmbitoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $requerimiento = DB::table('sector_requerimientos')
+                ->where('id_sector', $id);
+         return response()->json($requerimiento);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(sectorRequerimiento $sectorRequerimiento)
     {
         //
     }
@@ -67,10 +66,10 @@ class AmbitoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, sectorRequerimiento $sectorRequerimiento)
     {
         //
     }
@@ -78,10 +77,10 @@ class AmbitoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(sectorRequerimiento $sectorRequerimiento)
     {
         //
     }

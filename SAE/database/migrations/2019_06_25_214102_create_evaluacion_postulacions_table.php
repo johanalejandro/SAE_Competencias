@@ -14,7 +14,7 @@ class CreateEvaluacionPostulacionsTable extends Migration
     public function up()
     {
         Schema::create('evaluacion_postulacions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id_evaluacion');
             $table->timestamps();
             $table->text('detalleEvaluacion');
             $table->set('tipoEvaluacion',['Entrevista', 'Prueba']);

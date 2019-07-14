@@ -17,7 +17,6 @@ class SectorController extends Controller
     {
         //
         $listadoSectores = Sector::all();
-        //return view('pages.seleccionarAmbito') ->with('ambitos',$listadoAmbitos);
         return response()->json($listadoSectores);
     }
 
