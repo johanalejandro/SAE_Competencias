@@ -16,8 +16,7 @@ class SectorController extends Controller
     public function index()
     {
         //
-        $listadoSectores = Sector::all();
-        return response()->json($listadoSectores);
+        return Sector::all();
     }
 
     /**

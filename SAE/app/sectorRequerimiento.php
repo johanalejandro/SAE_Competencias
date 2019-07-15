@@ -13,4 +13,17 @@ class sectorRequerimiento extends Model
     {
         return $this->belongsTo('App\Sector');
     }
+
+
+    /**
+     * Scope a query to only include the sector sent.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBelongsto($query,$id)
+    {
+        return $query->where('id_sector', $id);
+    }
+
 }

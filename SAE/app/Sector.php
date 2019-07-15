@@ -8,7 +8,7 @@ class Sector extends Model
 {
     //
 
-    private $primaryKey = 'id_sector';
+    protected $primaryKey = 'id_sector';
     public function ambito()
     {
         return $this->belongsTo('App\Ambito');

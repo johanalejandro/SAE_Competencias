@@ -16,8 +16,7 @@ class AmbitoController extends Controller
     public function index()
     {
         //
-        $listadoAmbitos = Ambito::all();
-        return response()->json($listadoAmbitos);
+        return Ambito::all();
     }
 
     /**

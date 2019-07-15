@@ -16,9 +16,8 @@ class AlcanceController extends Controller
     public function index()
     {
         //
-        $listadoAlcances = Alcance::all();
         //return view('pages.seleccionarAmbito') ->with('ambitos',$listadoAmbitos);
-        return response()->json($listadoAlcances);
+        return Alcance::all();
     }
 
     /**

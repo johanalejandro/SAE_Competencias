@@ -44,12 +44,23 @@ class SectorRequerimientoController extends Controller
      * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
+    /*
     public function show($id)
     {
         $requerimiento = DB::table('sector_requerimientos')
                 ->where('id_sector', $id);
          return response()->json($requerimiento);
     }
+    */
+
+    public function show($id)
+    {
+        //$requerimientos = sectorRequerimiento::belongsto($id)->orderBy('created_at')->get();
+        $requerimiento = sectorRequerimiento::findOrFail($id);
+        return response()->json($requerimiento);
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
