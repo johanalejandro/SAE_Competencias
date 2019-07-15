@@ -97,6 +97,6 @@
 
             </div>
         </div>
-        <script src="js/app.js"></script>
+        <script src="{{mix('js/app.js')}}"></script>
     </body>
 </html>

@@ -1,19 +1,39 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../common/Header'
-import SeleccionarAmbito from './SeleccionarAmbito';
-import SeleccionarSector from './SeleccionarSector';
-import SeleccionarAlcance from './SeleccionarAlcance';
-import HojaDeVida from './HojaDeVida';
+import Prerrequisitos from './Prerrequisitos';
 
-export default class FormularioPostulacion extends Component {
+export default class HojaDeVida extends Component {
 
     state = {
-        tipo: "ambitos",
+        tipo: "",
         ambitosArray: [],
         sectoresArray: [],
         alcancesArray: [],
-        hojaDeVida: false,
+        prerrequisitos: "",
+        form: ""
+    }
+
+    componentDidMount = async () =>{
+
+        if(this.props.tipo==="?tipo=evaluador"){
+            this.setState({
+                tipo: "evaluador",
+            });
+        }
+        if(this.props.tipo==="?tipo=experto"){
+            this.setState({
+                tipo: "experto",
+            });
+        }
+
+        await this.setState({
+            ambitosArray: this.props.ambitos,
+            sectoresArray: this.props.sectores,
+            alcancesArray: this.props.alcances,
+            form: "datosPersonales",
+            prerrequisitos: "si",
+        })
     }
 
     handleChangeTipo = ({target}) => {
@@ -29,55 +49,25 @@ export default class FormularioPostulacion extends Component {
         }
     }
 
-    opcionesPostulacion = () => {
-        payloadOpciones = [];
-        payloadOpciones["ambitosSeleccionados"] = this.state.ambitosArray;
-        payloadOpciones["sectoresSeleccionados"]= this.state.sectoresArray;
-        payloadOpciones["alcancesSeleccionados"]= this.state.alcancesArray;
-        console.log("Opciones de Postulacion: ",payloadOpciones);
-    }
-
-    updateAmbitos = (ambitos) => {
+    handleHojaDeVida = () => {
         this.setState({
-            ambitosArray: ambitos,
-        })
-    }
-
-    updateSectores = (sectores) => {
-        this.setState({
-            sectoresArray: sectores,
-        })
-    }
-
-    updateAlcances = async (alcances) => {
-        await this.setState({
-            alcancesArray: alcances,
-        })
-
-        this.handlePostulacion();
-    }
-
-    handlePostulacion = () => {
-        this.setState({
-            hojaDeVida: true,
+            prerrequisitos: false,
         })
     }
 
     render() {
         return (
-            this.state.hojaDeVida ? (
-                 <HojaDeVida 
-                    ambitos={this.state.ambitosArray}
+            this.state.prerrequisitos==="si" ? (
+                 <Prerrequisitos 
                     sectores={this.state.sectoresArray}
-                    alcances={this.state.alcancesArray}
-                    tipo={window.location.search}
+                    tipo={this.state.tipo}
                  />
               ): (
                 <React.Fragment>
-                    <Header title="Opciones de Postulación"/>
+                    <Header title="Hoja de Vida"/>
                     <div className="d-flex flex-row" >
                         <div className="d-flex flex-column align-items-center w-25">
-                                    {this.state.tipo === "ambitos"?(
+                                    {this.state.form === "datosPersonales"?(
                                         <React.Fragment>
                                             <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"}>
                                                 Ámbitos
@@ -124,7 +114,7 @@ export default class FormularioPostulacion extends Component {
                         <div className="cardSAE containersae w-100 w-75">
                                 
                             <div className="cardSAE-body">
-                                {this.state.tipo === "ambitos"?(
+                                {/*this.state.tipo === "ambitos"?(
                                     <SeleccionarAmbito updateAmbitos={this.updateAmbitos} handleChangeTipo={this.handleChangeTipo}/>
                                 ):(
                                     this.state.tipo === "sectores"?(
@@ -132,7 +122,7 @@ export default class FormularioPostulacion extends Component {
                                     ):(
                                         <SeleccionarAlcance sectoresArray={this.state.sectoresArray} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
                                     )
-                                )}
+                                    )*/}
         
                             </div>
                         </div>
@@ -145,6 +135,6 @@ export default class FormularioPostulacion extends Component {
     }
 }
 
-if (document.getElementById('postulation-form')) {
-    ReactDOM.render(<FormularioPostulacion />, document.getElementById('postulation-form'));
+if (document.getElementById('hojadevida-form')) {
+    ReactDOM.render(<HojaDeVida />, document.getElementById('hojadevida-form'));
 }

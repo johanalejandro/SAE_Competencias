@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
 import AmbitoItem from './AmbitoItem'
 import {clone, isEmpty, pull} from 'lodash';
 
@@ -12,11 +11,15 @@ export default class SeleccionarAmbito extends Component {
         checkedItems: new Map(),
     }
 
-    componentWillMount(){
-        axios.get('/api/ambito').then(response =>{
-            this.setState({
-                ambitos: response.data,
-            });
+    componentDidMount(){
+
+        fetch('/api/ambito')
+        .then(response => {
+            return response.json();
+        })
+        .then(ambitos => {
+            //Fetched product is stored in the state
+            this.setState({ ambitos });
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
@@ -28,7 +31,6 @@ export default class SeleccionarAmbito extends Component {
         const id = target.id;
         const isChecked =target.checked;
         this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
-        console.log(this.state.checkedItems)
         const ambito = ambitos.find((ambito)=>{
             return ambito.id_ambito === parseInt(id);
         });
@@ -70,7 +72,7 @@ export default class SeleccionarAmbito extends Component {
                                                 key={ambito.id_ambito}
                                                 checkedItems={this.state.checkedItems}
                                             />
-                                        ))):(null)}
+                                        ))):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)}
 
                                     </ul>
                                     
@@ -83,8 +85,8 @@ export default class SeleccionarAmbito extends Component {
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
                 <button name="sectores" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.props.handleChangeTipo(evt);
                         this.props.updateAmbitos(this.state.ambitosArray);
+                        this.props.handleChangeTipo(evt);
                         }}
                 >Siguiente</button>
             </div>

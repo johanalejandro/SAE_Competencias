@@ -11,10 +11,14 @@ export default class SeleccionarSector extends Component {
         checkedItems: new Map(),
     }
 
-    componentWillMount(){
+    componentDidMount(){
     
-        axios.get('/api/alcance').then(response =>{
-            const alcancesResponse = clone(response.data);
+        fetch('/api/alcance')
+        .then(response => {
+            return response.json();
+        })
+        .then(alcance => {
+            const alcancesResponse = clone(alcance);
             const sectoresSeleccionados = this.props.sectoresArray;
             let alcances = [];
             const ids = sectoresSeleccionados.map((sector) => {
@@ -52,7 +56,7 @@ export default class SeleccionarSector extends Component {
                 alcancesArray: cloned,
             })
         }else{
-            const cloned = cloneArray.pull(cloneArray,alcance);
+            const cloned = pull(cloneArray,alcance);
             this.setState({
                 alcancesArray: cloned,
             })
@@ -60,6 +64,7 @@ export default class SeleccionarSector extends Component {
     }
 
     render() {
+        console.log("alcances escogidos: ",this.state.alcancesArray);
         return (
             <React.Fragment>
             <div className="containersae d-flex flex-row justify-content-center align-items-center">
@@ -83,7 +88,7 @@ export default class SeleccionarSector extends Component {
                                                     checkedItems={this.state.checkedItems}
                                                 />
                                             ))
-                                        ):(null)
+                                        ):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
                                         }
 
                                     </ul>
@@ -95,7 +100,12 @@ export default class SeleccionarSector extends Component {
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <a href="/solicitud-postulacion"><button className="btn-primary-sae w-100">Siguiente</button></a>
+                <button name="alcances" className="btn-primary-sae w-20" 
+                    onClick={(evt)=>{
+                        this.props.updateAlcances(this.state.alcancesArray);
+                        this.props.handleChangeTipo(evt);
+                        }}
+                    >Siguiente</button>
             </div>
             </React.Fragment>
         );

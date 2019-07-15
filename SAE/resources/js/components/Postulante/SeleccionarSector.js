@@ -12,13 +12,19 @@ export default class SeleccionarSector extends Component {
     }
 
     componentDidMount(){
-        axios.get('/api/sector').then(response =>{
-            const sectorsResponse = clone(response.data);
+
+        fetch('/api/sector')
+        .then(response => {
+            return response.json();
+        })
+        .then(sectores => {
+            //Fetched product is stored in the state
+            const sectorsResponse = clone(sectores);
             const ambitosSeleccionados = this.props.ambitosArray;
             let sectors = [];
             const ids = ambitosSeleccionados.map((ambito) => {
                 return ambito.id_ambito;
-            })
+            });
             for (let index = 0; index < sectorsResponse.length; index++) {
                 const sector = sectorsResponse[index];
                 for (let i = 0; i < ids.length; i++) {
@@ -30,10 +36,11 @@ export default class SeleccionarSector extends Component {
             console.log("sectores filtrados: ",sectors);
             this.setState({
                 sectores: sectors,
-            })
+            });
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
+
     }
 
     handleCheckBoxChange = ({target}) => {
@@ -83,7 +90,7 @@ export default class SeleccionarSector extends Component {
                                                     checkedItems={this.state.checkedItems}
                                                 />
                                             ))
-                                        ):(null)
+                                        ):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
                                         }
 
                                     </ul>
@@ -97,8 +104,8 @@ export default class SeleccionarSector extends Component {
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
                 <button name="alcances" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.props.handleChangeTipo(evt);
                         this.props.updateSectores(this.state.sectoresArray);
+                        this.props.handleChangeTipo(evt);
                         }}
                     >Siguiente</button>
             </div>
