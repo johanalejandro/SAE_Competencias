@@ -17,11 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('ambito','AmbitoController');//localhost:[port]/api/ambito
+Route::get('ambito','AmbitoController@index');//localhost:[port]/api/ambito
 
-Route::resource('sector','SectorController');
+Route::get('sector','SectorController@index');
 
-Route::resource('alcance','AlcanceController');
+Route::get('alcance','AlcanceController@index');
 
 /* Api para tabla postulantes */
 
@@ -33,4 +33,4 @@ Route::post('/postulantes', 'PostulanteController@store');
 
 /*Api para mostrar requerimientos segun sector (se pasa id de sector)*/
 
-Route::get('/sector/{id}', 'SectorRequerimiento@show');
+Route::get('sector/{id}', 'SectorRequerimientoController@show');
