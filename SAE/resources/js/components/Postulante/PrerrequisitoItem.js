@@ -10,7 +10,7 @@ export default class PrerrequisitoItem extends Component {
         const id = this.props.id;
         return (
             <div className="d-flex flex-row col-lg-12 col-sm-12 justify-content-start align-items-center">
-                <label className="text-left text-normal">
+                <label className="w-90 text-left text-normal">
                     {requisito}
                 </label>
                 <Checkbox id={id} className="mb-2" name={id.toString()} checked={this.props.checkedItems.get(id.toString())} onChange={this.props.handleCheckBoxChange} />

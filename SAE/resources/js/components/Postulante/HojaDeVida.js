@@ -51,7 +51,7 @@ export default class HojaDeVida extends Component {
 
     handleHojaDeVida = () => {
         this.setState({
-            prerrequisitos: false,
+            prerrequisitos: "no",
         })
     }
 
