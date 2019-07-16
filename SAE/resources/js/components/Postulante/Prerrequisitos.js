@@ -12,6 +12,7 @@ export default class Prerrequisitos extends Component {
         show:true,
         checkedItems: new Map(),
         validador: false,
+        noValidador: false,
     }
 
     componentDidMount = async () =>{
@@ -148,9 +149,24 @@ export default class Prerrequisitos extends Component {
                         </React.Fragment>
                     ):(
                         <React.Fragment>
-                            <Header title="Prerrequisitos Mínimos"/>
-                            <div className="cardSAE containersae w-100 w-75">
-                            <div className="cardSAE-body">EXPERTO</div>
+                            <Header title="Postulación"/>
+                            <div className="containersae d-flex flex-row justify-content-center align-items-center">
+                                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                                    <h2>Requisitos mínimos</h2>
+                                    <h3>Lea con atención, debe poseer todos los requisitos a continuación para proseguir</h3>
+                                    <div className="card w-100 mb-4">
+
+                                        <div className="flex-row justify-content-between">
+
+                                            <div className="card-body">
+                                                <label className="text-center text-normal">¿Al menos tiene 2 años de experiencia en el sector, alcance, ensayo o técnica que desea postular?</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="d-flex flex-row justify-content-end align-items-center py-4">
+                                <button name="prerrequisitos" className="btn-primary-sae w-20" data-toggle="modal" data-target="#expertoModal">Sí</button>
                             </div>
                         </React.Fragment>
                     )}
@@ -179,6 +195,24 @@ export default class Prerrequisitos extends Component {
                             <button type="button" className="btn btn-secondary w-20" data-dismiss="modal">Ok</button>
                         )
                         }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal fade" id="expertoModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header text-center">
+                      <h5 className="modal-title" id="exampleModalLongTitle">Recuerde</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                            <label className="w-90 text-normal text-justify">Más adelante deberá anexar documentos que avalen la información proporcionada previamente</label>
+                    </div>
+                    <div className="modal-footer">
+                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
                     </div>
                   </div>
                 </div>
