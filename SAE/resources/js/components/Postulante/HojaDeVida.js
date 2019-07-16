@@ -11,7 +11,8 @@ export default class HojaDeVida extends Component {
         sectoresArray: [],
         alcancesArray: [],
         prerrequisitos: "",
-        form: ""
+        form: "",
+        prerrequisitosArray : [],
     }
 
     componentDidMount = async () =>{
@@ -31,7 +32,7 @@ export default class HojaDeVida extends Component {
             ambitosArray: this.props.ambitos,
             sectoresArray: this.props.sectores,
             alcancesArray: this.props.alcances,
-            form: "datosPersonales",
+            form: "datos",
             prerrequisitos: "si",
         })
     }
@@ -39,12 +40,12 @@ export default class HojaDeVida extends Component {
     handleChangeTipo = ({target}) => {
         if(target.name){
             this.setState({
-                tipo: target.name,
+                form: target.name,
             })
         }
         if(target.id){
             this.setState({
-                tipo: target.id,
+                form: target.id,
             })
         }
     }
@@ -55,58 +56,91 @@ export default class HojaDeVida extends Component {
         })
     }
 
+    updatePrerrequisitos = (requerimientos) => {
+        console.log("requerimientos que llegan" ,requerimientos);
+        this.setState({
+            prerrequisitosArray: requerimientos,
+        })
+    } 
+
     render() {
         return (
             this.state.prerrequisitos==="si" ? (
                  <Prerrequisitos 
                     sectores={this.state.sectoresArray}
                     tipo={this.state.tipo}
+                    updatePrerrequisitos={this.updatePrerrequisitos}
+                    handleHojaDeVida={this.handleHojaDeVida}
                  />
               ): (
                 <React.Fragment>
                     <Header title="Hoja de Vida"/>
                     <div className="d-flex flex-row" >
                         <div className="d-flex flex-column align-items-center w-25">
-                                    {this.state.form === "datosPersonales"?(
+                                    {this.state.form === "datos"?(
                                         <React.Fragment>
-                                            <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"}>
-                                                Ámbitos
+                                            <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"} onClick={this.handleChangeTipo}>
+                                                Datos Generales
                                             </div>
-                                            <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
-                                                Sectores
+                                            <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Educación Formal
                                             </div>
-                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
-                                                Alcances
+                                            <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Experiencia Laboral
+                                            </div>  
+                                            <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Referencia
                                             </div>                                    
                                         </React.Fragment>
         
                                 ):(
-                                    this.state.tipo === "sectores"?(
+                                    this.state.form === "educacion"?(
                                         <React.Fragment>
-                                            <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"}>
-                                                Ámbitos
+                                            <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
+                                                Datos Generales
                                             </div>
-                                            <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current">
-                                                Sectores
+                                            <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
+                                                Educación Formal
                                             </div>
-                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4">
-                                                Alcances
+                                            <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Experiencia Laboral
+                                            </div>
+                                            <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Referencia
                                             </div>
                                         </React.Fragment>
         
-                                    ):(
-                                        <React.Fragment>
-                                            <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"}>
-                                                Ámbitos
-                                            </div>
-                                            <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 ">
-                                                Sectores
-                                            </div>
-                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current">
-                                                Alcances
-                                            </div>
-                                        </React.Fragment>
-        
+                                    ):(this.state.form === "experiencia"?(
+                                            <React.Fragment>
+                                                <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
+                                                    Datos Generales
+                                                </div>
+                                                <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                    Educación Formal
+                                                </div>
+                                                <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
+                                                    Experiencia Laboral
+                                                </div>
+                                                <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                    Referencia
+                                                </div>
+                                            </React.Fragment>
+                                        ):(
+                                            <React.Fragment>
+                                                <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
+                                                    Datos Generales
+                                                </div>
+                                                <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                    Educación Formal
+                                                </div>
+                                                <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 " onClick={this.handleChangeTipo}>
+                                                    Experiencia Laboral
+                                                </div>
+                                                <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
+                                                    Referencia
+                                                </div>
+                                            </React.Fragment>
+                                        )
                                     )
                                 )}
                         </div>
@@ -122,8 +156,19 @@ export default class HojaDeVida extends Component {
                                     ):(
                                         <SeleccionarAlcance sectoresArray={this.state.sectoresArray} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
                                     )
-                                    )*/}
-        
+                                    )*/
+                                this.state.form === "datos" && (
+                                    <div>Datos Personales</div>
+                                )}
+                                {this.state.form === "educacion" && (
+                                    <div>Educación Formal</div>
+                                )}
+                                {this.state.form === "experiencia" && (
+                                    <div>Experiencia Laboral</div>
+                                )}
+                                {this.state.form === "referencia" && (
+                                    <div>Referencia</div>
+                                )}
                             </div>
                         </div>
                     </div>

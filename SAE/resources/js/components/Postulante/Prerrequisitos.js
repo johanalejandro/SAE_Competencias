@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../common/Header'
-import {clone, isEmpty, pull} from 'lodash';
+import {clone, isEmpty, pull, isEqual} from 'lodash';
 import PrerrequisitoItem from './PrerrequisitoItem';
 
 export default class Prerrequisitos extends Component {
@@ -11,6 +11,7 @@ export default class Prerrequisitos extends Component {
         requerimientosArray: [],
         show:true,
         checkedItems: new Map(),
+        validador: false,
     }
 
     componentDidMount = async () =>{
@@ -29,7 +30,6 @@ export default class Prerrequisitos extends Component {
             })
             .then(requerimientos => {
                 //Fetched product is stored in the state
-                console.log("req",requerimientos);
                 reqs.push(requerimientos);
             }).catch(error => {
                 console.log("===ERROR: ",error);
@@ -49,6 +49,19 @@ export default class Prerrequisitos extends Component {
         })
     }
 
+    validar=()=>{
+        console.log("requerimientos validador",this.state.requerimientos);
+        console.log("requerimientosArray validador",this.state.requerimientosArray);
+        if(isEqual(this.state.requerimientos.length , this.state.requerimientosArray.length)){
+            this.setState({
+                validador: true
+            });
+            $('#exampleModalCenter').modal();
+            console.log("TRUUUUUUE");
+        }else{
+            $('#exampleModalCenter').modal();
+        }
+    }
 
 
     handleCheckBoxChange = ({target}) => {
@@ -74,9 +87,10 @@ export default class Prerrequisitos extends Component {
     }
 
     render() {
-        console.log("requerimientos seleccionados: ",this.state.alcancesArray);
+        console.log("requerimientos seleccionados: ",this.state.requerimientosArray);
         return (
-            this.state.show?(
+            <React.Fragment>
+            {this.state.show?(
                 <React.Fragment>
                     <Header title="Postulación"/>
                     <div className="containersae d-flex flex-row justify-content-center align-items-center">
@@ -123,6 +137,14 @@ export default class Prerrequisitos extends Component {
                                     </div>
                                 </div>
                             </div>
+                            <div className="d-flex flex-row justify-content-end align-items-center py-4">
+                                <button name="prerrequisitos" className="btn-primary-sae w-20"
+                                    onClick={(evt)=>{
+                                        this.validar();
+                                        this.props.updatePrerrequisitos(this.state.requerimientosArray);
+                                        }}
+                                    >Siguiente</button>
+                            </div>
                         </React.Fragment>
                     ):(
                         <React.Fragment>
@@ -133,8 +155,35 @@ export default class Prerrequisitos extends Component {
                         </React.Fragment>
                     )}
                 </React.Fragment>
-            )
-                
+            )}
+                <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header text-center">
+                      <h5 className="modal-title" id="exampleModalLongTitle">Recuerde</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                        {this.state.validador?(
+                            <label className="w-90 text-normal text-justify">Más adelante deberá anexar documentos que avalen la información proporcionada previamente</label>
+                        ):(
+                            <label className="w-90 text-normal-danger text-justify">Debe cumplir con todas las normas para proseguir, caso contrario no puede aplicar. Más adelante debe anexar documentos que avalen esta información</label>
+                        )}
+                    </div>
+                    <div className="modal-footer">
+                        {this.state.validador?(
+                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
+                        ):(
+                            <button type="button" className="btn btn-secondary w-20" data-dismiss="modal">Ok</button>
+                        )
+                        }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </React.Fragment>    
         );
     }
 }

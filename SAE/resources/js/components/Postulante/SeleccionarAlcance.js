@@ -88,7 +88,7 @@ export default class SeleccionarSector extends Component {
                                                     checkedItems={this.state.checkedItems}
                                                 />
                                             ))
-                                        ):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
+                                        ):(<div className="text-center">AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
                                         }
 
                                     </ul>
