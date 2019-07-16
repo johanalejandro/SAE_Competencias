@@ -5,49 +5,6 @@ import {clone, isEmpty, pull} from 'lodash';
 
 export default class DatosPersonales extends Component {
 
-    state = {
-        ambitos: [],
-        ambitosArray: [],
-        checkedItems: new Map(),
-    }
-
-    /*componentDidMount(){
-
-        fetch('/api/ambito')
-        .then(response => {
-            return response.json();
-        })
-        .then(ambitos => {
-            //Fetched product is stored in the state
-            this.setState({ ambitos });
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
-    }*/
-
-    /*handleCheckBoxChange = ({target}) => {
-        const ambitos = this.state.ambitos;
-        const item = target.name;
-        const id = target.id;
-        const isChecked =target.checked;
-        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
-        const ambito = ambitos.find((ambito)=>{
-            return ambito.id_ambito === parseInt(id);
-        });
-        const cloneArray = clone(this.state.ambitosArray);
-        if(isChecked){
-            const cloned = cloneArray.concat(ambito);
-            this.setState({
-                ambitosArray: cloned,
-            })
-        }else{
-            const cloned = pull(cloneArray,ambito);
-            this.setState({
-                ambitosArray: cloned,
-            })
-        }
-    }*/
-
     render() {
         //console.log("ambitos escogidos: ",this.state.ambitosArray);
         return (
@@ -60,7 +17,7 @@ export default class DatosPersonales extends Component {
                                 <div className="d-flex flex-row justify-content-between">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Tipo"/>
-                                        <select className="h-50" defaultValue="selec">
+                                        <select className="h-50" name="tipo" defaultValue={this.props.tipo} onChange={this.props.handleChange}>
                                             <option disabled value="selec">Seleccione</option>
                                             <option value="cedula">Cédula</option>
                                             <option value="pasaporte">Pasaporte</option>
@@ -68,7 +25,7 @@ export default class DatosPersonales extends Component {
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Identificación"/>
-                                        <input type="text" className="h-50"></input>
+                                        <input type="text" className="h-50" name="identificacion" defaultValue={this.props.identificacion} onChange={this.props.handleChange}></input>
                                     </div>
                                 </div>
                         </div>
@@ -77,23 +34,23 @@ export default class DatosPersonales extends Component {
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Apellidos"/>
-                                        <input type="text" className="h-50"></input>
+                                        <input type="text" className="h-50" name="apellidos" defaultValue={this.props.apellidos} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Nombres"/>
-                                        <input type="text" className="h-50"></input>
+                                        <input type="text" className="h-50" name="nombres" defaultValue={this.props.nombres} onChange={this.props.handleChange}></input>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Fecha de Nacimiento"/>
-                                        <input type="date" className="h-50"></input>
+                                        <input type="date" className="h-50" name="fechaNacimiento" defaultValue={this.props.fechaNacimiento} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Género"/>
-                                        <select className="h-50" defaultValue="selec">
+                                        <select className="h-50" name="genero" defaultValue={this.props.genero} onChange={this.props.handleChange}>
                                             <option disabled value="selec">Seleccione</option>
                                             <option value="masculino">Masculino</option>
                                             <option value="femenino">Femenino</option>
@@ -104,13 +61,13 @@ export default class DatosPersonales extends Component {
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Correo Electrónico"/>
-                                        <input type="email"  className="h-50"></input>
+                                        <input type="email" name="correo" className="h-50" defaultValue={this.props.correo} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Estado Civil"/>
-                                        <select className="h-50" defaultValue="selec">
-                                            <option disabled value="selec">Seleccione</option>
+                                        <select className="h-50" name="estadoCivil" defaultValue={this.props.estadoCivil} onChange={this.props.handleChange}>
+                                            <option disabled value="selec" >Seleccione</option>
                                             <option value="soltero">Soltero/a</option>
                                             <option value="casado">Casado/a</option>
                                             <option value="divorciado">Divorciado/a</option>
@@ -121,34 +78,34 @@ export default class DatosPersonales extends Component {
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Teléfono Fijo"/>
-                                        <input type="tel"  className="h-50"></input>
+                                        <input type="tel" name="telConv" className="h-50" defaultValue={this.props.telConv} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Teléfono Celular"/>
-                                        <input type="tel"  className="h-50"></input>
+                                        <input type="tel" name="telCel" className="h-50" defaultValue={this.props.telCel} onChange={this.props.handleChange}></input>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="País"/>
-                                        <input type="text"  className="h-50"></input>
+                                        <input type="text" name="pais" className="h-50" defaultValue={this.props.pais} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Provincia"/>
-                                        <input type="text"  className="h-50"></input>
+                                        <input type="text" name="provincia" className="h-50" defaultValue={this.props.provincia} onChange={this.props.handleChange}></input>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Dirección"/>
-                                        <input type="text"  className="h-50"></input>
+                                        <input type="text" name="direccion"  className="h-50" defaultValue={this.props.direccion} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-1">
                                         <Label name="Disponibilidad para viajar"/>
-                                        <select className="h-50" defaultValue="selec">
+                                        <select className="h-50" name="disponibilidad" defaultValue={this.props.disponibilidad} onChange={this.props.handleChange}>
                                             <option disabled value="selec">Seleccione</option>
                                             <option value="si">Si</option>
                                             <option value="no">No</option>

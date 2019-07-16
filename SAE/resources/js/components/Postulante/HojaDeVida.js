@@ -18,6 +18,21 @@ export default class HojaDeVida extends Component {
         form: "",
         prerrequisitosArray : [],
         datosPersonales: [],
+        //Datos Generales
+        nombres: "",
+        apellidos: "",
+        tipoId: "selec",
+        identificacion: "",
+        fechaNacimiento: "",
+        correo: "",
+        estadoCivil: "selec",
+        telConv: "",
+        telCel: "",
+        pais: "",
+        provincia: "",
+        direccion: "",
+        disponibilidad: "selec",
+        genero: "selec",
     }
 
     componentDidMount = async () =>{
@@ -67,6 +82,14 @@ export default class HojaDeVida extends Component {
             prerrequisitosArray: requerimientos,
         })
     } 
+
+    handleChange = ({target}) => {
+        const value = target.value;
+        const name = target.name;
+        this.setState({
+            [name] : value,
+        })
+    }
 
     render() {
         return (
@@ -164,14 +187,27 @@ export default class HojaDeVida extends Component {
                                     )*/
                                 this.state.form === "datos" && (
                                     <DatosPersonales
-                                    handleChangeTipo={this.handleChangeTipo}
-
+                                        handleChangeTipo={this.handleChangeTipo}
+                                        handleChange={this.handleChange}
+                                        nombres={this.state.nombres}
+                                        apellidos={this.state.apellidos}
+                                        tipo={this.state.tipoId}
+                                        identificacion={this.state.identificacion}
+                                        fechaNacimiento={this.state.fechaNacimiento}
+                                        correo={this.state.correo}
+                                        estadoCivil={this.state.estadoCivil}
+                                        telConv={this.state.telConv}
+                                        telCel={this.state.telCel}
+                                        pais={this.state.pais}
+                                        provincia={this.state.provincia}
+                                        direccion={this.state.direccion}
+                                        disponibilidad={this.state.disponibilidad}
+                                        genero={this.state.genero}
                                     />
                                 )}
                                 {this.state.form === "educacion" && (
                                     <EducacionFormal
                                     handleChangeTipo={this.handleChangeTipo}
-                                    
                                     />
                                 )}
                                 {this.state.form === "experiencia" && (
