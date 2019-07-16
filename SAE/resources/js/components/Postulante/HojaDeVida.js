@@ -94,8 +94,6 @@ export default class HojaDeVida extends Component {
 
     handlePostulante = () => {
 
-        console.log(this.state);
-
         let postulante = {
             nombres: this.state.nombres,
             apellidos: this.state.apellidos,
@@ -106,6 +104,8 @@ export default class HojaDeVida extends Component {
             telefono: this.state.telCel,
             provincia: this.state.provincia,
         }
+
+        console.log("PAYLOAD DE POSTULANTE",postulante);
 
         this.handleSubmitPostulante(postulante);
         
