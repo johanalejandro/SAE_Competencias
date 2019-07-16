@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Label from '../common/Label';
-import {clone, isEmpty, pull} from 'lodash';
 
 export default class DatosPersonales extends Component {
+
+    constructor(props) {
+        super(props);
+      }
+
+    handleSubmit = (e) => {
+        //preventDefault prevents page reload   
+        e.preventDefault();
+        /*A call back to the onAdd props. The current
+         *state is passed as a param
+         */
+        this.props.handlePostulante();
+      }
 
     render() {
         //console.log("ambitos escogidos: ",this.state.ambitosArray);
@@ -116,11 +128,16 @@ export default class DatosPersonales extends Component {
                 </div>
 
             </div>
+            {this.props.agregado &&(
+            <div className="d-flex flex-row justify-content-end align-items-center py-4">
+                <label className="text-center text-normal">Postulante agregado con éxito</label>
+            </div>)}
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
                 <button name="educacion" className="btn-primary-sae w-20" 
-                    onClick={(evt)=>{
-                        this.props.handleChangeTipo(evt);
-                        }}
+                    onClick={//(evt)=>{
+                        this.handleSubmit
+                        //this.props.handleChangeTipo(evt);}
+                    }
                 >Siguiente</button>
             </div>
             </React.Fragment>

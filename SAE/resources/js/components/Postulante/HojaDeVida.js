@@ -33,6 +33,7 @@ export default class HojaDeVida extends Component {
         direccion: "",
         disponibilidad: "selec",
         genero: "selec",
+        agregado: false,
     }
 
     componentDidMount = async () =>{
@@ -89,6 +90,51 @@ export default class HojaDeVida extends Component {
         this.setState({
             [name] : value,
         })
+    }
+
+    handlePostulante = () => {
+
+        console.log(this.state);
+
+        let postulante = {
+            nombres: this.state.nombres,
+            apellidos: this.state.apellidos,
+            genero: this.state.genero,
+            cedula: this.state.identificacion,
+            email: this.state.correo,
+            fechaNacimiento: this.state.fechaNacimiento,
+            telefono: this.state.telCel,
+            provincia: this.state.provincia,
+        }
+
+        this.handleSubmitPostulante(postulante);
+        
+    }
+
+    handleSubmitPostulante(postulante) {
+        /*Fetch API for post request */
+        fetch( 'api/postulantes/', {
+            method:'post',
+            /* headers are important*/
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify(postulante)
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then( data => {
+            //update the state of products and currentProduct
+            console.log("POST POSTULANTE",data);
+            this.setState({
+                agregado: true,
+            });
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
     }
 
     render() {
@@ -189,6 +235,7 @@ export default class HojaDeVida extends Component {
                                     <DatosPersonales
                                         handleChangeTipo={this.handleChangeTipo}
                                         handleChange={this.handleChange}
+                                        handlePostulante={this.handlePostulante}
                                         nombres={this.state.nombres}
                                         apellidos={this.state.apellidos}
                                         tipo={this.state.tipoId}
@@ -203,6 +250,7 @@ export default class HojaDeVida extends Component {
                                         direccion={this.state.direccion}
                                         disponibilidad={this.state.disponibilidad}
                                         genero={this.state.genero}
+                                        agregado={this.state.agregado}
                                     />
                                 )}
                                 {this.state.form === "educacion" && (
