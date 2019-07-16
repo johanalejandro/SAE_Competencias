@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Checkbox from '../common/Checkbox'
+import Checkbox from '../../common/Checkbox'
 
 export default class SectorItem extends Component {
 

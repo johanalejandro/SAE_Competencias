@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import AlcanceItem from './AlcanceItem'
+import AlcanceItem from './Items/AlcanceItem'
 import {clone, isEmpty, pull} from 'lodash';
 
 export default class SeleccionarSector extends Component {

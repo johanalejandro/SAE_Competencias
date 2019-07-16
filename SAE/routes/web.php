@@ -15,10 +15,6 @@ Route::get('/postulacion', function () {
     return view('welcome');
 });
 
-Route::get('/sectores', function () {
-    return view('pages/seleccionarSector');
-});
-
 Route::get('/postulacion-formulario', function () {
     return view('pages/formPostulacion');
 });

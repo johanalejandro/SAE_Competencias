@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import SectorItem from './SectorItem'
+import SectorItem from './Items/SectorItem'
 import {clone, isEmpty, pull} from 'lodash';
 
 export default class SeleccionarSector extends Component {

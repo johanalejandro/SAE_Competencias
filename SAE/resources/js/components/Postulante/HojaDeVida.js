@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../common/Header'
 import Prerrequisitos from './Prerrequisitos';
+import DatosPersonales from './DatosPersonales';
+import EducacionFormal from './EducacionFormal';
+import ExperienciaLaboral from './ExperienciaLaboral';
+import Referencia from './Referencia';
 
 export default class HojaDeVida extends Component {
 
@@ -13,6 +17,7 @@ export default class HojaDeVida extends Component {
         prerrequisitos: "",
         form: "",
         prerrequisitosArray : [],
+        datosPersonales: [],
     }
 
     componentDidMount = async () =>{
@@ -158,16 +163,28 @@ export default class HojaDeVida extends Component {
                                     )
                                     )*/
                                 this.state.form === "datos" && (
-                                    <div>Datos Personales</div>
+                                    <DatosPersonales
+                                    handleChangeTipo={this.handleChangeTipo}
+
+                                    />
                                 )}
                                 {this.state.form === "educacion" && (
-                                    <div>Educación Formal</div>
+                                    <EducacionFormal
+                                    handleChangeTipo={this.handleChangeTipo}
+                                    
+                                    />
                                 )}
                                 {this.state.form === "experiencia" && (
-                                    <div>Experiencia Laboral</div>
+                                    <ExperienciaLaboral
+                                    handleChangeTipo={this.handleChangeTipo}
+                                    
+                                    />
                                 )}
                                 {this.state.form === "referencia" && (
-                                    <div>Referencia</div>
+                                    <Referencia
+                                    handleChangeTipo={this.handleChangeTipo}
+                                    
+                                    />
                                 )}
                             </div>
                         </div>

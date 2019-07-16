@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import AmbitoItem from './Items/AmbitoItem'
 import {clone, isEmpty, pull} from 'lodash';
 
-export default class SeleccionarAmbito extends Component {
+export default class Referencia extends Component {
 
     state = {
         ambitos: [],
@@ -11,7 +10,7 @@ export default class SeleccionarAmbito extends Component {
         checkedItems: new Map(),
     }
 
-    componentDidMount(){
+    /*componentDidMount(){
 
         fetch('/api/ambito')
         .then(response => {
@@ -46,46 +45,24 @@ export default class SeleccionarAmbito extends Component {
                 ambitosArray: cloned,
             })
         }
-    }
+    }*/
 
     render() {
-        console.log("ambitos escogidos: ",this.state.ambitosArray);
+        //console.log("ambitos escogidos: ",this.state.ambitosArray);
         return (
             <React.Fragment>
             <div className="containersae d-flex flex-row justify-content-center align-items-center">
                 <div className="d-flex flex-column align-items-center w-100 mx-4">
-                        <h2>Ámbito a postular</h2>
-                        <h3>Seleccione el/los  ámbito(s) que desea postular</h3>
+                        <h2>Referencia</h2>
                         <div className="card w-100 mb-4">
-
-                            <div className="flex-row justify-content-between">
-
-                                <div className="card-body">
-                                    <ul className="mb-0">
-                                        {!isEmpty(this.state.ambitos)?(
-                                            this.state.ambitos.map((ambito) => (
-                                            <AmbitoItem
-                                                ambito={ambito}
-                                                id={ambito.id_ambito}
-                                                handleAmbitoChange={this.handleAmbitoChange}
-                                                handleCheckBoxChange={this.handleCheckBoxChange}
-                                                key={ambito.id_ambito}
-                                                checkedItems={this.state.checkedItems}
-                                            />
-                                        ))):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)}
-
-                                    </ul>
-                                    
-                                </div>
-                            </div>
+                            
                         </div>
                 </div>
 
             </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <button name="sectores" className="btn-primary-sae w-20" 
+                <button name="referencia" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.props.updateAmbitos(this.state.ambitosArray);
                         this.props.handleChangeTipo(evt);
                         }}
                 >Siguiente</button>
@@ -95,6 +72,6 @@ export default class SeleccionarAmbito extends Component {
     }
 }
 
-if (document.getElementById('seleccionar-ambito')) {
-    ReactDOM.render(<SeleccionarAmbito />, document.getElementById('seleccionar-ambito'));
+if (document.getElementById('referencia')) {
+    ReactDOM.render(<Referencia />, document.getElementById('referencia'));
 }

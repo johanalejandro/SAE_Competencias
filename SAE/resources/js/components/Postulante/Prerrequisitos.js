@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../common/Header'
 import {clone, isEmpty, pull, isEqual} from 'lodash';
-import PrerrequisitoItem from './PrerrequisitoItem';
+import PrerrequisitoItem from './Items/PrerrequisitoItem';
 
 export default class Prerrequisitos extends Component {
 
@@ -130,7 +130,7 @@ export default class Prerrequisitos extends Component {
                                                         ):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
                                                         }
 
-                                                    </ul>)
+                                                    </ul>
                                                 
                                                 
                                             </div>
