@@ -13,7 +13,7 @@ export default class Img extends Component {
                 case 'experto':
                   return <img className={className} src={require('./img/experto.jpg')} height="200px" width="200px"></img> ;
                 case 'header':
-                  return <img className={className} src={require('./img/sae.png')} height="160px" width="200px"></img>;
+                  return <img className={className} src={require('./img/sae.png')} height="100px" width="200px"></img>;
                 default:
                   return null;
             }

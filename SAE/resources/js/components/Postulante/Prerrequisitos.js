@@ -106,7 +106,7 @@ export default class Prerrequisitos extends Component {
                     {this.props.tipo === "evaluador"?(
                         <React.Fragment>
                             <Header title="Postulación"/>
-                            <div className="containersae d-flex flex-row justify-content-center align-items-center">
+                            <div className="containersae d-flex flex-column justify-content-center align-items-center">
                                 <div className="d-flex flex-column align-items-center w-100 mx-4">
                                     <h2>Requisitos mínimos</h2>
                                     <h3>Lea con atención, debe poseer todos los requisitos a continuación para proseguir</h3>
@@ -137,20 +137,20 @@ export default class Prerrequisitos extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                                <button name="prerrequisitos" className="btn-primary-sae w-20"
-                                    onClick={(evt)=>{
-                                        this.validar();
-                                        this.props.updatePrerrequisitos(this.state.requerimientosArray);
-                                        }}
-                                    >Siguiente</button>
+                                <div className="d-flex flex-row justify-content-end align-items-center w-100 my-2">
+                                    <button name="prerrequisitos" className="btn-primary-sae w-20"
+                                        onClick={(evt)=>{
+                                            this.validar();
+                                            this.props.updatePrerrequisitos(this.state.requerimientosArray);
+                                            }}
+                                        >Siguiente</button>
+                                </div>
                             </div>
                         </React.Fragment>
                     ):(
                         <React.Fragment>
                             <Header title="Postulación"/>
-                            <div className="containersae d-flex flex-row justify-content-center align-items-center">
+                            <div className="containersae d-flex flex-column justify-content-center align-items-center">
                                 <div className="d-flex flex-column align-items-center w-100 mx-4">
                                     <h2>Requisitos mínimos</h2>
                                     <h3>Lea con atención, debe poseer todos los requisitos a continuación para proseguir</h3>
@@ -161,12 +161,15 @@ export default class Prerrequisitos extends Component {
                                             <div className="card-body">
                                                 <label className="text-center text-normal">¿Al menos tiene 2 años de experiencia en el sector, alcance, ensayo o técnica que desea postular?</label>
                                             </div>
+
+                                            
+
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                                <button name="prerrequisitos" className="btn-primary-sae w-20" data-toggle="modal" data-target="#expertoModal">Sí</button>
+                                <div className="d-flex flex-row justify-content-end align-items-center w-100 my-2">
+                                    <button name="prerrequisitos" className="btn-primary-sae w-20" data-toggle="modal" data-target="#expertoModal">Sí</button>
+                                </div>
                             </div>
                         </React.Fragment>
                     )}

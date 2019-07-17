@@ -34,6 +34,8 @@ export default class HojaDeVida extends Component {
         disponibilidad: "selec",
         genero: "selec",
         agregado: false,
+        //Educación Formal
+        
     }
 
     componentDidMount = async () =>{

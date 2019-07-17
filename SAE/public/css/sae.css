@@ -109,7 +109,7 @@ h3{
 }
 
 .mh-header{
-  max-height: 160px;
+  max-height: 75px;
 }
 
 .text-normal{
@@ -165,4 +165,9 @@ h3{
 
 .bg-current{
   background-color: #e9ecef; 
+}
+
+.px-3{
+  padding-left: 15px !important;
+  padding-right: 15px !important;
 }

@@ -6,7 +6,7 @@ export default class Header extends Component {
 
     render() {
         return (
-                <div className="d-flex flex-row justify-content-center items-align-center">
+                <div className="d-flex flex-row justify-content-center items-align-center h-50">
                     <div className="w-40">
                         <Img className="w-auto px-2" imageType="header"/>
                     </div>

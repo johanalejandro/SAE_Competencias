@@ -89,7 +89,7 @@
         </div>
             <div class="bg-light">
 
-            <div class="mx-6 content mt-6">
+            <div class="mx-2 content">
 
                     <div id="postulation-form">
 

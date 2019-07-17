@@ -52,8 +52,7 @@ export default class SeleccionarAmbito extends Component {
         console.log("ambitos escogidos: ",this.state.ambitosArray);
         return (
             <React.Fragment>
-            <div className="containersae d-flex flex-row justify-content-center align-items-center">
-                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                <div className="d-flex flex-column align-items-center w-100">
                         <h2>Ámbito a postular</h2>
                         <h3>Seleccione el/los  ámbito(s) que desea postular</h3>
                         <div className="card w-100 mb-4">
@@ -80,9 +79,7 @@ export default class SeleccionarAmbito extends Component {
                             </div>
                         </div>
                 </div>
-
-            </div>
-            <div className="d-flex flex-row justify-content-end align-items-center py-4">
+            <div className="d-flex flex-row justify-content-end align-items-center my-4">
                 <button name="sectores" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
                         this.props.updateAmbitos(this.state.ambitosArray);

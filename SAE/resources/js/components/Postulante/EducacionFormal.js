@@ -51,8 +51,7 @@ export default class EducacionFormal extends Component {
         //console.log("ambitos escogidos: ",this.state.ambitosArray);
         return (
             <React.Fragment>
-            <div className="containersae d-flex flex-row justify-content-center align-items-center">
-                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                <div className="d-flex flex-column align-items-center w-100">
                         <h2>Educación Formal</h2>
                         <div className="card w-100 mb-4">
                             <div className="flex-row justify-content-between">
@@ -63,7 +62,6 @@ export default class EducacionFormal extends Component {
                         </div>
                 </div>
 
-            </div>
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
                 <button name="experiencia" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{

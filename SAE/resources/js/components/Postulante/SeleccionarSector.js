@@ -69,8 +69,7 @@ export default class SeleccionarSector extends Component {
         console.log("sectores escogidos: ",this.state.sectoresArray);
         return(
         <React.Fragment>
-        <div className="containersae d-flex flex-row justify-content-center align-items-center">
-                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                <div className="d-flex flex-column align-items-center w-100">
                         <h2>Sector a postular</h2>
                         <h3>Seleccione el/los  secto(es) que desea postular</h3>
                         <div className="card w-100 mb-4">
@@ -99,9 +98,7 @@ export default class SeleccionarSector extends Component {
                             </div>
                         </div>
                 </div>
-
-            </div>
-            <div className="d-flex flex-row justify-content-end align-items-center py-4">
+            <div className="d-flex flex-row justify-content-end align-items-center my-4">
                 <button name="alcances" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
                         this.props.updateSectores(this.state.sectoresArray);
