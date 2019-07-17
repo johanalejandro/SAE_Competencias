@@ -63,12 +63,20 @@ export default class SeleccionarSector extends Component {
         }
     }
 
+    validar = (evt) => {
+        if(!isEmpty(this.state.alcancesArray)){
+            this.props.updateAlcances(this.state.alcancesArray);
+            this.props.handleChangeTipo(evt);
+        }else{
+            $('#alcancesModal').modal();
+        }
+    }
+
     render() {
         console.log("alcances escogidos: ",this.state.alcancesArray);
         return (
             <React.Fragment>
-            <div className="containersae d-flex flex-row justify-content-center align-items-center">
-                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                <div className="d-flex flex-column align-items-center w-100">
                         <h2>Alcance a postular</h2>
                         <h3>Seleccione el/los  alcance(s) que desea postular</h3>
                         <div className="card w-100 mb-4">
@@ -97,16 +105,31 @@ export default class SeleccionarSector extends Component {
                             </div>
                         </div>
                 </div>
-
-            </div>
-            <div className="d-flex flex-row justify-content-end align-items-center py-4">
+            <div className="d-flex flex-row justify-content-end align-items-center my-4">
                 <button name="alcances" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.props.updateAlcances(this.state.alcancesArray);
-                        this.props.handleChangeTipo(evt);
+                        this.validar(evt);
                         }}
                     >Siguiente</button>
             </div>
+            <div className="modal fade" id="alcancesModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header text-center">
+                      <h5 className="modal-title" id="exampleModalLongTitle">Recuerde</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                            <label className="w-90 text-normal text-danger text-justify">No ha seleccionado ningún alcance a aplicar. Debe seleccionar al menos uno</label>
+                    </div>
+                    <div className="modal-footer">
+                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </React.Fragment>
         );
     }
