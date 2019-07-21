@@ -28,6 +28,7 @@ export default class HojaDeVida extends Component {
         estadoCivil: "selec",
         telConv: "",
         telCel: "",
+        ciudad:"",
         pais: "",
         provincia: "",
         direccion: "",
@@ -103,8 +104,9 @@ export default class HojaDeVida extends Component {
             cedula: this.state.identificacion,
             email: this.state.correo,
             fechaNacimiento: this.state.fechaNacimiento,
-            telefono: this.state.telCel,
+            telefono: this.state.telefono,
             provincia: this.state.provincia,
+            disponibilidad=this.state.disponibilidad
         }
 
         console.log("PAYLOAD DE POSTULANTE",postulante);
@@ -115,7 +117,7 @@ export default class HojaDeVida extends Component {
 
     handleSubmitPostulante(postulante) {
         /*Fetch API for post request */
-        fetch( 'api/postulantes/', {
+        fetch( 'api/postulantes', {
             method:'post',
             /* headers are important*/
             headers: {

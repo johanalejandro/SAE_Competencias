@@ -13,6 +13,7 @@ class CreatePostulantesTable extends Migration
      */
     public function up()
     {
+       
         Schema::create('postulantes', function (Blueprint $table) {
             $table->bigIncrements('id_postulante')->autoIncrement();
             $table->timestamps();
@@ -26,8 +27,9 @@ class CreatePostulantesTable extends Migration
             $table->bigInteger('telefono');
             $table->string('provincia');
             $table->set('estado',['Por Habilitar', 'Habilitado','Deshabilitado','Por Asignar','Por Evaluar'])->default('Por Asignar');
-            $table->date('fechaHabilitacion');
+            $table->date('fechaHabilitacion')->nullable();
             $table->boolean('disponibilidadViajar');
+            $table->set('tipoPostulacion',['Evaluador', 'Experto']);
 
 
 

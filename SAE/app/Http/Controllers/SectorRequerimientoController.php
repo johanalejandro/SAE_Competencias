@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\sectorRequerimiento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SectorRequerimientoController extends Controller
 {
@@ -38,29 +39,7 @@ class SectorRequerimientoController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\sectorRequerimiento  $sectorRequerimiento
-     * @return \Illuminate\Http\Response
-     */
-    /*
-    public function show($id)
-    {
-        $requerimiento = DB::table('sector_requerimientos')
-                ->where('id_sector', $id);
-         return response()->json($requerimiento);
-    }
-    */
-
-    public function show($id)
-    {
-        //$requerimientos = sectorRequerimiento::belongsto($id)->orderBy('created_at')->get();
-        $requerimiento = sectorRequerimiento::findOrFail($id);
-        return response()->json($requerimiento);
-    }
-
-
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -80,19 +59,18 @@ class SectorRequerimientoController extends Controller
      * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, sectorRequerimiento $sectorRequerimiento)
+    public function show($id)
     {
-        //
+        //$requerimientos = sectorRequerimiento::belongsto($id)->orderBy('created_at')->get();
+        $requerimiento = sectorRequerimiento::findOrFail($id);
+        return response()->json($requerimiento);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\sectorRequerimiento  $sectorRequerimiento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(sectorRequerimiento $sectorRequerimiento)
-    {
-        //
+
+
+    public function verRequerimientosPorSector($id){
+        $requerimientos = DB::table('sector_requerimientos')->where('id_sector',$id)->get();
+        return response()->json($requerimientos);
+
     }
 }

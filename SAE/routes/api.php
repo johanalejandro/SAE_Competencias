@@ -31,6 +31,10 @@ Route::get('/postulantes/{id}', 'PostulanteController@show');
 
 Route::post('/postulantes', 'PostulanteController@store');
 
+Route::get('postulantePorHabilitar', 'PostulanteController@mostrarPostulantePorHabilitar'); // Muestra postulantes por habilitar
+
+Route::get('postulanteHabilitado', 'PostulanteController@mostrarPostulanteHabilitado');
+
 /*Api para mostrar requerimientos segun sector (se pasa id de sector)*/
 
-Route::get('sector/{id}', 'SectorRequerimientoController@show');
+Route::get('requerimientosSector/{id}', 'SectorRequerimientoController@verRequerimientosPorSector');

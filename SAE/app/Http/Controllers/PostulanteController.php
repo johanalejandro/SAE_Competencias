@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Postulante;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PostulanteController extends Controller
 {
@@ -36,30 +38,25 @@ class PostulanteController extends Controller
      */
     public function store(Request $request)
     {
-        /*Valido los campos */
-         $validatedData = $request->validate([
-          'nombres' => 'required|max:100',
-          'apellidos' => 'required|max:100',
-          'genero' => 'required',
-          'cedula' => 'required',
-          'email' => 'required',
-          'fechaNacimiento' => 'required',
-          'telefono' => 'required',
-          'provincia' => 'required',
-          'disponibilidadViajar' => 'required',
-        ]);
-        $postulante = Postulante::create([
-            'nombres'   =>  $validatedData->['nombre'],
-            'apellidos' =>  $validatedData->['apellido'],
-            'ciudad'    =>  $validatedData->['ciudad'],
-            'genero'   =>   $validatedData->['genero'],
-            'email'    =>   $validatedData->['email'],
-            'cedula'  =>    $validatedData->['cedula'],
-            'fechaNacimiento'=>$validatedData->['fechaNacimiento'],
-            'telefono'=>       $validatedData->['telefono'],
-            'provincia'=>     $validatedData->['provincia'],
-            'estado'=>        $validatedData->['estado'],
-            'fechaHabilitacion'=>$validatedData->['fechaHabilitacion']);
+        //$todayDate = new DateTime();
+        $current_date_time = Carbon::now()->toDateTimeString();
+        $campos = $request->all();
+        $campos['nombres']=$request->nombres;
+        $campos['apellidos']=$request->apellidos;
+        $campos['ciudad']="Guayaquil";
+        $campos['genero']=$request->genero;
+        $campos['email']=$request->email;
+        $campos['cedula']=$request->cedula;
+        $campos['fechaNacimiento']=$current_date_time;
+        $campos['telefono']=$request->telefono;
+        $campos['provincia']=$request->provincia;
+        $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
+        $campos['disponibilidadViajar']=1;
+        $campos['fechaHabilitacion']=$current_date_time;
+        $campos['tipoPostulacion']=$request->tipoPostulacion;
+        
+       
+        $postulante= Postulante::create($campos);
         
         return response()->json('Postulante creado');
     }
@@ -70,21 +67,24 @@ class PostulanteController extends Controller
      * @param  \App\Postulante  $postulante
      * @return \Illuminate\Http\Response
      */
-    public function show(Postulante $postulante)
+    public function show(Postulante $id)
     {
-        //
+        $postulante = Postulante::findOrFail($id);
+        return response()->json($postulante);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Postulante  $postulante
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Postulante $postulante)
+    public function mostrarPostulantePorHabilitar()
     {
-        //
+        $postulantes = DB::table('postulantes')->where('estado', 'Por Habilitar')->get();
+        return response()->json($postulantes);
     }
+    public function mostrarPostulanteHabilitado()
+    {
+        $postulantes = DB::table('postulantes')->where('estado', 'Habilitado')->get();
+        return response()->json($postulantes);
+    }
+
+    
 
     /**
      * Update the specified resource in storage.
