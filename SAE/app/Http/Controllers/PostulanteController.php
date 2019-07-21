@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Postulante;
-use App\experienciaLaboral;
 use App\educacionFormal;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -40,7 +39,7 @@ class PostulanteController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //$todayDate = new DateTime();
         $current_date_time = Carbon::now()->toDateTimeString();
         $campos = $request->all();
         $campos['nombres']=$request->nombres;
@@ -56,24 +55,26 @@ class PostulanteController extends Controller
         $campos['disponibilidadViajar']=1;
         $campos['fechaHabilitacion']=$current_date_time;
         //$campos['tipoPostulacion']=$request->tipoPostulacion;
-        
+        $campos['nombreInstitucion']= $request->nombreInstitucion;
+        $campos['tituloObtenido'] = $request->tituloObtenido;
+        $campos['tipoFormacion'] = $request->tipoFormacion;
+        $campos['archivoAnexo'] = $request->archivoAnexo;
+
+       
        
         $postulante= Postulante::create($campos);
 
-        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->get();
-
-        $educacion = educacionFormal::create([
-            'id_postulante' => $keypostulante,
-            'nombreInstitucion' => $request->nombreInstitucion,
-            'tituloObtenido' => $request->tituloObtenido,
-            'tipoFormacion' => $request->tipoFormacion,
-            'archivoAnexo' => $request->archivoAnexo,
-
-            
-
-
-
+        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
+    
+            $educacion = educacionFormal::create([
+                'id_postulante' => $keypostulante->id_postulante,
+                'nombreInstitucion' => $campos['nombreInstitucion'],
+                'tituloObtenido' =>  $campos['tituloObtenido'],
+                'tipoFormacion' => $campos['tipoFormacion'],
+                'archivoAnexo' => $campos['archivoAnexo']
         ]);
+    
+                
         
         return response()->json('Postulante creado');
     }

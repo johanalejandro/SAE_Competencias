@@ -38,3 +38,6 @@ Route::get('postulanteHabilitado', 'PostulanteController@mostrarPostulanteHabili
 /*Api para mostrar requerimientos segun sector (se pasa id de sector)*/
 
 Route::get('requerimientosSector/{id}', 'SectorRequerimientoController@verRequerimientosPorSector');
+
+Route::get('/sector/{id}', 'SectorRequerimientoController@show');
+

@@ -13,7 +13,7 @@ class CreatePostulantesTable extends Migration
      */
     public function up()
     {
-       
+
         Schema::create('postulantes', function (Blueprint $table) {
             $table->bigIncrements('id_postulante')->autoIncrement();
             $table->timestamps();

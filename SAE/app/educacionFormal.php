@@ -15,5 +15,13 @@ class educacionFormal extends Model
         return $this->belongsTo('App\Postulante');
          
     }
+
+    protected $fillable = [
+        'id_postulante', 
+        'nombreInstitucion', 
+        'tituloObtenido',
+        'tipoFormacion',
+        'archivoAnexo'
+    ];
     
 }

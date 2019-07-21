@@ -36,12 +36,11 @@ export default class HojaDeVida extends Component {
         genero: "selec",
         agregado: false,
         //Educación Formal
-        nombreInstritucion: "Inst Prueba",
+
+        nombreInstitucion: "Inst Prueba",
         tituloObtenido:"Titulo Prueba",
         tipoFormacion:"Tercer Nivel",
         archivoAnexo:"Archivo Prueba"
-
-
         
     }
 
@@ -113,7 +112,7 @@ export default class HojaDeVida extends Component {
             telefono: this.state.telefono,
             provincia: this.state.provincia,
             disponibilidad:this.state.disponibilidad,
-            nombreInstritucion:this.state.nombreInstritucion,
+            nombreInstitucion:this.state.nombreInstitucion,
             tituloObtenido:this.state.tituloObtenido,
             tipoFormacion:this.state.tipoFormacion,
             archivoAnexo:this.state.archivoAnexo
@@ -265,6 +264,12 @@ export default class HojaDeVida extends Component {
                                         disponibilidad={this.state.disponibilidad}
                                         genero={this.state.genero}
                                         agregado={this.state.agregado}
+                                        nombreInstitucion={this.state.nombreInstitucion} 
+                                        tituloObtenido={this.state.tituloObtenido}
+                                        tipoFormacion={this.state.tipoFormacion}
+                                        archivoAnexo={this.state.archivoAnexo}
+        
+
                                     />
                                 )}
                                 {this.state.form === "educacion" && (

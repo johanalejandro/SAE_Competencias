@@ -94,7 +94,7 @@ export default class DatosPersonales extends Component {
                                     </div>
                                     <div className="d-flex flex-column w-50">
                                         <Label name="Teléfono Celular"/>
-                                        <input type="tel" name="telCel" className="h-50" defaultValue={this.props.telCel} onChange={this.props.handleChange}></input>
+                                        <input type="tel" name="telefono" className="h-50" defaultValue={this.props.telCel} onChange={this.props.handleChange}></input>
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row justify-content-between mb-1">
@@ -116,10 +116,10 @@ export default class DatosPersonales extends Component {
                                     </div>
                                     <div className="d-flex flex-column w-50">
                                         <Label name="Disponibilidad para viajar"/>
-                                        <select className="h-50" name="disponibilidad" defaultValue={this.props.disponibilidad} onChange={this.props.handleChange}>
+                                        <select className="h-50" name="disponibilidadViajar" defaultValue={this.props.disponibilidad} onChange={this.props.handleChange}>
                                             <option disabled value="selec">Seleccione</option>
-                                            <option value="si">Si</option>
-                                            <option value="no">No</option>
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
                                         </select>
                                     </div>
                                 </div>

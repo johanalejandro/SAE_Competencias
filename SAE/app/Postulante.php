@@ -6,9 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Postulante extends Model
 {
-    //
+    const POSTULANTE_POR_HABILITAR ='por habilitar';
+    const POSTULANTE_HABILITADO ='habilitado';
+    const POSTULANTE_DESHABILITADO ='deshabilitado';
+    const POSTULANTE_POR_ASIGNAR ='por asignar';
+    const POSTULANTE_POR_EVALUAR ='por evaluar';
+
     protected $primaryKey = 'id_postulante';
     public $timestamps = true;
+
+    protected $fillable = [
+        'nombres', 
+        'apellidos', 
+        'ciudad',
+        'genero',
+        'email',
+        'cedula',
+        'fechaNacimiento',
+        'telefono',
+        'provincia',
+        'estado',
+        'fechaHabilitacion',
+        'disponibilidadViajar',
+        'tipoPostulacion'
+    ];
+
+    /* Relaciones de Base de Datos */
 
     public function experienciaLaborals()
     {
@@ -26,9 +49,7 @@ class Postulante extends Model
     }
 
 
-    protected $fillable = [
-        'nombres', 'apellidos', 'ciudad','genero','email','cedula','fechaNacimiento','telefono','provincia','estado','fechaHabilitacion','disponibilidadViajar'
-    ];
+    
 
 
 

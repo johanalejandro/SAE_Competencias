@@ -8,6 +8,14 @@ class solicitudPostulacion extends Model
 {
 	protected $primaryKey = 'id_solicitud';
     public $timestamps = true;
+
+
+    protected $fillable = [
+        'id_postulante', 
+        'id_usuario', 
+        'id_evaluacion'
+        
+    ];
     
     public function postulante()
     {

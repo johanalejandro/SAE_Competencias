@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\sectorRequerimiento;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class SectorRequerimientoController extends Controller
 {
@@ -39,26 +39,21 @@ class SectorRequerimientoController extends Controller
         //
     }
 
-    
-
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
      * @param  \App\sectorRequerimiento  $sectorRequerimiento
      * @return \Illuminate\Http\Response
      */
-    public function edit(sectorRequerimiento $sectorRequerimiento)
+    /*
+    public function show($id)
     {
-        //
+        $requerimiento = DB::table('sector_requerimientos')
+                ->where('id_sector', $id);
+         return response()->json($requerimiento);
     }
+    */
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\sectorRequerimiento  $sectorRequerimiento
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //$requerimientos = sectorRequerimiento::belongsto($id)->orderBy('created_at')->get();
@@ -73,4 +68,7 @@ class SectorRequerimientoController extends Controller
         return response()->json($requerimientos);
 
     }
+    
+    
+    
 }
