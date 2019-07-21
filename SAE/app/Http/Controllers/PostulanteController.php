@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Postulante;
+use App\experienciaLaboral;
+use App\educacionFormal;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +40,7 @@ class PostulanteController extends Controller
      */
     public function store(Request $request)
     {
-        //$todayDate = new DateTime();
+        
         $current_date_time = Carbon::now()->toDateTimeString();
         $campos = $request->all();
         $campos['nombres']=$request->nombres;
@@ -53,10 +55,25 @@ class PostulanteController extends Controller
         $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
         $campos['disponibilidadViajar']=1;
         $campos['fechaHabilitacion']=$current_date_time;
-        $campos['tipoPostulacion']=$request->tipoPostulacion;
+        //$campos['tipoPostulacion']=$request->tipoPostulacion;
         
        
         $postulante= Postulante::create($campos);
+
+        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->get();
+
+        $educacion = educacionFormal::create([
+            'id_postulante' => $keypostulante,
+            'nombreInstitucion' => $request->nombreInstitucion,
+            'tituloObtenido' => $request->tituloObtenido,
+            'tipoFormacion' => $request->tipoFormacion,
+            'archivoAnexo' => $request->archivoAnexo,
+
+            
+
+
+
+        ]);
         
         return response()->json('Postulante creado');
     }

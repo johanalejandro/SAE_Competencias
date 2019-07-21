@@ -36,6 +36,12 @@ export default class HojaDeVida extends Component {
         genero: "selec",
         agregado: false,
         //Educación Formal
+        nombreInstritucion: "Inst Prueba",
+        tituloObtenido:"Titulo Prueba",
+        tipoFormacion:"Tercer Nivel",
+        archivoAnexo:"Archivo Prueba"
+
+
         
     }
 
@@ -106,7 +112,11 @@ export default class HojaDeVida extends Component {
             fechaNacimiento: this.state.fechaNacimiento,
             telefono: this.state.telefono,
             provincia: this.state.provincia,
-            disponibilidad=this.state.disponibilidad
+            disponibilidad:this.state.disponibilidad,
+            nombreInstritucion:this.state.nombreInstritucion,
+            tituloObtenido:this.state.tituloObtenido,
+            tipoFormacion:this.state.tipoFormacion,
+            archivoAnexo:this.state.archivoAnexo
         }
 
         console.log("PAYLOAD DE POSTULANTE",postulante);
