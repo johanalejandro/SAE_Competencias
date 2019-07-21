@@ -44,7 +44,7 @@ class PostulanteController extends Controller
         $campos = $request->all();
         $campos['nombres']=$request->nombres;
         $campos['apellidos']=$request->apellidos;
-        $campos['ciudad']="Guayaquil";
+        $campos['ciudad']=$request->ciudad;
         $campos['genero']=$request->genero;
         $campos['email']=$request->email;
         $campos['cedula']=$request->cedula;
@@ -52,13 +52,10 @@ class PostulanteController extends Controller
         $campos['telefono']=$request->telefono;
         $campos['provincia']=$request->provincia;
         $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
-        $campos['disponibilidadViajar']=1;
+        $campos['disponibilidadViajar']=$request->disponibilidadViajar;
         $campos['fechaHabilitacion']=$current_date_time;
-        //$campos['tipoPostulacion']=$request->tipoPostulacion;
-        $campos['nombreInstitucion']= $request->nombreInstitucion;
-        $campos['tituloObtenido'] = $request->tituloObtenido;
-        $campos['tipoFormacion'] = $request->tipoFormacion;
-        $campos['archivoAnexo'] = $request->archivoAnexo;
+        $campos['tipoPostulacion']=$request->tipoPostulacion;
+       
 
        
        
@@ -67,11 +64,11 @@ class PostulanteController extends Controller
         $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
     
             $educacion = educacionFormal::create([
-                'id_postulante' => $keypostulante->id_postulante,
-                'nombreInstitucion' => $campos['nombreInstitucion'],
-                'tituloObtenido' =>  $campos['tituloObtenido'],
-                'tipoFormacion' => $campos['tipoFormacion'],
-                'archivoAnexo' => $campos['archivoAnexo']
+                'id_postulante'     =>  $keypostulante->id_postulante,
+                'nombreInstitucion' =>  $request->nombreInstitucion,
+                'tituloObtenido'    =>  $request->tituloObtenido,
+                'tipoFormacion'     =>  $request->tipoFormacion,
+                'archivoAnexo'      =>  $request->archivoAnexo->store()
         ]);
     
                 
