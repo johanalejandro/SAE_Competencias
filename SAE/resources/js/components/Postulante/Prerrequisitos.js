@@ -25,13 +25,13 @@ export default class Prerrequisitos extends Component {
         for (let index = 0; index < ids.length; index++) {
             const sector = ids[index];
             
-            await fetch('/api/sector/'+sector)
+            await fetch('/api/requerimientosSector/'+sector)
             .then(response => {
                 return response.json();
             })
             .then(requerimientos => {
                 //Fetched product is stored in the state
-                reqs.push(requerimientos);
+                reqs=clone(requerimientos);
             }).catch(error => {
                 console.log("===ERROR: ",error);
             });
@@ -58,7 +58,6 @@ export default class Prerrequisitos extends Component {
                 validador: true
             });
             $('#exampleModalCenter').modal();
-            console.log("TRUUUUUUE");
         }else{
             $('#exampleModalCenter').modal();
         }
@@ -94,10 +93,21 @@ export default class Prerrequisitos extends Component {
             {this.state.show?(
                 <React.Fragment>
                     <Header title="Postulación"/>
-                    <div className="containersae d-flex flex-row justify-content-center align-items-center">
-                        <div className="d-flex flex-column align-items-center w-100 mx-4">
+                    <div className="containersae d-flex flex-row justify-content-center h-85">
+                        <div className="d-flex flex-column align-items-center w-100 mx-2">
                             <h2>Requisitos mínimos</h2>
                             <h3>Lea con atención, debe poseer todos los requisitos a continuación para proseguir</h3>
+                            <div className="card w-100 mb-4">
+
+                                        <div className="flex-row justify-content-between">
+
+                                            <div className="card-body">
+                                            
+                                                
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                         </div>
                     </div>
                 </React.Fragment>
@@ -106,8 +116,8 @@ export default class Prerrequisitos extends Component {
                     {this.props.tipo === "evaluador"?(
                         <React.Fragment>
                             <Header title="Postulación"/>
-                            <div className="containersae d-flex flex-column justify-content-center align-items-center">
-                                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                            <div className="containersae d-flex flex-column w-100 h-85">
+                                <div className="d-flex flex-column align-items-center mx-2">
                                     <h2>Requisitos mínimos</h2>
                                     <h3>Lea con atención, debe poseer todos los requisitos a continuación para proseguir</h3>
                                     <div className="card w-100 mb-4">
@@ -137,7 +147,7 @@ export default class Prerrequisitos extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="d-flex flex-row justify-content-end align-items-center w-100 my-2">
+                                <div className="d-flex flex-row justify-content-end align-items-center my-2 mx-2">
                                     <button name="prerrequisitos" className="btn-primary-sae w-20"
                                         onClick={(evt)=>{
                                             this.validar();

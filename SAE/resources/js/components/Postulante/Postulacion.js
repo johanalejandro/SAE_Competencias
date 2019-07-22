@@ -9,7 +9,7 @@ export default class Postulacion extends Component {
         return (
             <React.Fragment>
             <Header title="Certificarse como evaluador y/o experto técnico"/>
-            <div className="containersae d-flex flex-row justify-content-around align-items-center">
+            <div className="containersae d-flex flex-row justify-content-around align-items-center h-85">
                 <div className="d-flex flex-row justify-content-center align-items-center">
                     <div className="col-md-12">
                         <div className="card w-100">

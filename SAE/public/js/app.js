@@ -16787,7 +16787,7 @@ return jQuery;
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
  * @license
  * Lodash <https://lodash.com/>
- * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
+ * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -16798,7 +16798,7 @@ return jQuery;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.15';
+  var VERSION = '4.17.11';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -19457,10 +19457,16 @@ return jQuery;
         value.forEach(function(subValue) {
           result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
         });
-      } else if (isMap(value)) {
+
+        return result;
+      }
+
+      if (isMap(value)) {
         value.forEach(function(subValue, key) {
           result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
         });
+
+        return result;
       }
 
       var keysFunc = isFull
@@ -20384,8 +20390,8 @@ return jQuery;
         return;
       }
       baseFor(source, function(srcValue, key) {
-        stack || (stack = new Stack);
         if (isObject(srcValue)) {
+          stack || (stack = new Stack);
           baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
         }
         else {
@@ -22202,7 +22208,7 @@ return jQuery;
       return function(number, precision) {
         number = toNumber(number);
         precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
-        if (precision && nativeIsFinite(number)) {
+        if (precision) {
           // Shift with exponential notation to avoid floating-point issues.
           // See [MDN](https://mdn.io/round#Examples) for more details.
           var pair = (toString(number) + 'e').split('e'),
@@ -23385,7 +23391,7 @@ return jQuery;
     }
 
     /**
-     * Gets the value at `key`, unless `key` is "__proto__" or "constructor".
+     * Gets the value at `key`, unless `key` is "__proto__".
      *
      * @private
      * @param {Object} object The object to query.
@@ -23393,10 +23399,6 @@ return jQuery;
      * @returns {*} Returns the property value.
      */
     function safeGet(object, key) {
-      if (key === 'constructor' && typeof object[key] === 'function') {
-        return;
-      }
-
       if (key == '__proto__') {
         return;
       }
@@ -27197,7 +27199,6 @@ return jQuery;
           }
           if (maxing) {
             // Handle invocations in a tight loop.
-            clearTimeout(timerId);
             timerId = setTimeout(timerExpired, wait);
             return invokeFunc(lastCallTime);
           }
@@ -31584,12 +31585,9 @@ return jQuery;
       , 'g');
 
       // Use a sourceURL for easier debugging.
-      // The sourceURL gets injected into the source that's eval-ed, so be careful
-      // with lookup (in case of e.g. prototype pollution), and strip newlines if any.
-      // A newline wouldn't be a valid sourceURL anyway, and it'd enable code injection.
       var sourceURL = '//# sourceURL=' +
-        (hasOwnProperty.call(options, 'sourceURL')
-          ? (options.sourceURL + '').replace(/[\r\n]/g, ' ')
+        ('sourceURL' in options
+          ? options.sourceURL
           : ('lodash.templateSources[' + (++templateCounter) + ']')
         ) + '\n';
 
@@ -31622,9 +31620,7 @@ return jQuery;
 
       // If `variable` is not specified wrap a with-statement around the generated
       // code to add the data object to the top of the scope chain.
-      // Like with sourceURL, we take care to not check the option's prototype,
-      // as this configuration is a code injection vector.
-      var variable = hasOwnProperty.call(options, 'variable') && options.variable;
+      var variable = options.variable;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
       }
@@ -33829,11 +33825,10 @@ return jQuery;
     baseForOwn(LazyWrapper.prototype, function(func, methodName) {
       var lodashFunc = lodash[methodName];
       if (lodashFunc) {
-        var key = lodashFunc.name + '';
-        if (!hasOwnProperty.call(realNames, key)) {
-          realNames[key] = [];
-        }
-        realNames[key].push({ 'name': methodName, 'func': lodashFunc });
+        var key = (lodashFunc.name + ''),
+            names = realNames[key] || (realNames[key] = []);
+
+        names.push({ 'name': methodName, 'func': lodashFunc });
       }
     });
 
@@ -63187,15 +63182,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -63207,43 +63200,40 @@ function (_Component) {
   _inherits(DatosPersonales, _Component);
 
   function DatosPersonales(props) {
-    var _this;
-
     _classCallCheck(this, DatosPersonales);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(DatosPersonales).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_this), "handleSubmit", function (e) {
+    return _possibleConstructorReturn(this, _getPrototypeOf(DatosPersonales).call(this, props));
+  }
+  /*handleSubmit = (e) => {
       //preventDefault prevents page reload   
       e.preventDefault();
       /*A call back to the onAdd props. The current
        *state is passed as a param
-       */
+       *
+      this.props.handlePostulante();
+  }*/
 
-      _this.props.handlePostulante();
-    });
-
-    return _this;
-  }
 
   _createClass(DatosPersonales, [{
     key: "render",
     value: function render() {
+      var _this = this;
+
       //console.log("ambitos escogidos: ",this.state.ambitosArray);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "containersae d-flex flex-column justify-content-center align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Datos Generales"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "w-100 mb-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Documento"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-row justify-content-between"
+        className: "d-flex flex-row justify-content-between w-65"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
+        className: "d-flex flex-column w-50 mr-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Tipo"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         className: "h-50",
-        name: "tipo",
-        defaultValue: this.props.tipo,
+        name: "tipoId",
+        defaultValue: this.props.tipoId,
         onChange: this.props.handleChange
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         disabled: true,
@@ -63267,7 +63257,7 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Informaci\xF3n Personal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-row justify-content-between mb-1"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
+        className: "d-flex flex-column w-30 mr-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Apellidos"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -63277,7 +63267,7 @@ function (_Component) {
         defaultValue: this.props.apellidos,
         onChange: this.props.handleChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50"
+        className: "d-flex flex-column w-30 mr-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Nombres"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -63286,10 +63276,8 @@ function (_Component) {
         name: "nombres",
         defaultValue: this.props.nombres,
         onChange: this.props.handleChange
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-row justify-content-between mb-1"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-30"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Fecha de Nacimiento"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -63298,8 +63286,10 @@ function (_Component) {
         name: "fechaNacimiento",
         defaultValue: this.props.fechaNacimiento,
         onChange: this.props.handleChange
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-row justify-content-between mb-1"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-30 mr-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "G\xE9nero"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
@@ -63316,10 +63306,8 @@ function (_Component) {
         value: "femenino"
       }, "Femenino"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "otro"
-      }, "Otro")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-row justify-content-between mb-1"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
+      }, "Otro"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-30 mr-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Correo Electr\xF3nico"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -63329,7 +63317,7 @@ function (_Component) {
         defaultValue: this.props.correo,
         onChange: this.props.handleChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50"
+        className: "d-flex flex-column w-30"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Estado Civil"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
@@ -63351,39 +63339,27 @@ function (_Component) {
       }, "Uni\xF3n Libre")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-row justify-content-between mb-1"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
+        className: "d-flex flex-column w-30 mr-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        name: "Tel\xE9fono Fijo"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "tel",
-        name: "telConv",
-        className: "h-50",
-        defaultValue: this.props.telConv,
-        onChange: this.props.handleChange
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        name: "Tel\xE9fono Celular"
+        name: "Tel\xE9fono"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "tel",
         name: "telefono",
         className: "h-50",
-        defaultValue: this.props.telCel,
-        onChange: this.props.handleChange
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-row justify-content-between mb-1"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        name: "Pa\xEDs"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        name: "pais",
-        className: "h-50",
-        defaultValue: this.props.pais,
+        defaultValue: this.props.telefono,
         onChange: this.props.handleChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50"
+        className: "d-flex flex-column w-30 mr-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        name: "Direcci\xF3n"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        name: "direccion",
+        className: "h-50",
+        defaultValue: this.props.direccion,
+        onChange: this.props.handleChange
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-30"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Provincia"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -63395,22 +63371,22 @@ function (_Component) {
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-row justify-content-between mb-1"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50 mr-1"
+        className: "d-flex flex-column w-30"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        name: "Direcci\xF3n"
+        name: "Ciudad"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
-        name: "direccion",
+        name: "ciudad",
         className: "h-50",
-        defaultValue: this.props.direccion,
+        defaultValue: this.props.ciudad,
         onChange: this.props.handleChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-column w-50"
+        className: "d-flex flex-column w-60"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: "Disponibilidad para viajar"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         className: "h-50",
-        name: "disponibilidadViajar",
+        name: "disponibilidad",
         defaultValue: this.props.disponibilidad,
         onChange: this.props.handleChange
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -63429,9 +63405,9 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         name: "educacion",
         className: "btn-primary-sae w-20",
-        onClick: //(evt)=>{
-        this.handleSubmit //this.props.handleChangeTipo(evt);}
-
+        onClick: function onClick(evt) {
+          _this.props.handleChangeTipo(evt);
+        }
       }, "Siguiente")));
     }
   }]);
@@ -63463,6 +63439,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _common_Label__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/Label */ "./resources/js/components/common/Label.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -63487,63 +63464,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var EducacionFormal =
 /*#__PURE__*/
 function (_Component) {
   _inherits(EducacionFormal, _Component);
 
-  function EducacionFormal() {
-    var _getPrototypeOf2;
-
+  function EducacionFormal(props) {
     var _this;
 
     _classCallCheck(this, EducacionFormal);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(EducacionFormal).call(this, props));
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(EducacionFormal)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _defineProperty(_assertThisInitialized(_this), "handleSubmit", function (e) {
+      //preventDefault prevents page reload   
+      e.preventDefault();
+      /*A call back to the onAdd props. The current
+       *state is passed as a param
+       */
 
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      ambitos: [],
-      ambitosArray: [],
-      checkedItems: new Map()
-      /*componentDidMount(){
-           fetch('/api/ambito')
-          .then(response => {
-              return response.json();
-          })
-          .then(ambitos => {
-              //Fetched product is stored in the state
-              this.setState({ ambitos });
-          }).catch(error => {
-              console.log("===ERROR: ",error);
-          });
-      }
-       handleCheckBoxChange = ({target}) => {
-          const ambitos = this.state.ambitos;
-          const item = target.name;
-          const id = target.id;
-          const isChecked =target.checked;
-          this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
-          const ambito = ambitos.find((ambito)=>{
-              return ambito.id_ambito === parseInt(id);
-          });
-          const cloneArray = clone(this.state.ambitosArray);
-          if(isChecked){
-              const cloned = cloneArray.concat(ambito);
-              this.setState({
-                  ambitosArray: cloned,
-              })
-          }else{
-              const cloned = pull(cloneArray,ambito);
-              this.setState({
-                  ambitosArray: cloned,
-              })
-          }
-      }*/
-
+      _this.props.handlePostulante();
     });
 
     return _this;
@@ -63551,6 +63492,41 @@ function (_Component) {
 
   _createClass(EducacionFormal, [{
     key: "render",
+
+    /*componentDidMount(){
+          fetch('/api/ambito')
+        .then(response => {
+            return response.json();
+        })
+        .then(ambitos => {
+            //Fetched product is stored in the state
+            this.setState({ ambitos });
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+    }
+      handleCheckBoxChange = ({target}) => {
+        const ambitos = this.state.ambitos;
+        const item = target.name;
+        const id = target.id;
+        const isChecked =target.checked;
+        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+        const ambito = ambitos.find((ambito)=>{
+            return ambito.id_ambito === parseInt(id);
+        });
+        const cloneArray = clone(this.state.ambitosArray);
+        if(isChecked){
+            const cloned = cloneArray.concat(ambito);
+            this.setState({
+                ambitosArray: cloned,
+            })
+        }else{
+            const cloned = pull(cloneArray,ambito);
+            this.setState({
+                ambitosArray: cloned,
+            })
+        }
+    }*/
     value: function render() {
       var _this2 = this;
 
@@ -63558,18 +63534,57 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-column align-items-center w-100"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Educaci\xF3n Formal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card w-100 mb-4"
+        className: "w-100 mb-2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "flex-row justify-content-between"
+        className: "d-flex flex-row justify-content-between w-65"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-50"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        name: "Instituci\xF3n"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "h-50",
+        name: "nombreInstitucion",
+        defaultValue: this.props.nombreInstitucion,
+        onChange: this.props.handleChange
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-row justify-content-between w-65"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-50"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        name: "T\xEDtulo Obtenido"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "h-50",
+        name: "tituloObtenido",
+        defaultValue: this.props.tituloObtenido,
+        onChange: this.props.handleChange
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "d-flex flex-column w-50 mr-4"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Label__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        name: "Tipo de Formaci\xF3n"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        className: "h-50",
+        name: "tipoFormacion",
+        defaultValue: this.props.tipoFormacion,
+        onChange: this.props.handleChange
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        disabled: true,
+        value: "selec"
+      }, "Seleccione"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "Tercer Nivel"
+      }, "Tercer Nivel"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "Cuarto Nivel"
+      }, "Cuarto Nivel"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "Doctorado(PHD)"
+      }, "Doctorado(PHD)"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-row justify-content-end align-items-center py-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         name: "experiencia",
         className: "btn-primary-sae w-20",
         onClick: function onClick(evt) {
-          _this2.props.handleChangeTipo(evt);
+          _this2.handleSubmit(evt); //this.props.handleChangeTipo(evt);
+
         }
       }, "Siguiente")));
     }
@@ -63649,7 +63664,7 @@ function (_Component) {
       ambitosArray: [],
       checkedItems: new Map()
       /*componentDidMount(){
-           fetch('/api/ambito')
+            fetch('/api/ambito')
           .then(response => {
               return response.json();
           })
@@ -63660,7 +63675,7 @@ function (_Component) {
               console.log("===ERROR: ",error);
           });
       }
-       handleCheckBoxChange = ({target}) => {
+        handleCheckBoxChange = ({target}) => {
           const ambitos = this.state.ambitos;
           const item = target.name;
           const id = target.id;
@@ -63895,9 +63910,9 @@ function (_Component) {
       }) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
         title: "Opciones de Postulaci\xF3n"
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "d-flex flex-row"
+        className: "d-flex flex-row h-85"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "d-flex flex-column align-items-center w-25"
+        className: "d-flex flex-column align-items-center w-20"
       }, this.state.tipo === "ambitos" ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         id: "ambitos",
         className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"
@@ -63926,7 +63941,7 @@ function (_Component) {
         id: "alcances",
         className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"
       }, "Alcances"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "cardSAE containersae w-100 w-75"
+        className: "cardSAE containersae w-100 w-80"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "cardSAE-body"
       }, this.state.tipo === "ambitos" ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_SeleccionarAmbito__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -63977,6 +63992,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EducacionFormal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EducacionFormal */ "./resources/js/components/Postulante/EducacionFormal.js");
 /* harmony import */ var _ExperienciaLaboral__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ExperienciaLaboral */ "./resources/js/components/Postulante/ExperienciaLaboral.js");
 /* harmony import */ var _Referencia__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Referencia */ "./resources/js/components/Postulante/Referencia.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
 
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -64002,6 +64019,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -64047,19 +64065,17 @@ function (_Component) {
       fechaNacimiento: "",
       correo: "",
       estadoCivil: "selec",
-      telConv: "",
-      telCel: "",
+      telefono: "",
       ciudad: "",
-      pais: "",
       provincia: "",
       direccion: "",
       disponibilidad: "selec",
-      genero: "selec",
+      genero: 'selec',
       agregado: false,
       //Educación Formal
-      nombreInstitucion: "Inst Prueba",
-      tituloObtenido: "Titulo Prueba",
-      tipoFormacion: "Tercer Nivel",
+      nombreInstitucion: "",
+      tituloObtenido: "",
+      tipoFormacion: "selec",
       archivoAnexo: "Archivo Prueba"
     });
 
@@ -64143,17 +64159,19 @@ function (_Component) {
       var postulante = {
         nombres: _this.state.nombres,
         apellidos: _this.state.apellidos,
-        genero: _this.state.genero,
+        genero: Object(lodash__WEBPACK_IMPORTED_MODULE_9__["capitalize"])(_this.state.genero),
         cedula: _this.state.identificacion,
         email: _this.state.correo,
         fechaNacimiento: _this.state.fechaNacimiento,
         telefono: _this.state.telefono,
+        ciudad: _this.state.ciudad,
         provincia: _this.state.provincia,
-        disponibilidad: _this.state.disponibilidad,
         nombreInstitucion: _this.state.nombreInstitucion,
         tituloObtenido: _this.state.tituloObtenido,
         tipoFormacion: _this.state.tipoFormacion,
-        archivoAnexo: _this.state.archivoAnexo
+        archivoAnexo: _this.state.archivoAnexo,
+        tipoPostulacion: _this.state.tipo,
+        disponibilidad: parseInt(_this.state.disponibilidad)
       };
       console.log("PAYLOAD DE POSTULANTE", postulante);
 
@@ -64204,7 +64222,7 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "d-flex flex-row"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "d-flex flex-column align-items-center w-25"
+        className: "d-flex flex-column align-items-center w-20"
       }, this.state.form === "datos" ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         id: "datos",
         className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current",
@@ -64270,7 +64288,7 @@ function (_Component) {
         className: " d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current",
         onClick: this.handleChangeTipo
       }, "Referencia"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "cardSAE containersae w-100 w-75"
+        className: "cardSAE containersae w-100 w-80"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "cardSAE-body"
       },
@@ -64294,20 +64312,21 @@ function (_Component) {
         fechaNacimiento: this.state.fechaNacimiento,
         correo: this.state.correo,
         estadoCivil: this.state.estadoCivil,
-        telConv: this.state.telConv,
-        telCel: this.state.telCel,
-        pais: this.state.pais,
+        telefono: this.state.telefono,
+        ciudad: this.state.ciudad,
         provincia: this.state.provincia,
         direccion: this.state.direccion,
         disponibilidad: this.state.disponibilidad,
         genero: this.state.genero,
-        agregado: this.state.agregado,
+        agregado: this.state.agregado
+      }), this.state.form === "educacion" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_EducacionFormal__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        handleChangeTipo: this.handleChangeTipo,
         nombreInstitucion: this.state.nombreInstitucion,
         tituloObtenido: this.state.tituloObtenido,
         tipoFormacion: this.state.tipoFormacion,
-        archivoAnexo: this.state.archivoAnexo
-      }), this.state.form === "educacion" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_EducacionFormal__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        handleChangeTipo: this.handleChangeTipo
+        archivoAnexo: this.state.archivoAnexo,
+        handleChange: this.handleChange,
+        handlePostulante: this.handlePostulante
       }), this.state.form === "experiencia" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ExperienciaLaboral__WEBPACK_IMPORTED_MODULE_7__["default"], {
         handleChangeTipo: this.handleChangeTipo
       }), this.state.form === "referencia" && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Referencia__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -64666,7 +64685,7 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
         title: "Certificarse como evaluador y/o experto t\xE9cnico"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "containersae d-flex flex-row justify-content-around align-items-center"
+        className: "containersae d-flex flex-row justify-content-around align-items-center h-85"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "d-flex flex-row justify-content-center align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -64823,11 +64842,11 @@ function (_Component) {
 
               sector = ids[index];
               _context.next = 9;
-              return fetch('/api/sector/' + sector).then(function (response) {
+              return fetch('/api/requerimientosSector/' + sector).then(function (response) {
                 return response.json();
               }).then(function (requerimientos) {
                 //Fetched product is stored in the state
-                reqs.push(requerimientos);
+                reqs = Object(lodash__WEBPACK_IMPORTED_MODULE_4__["clone"])(requerimientos);
               })["catch"](function (error) {
                 console.log("===ERROR: ", error);
               });
@@ -64871,7 +64890,6 @@ function (_Component) {
         });
 
         $('#exampleModalCenter').modal();
-        console.log("TRUUUUUUE");
       } else {
         $('#exampleModalCenter').modal();
       }
@@ -64921,15 +64939,21 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, this.state.show ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
         title: "Postulaci\xF3n"
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "containersae d-flex flex-row justify-content-center align-items-center"
+        className: "containersae d-flex flex-row justify-content-center h-85"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "d-flex flex-column align-items-center w-100 mx-4"
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", null, "Requisitos m\xEDnimos"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Lea con atenci\xF3n, debe poseer todos los requisitos a continuaci\xF3n para proseguir")))) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, this.props.tipo === "evaluador" ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        className: "d-flex flex-column align-items-center w-100 mx-2"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", null, "Requisitos m\xEDnimos"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Lea con atenci\xF3n, debe poseer todos los requisitos a continuaci\xF3n para proseguir"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card w-100 mb-4"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "flex-row justify-content-between"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "card-body"
+      })))))) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, this.props.tipo === "evaluador" ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_common_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
         title: "Postulaci\xF3n"
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "containersae d-flex flex-column justify-content-center align-items-center"
+        className: "containersae d-flex flex-column w-100 h-85"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "d-flex flex-column align-items-center w-100 mx-4"
+        className: "d-flex flex-column align-items-center mx-2"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", null, "Requisitos m\xEDnimos"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Lea con atenci\xF3n, debe poseer todos los requisitos a continuaci\xF3n para proseguir"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "card w-100 mb-4"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -64947,7 +64971,7 @@ function (_Component) {
           checkedItems: _this2.state.checkedItems
         });
       }) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, "A\xDAN NO HAY INFORMACI\xD3N PARA MOSTRAR")))))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "d-flex flex-row justify-content-end align-items-center w-100 my-2"
+        className: "d-flex flex-row justify-content-end align-items-center my-2 mx-2"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         name: "prerrequisitos",
         className: "btn-primary-sae w-20",
@@ -65127,7 +65151,7 @@ function (_Component) {
       ambitosArray: [],
       checkedItems: new Map()
       /*componentDidMount(){
-           fetch('/api/ambito')
+            fetch('/api/ambito')
           .then(response => {
               return response.json();
           })
@@ -65138,7 +65162,7 @@ function (_Component) {
               console.log("===ERROR: ",error);
           });
       }
-       handleCheckBoxChange = ({target}) => {
+        handleCheckBoxChange = ({target}) => {
           const ambitos = this.state.ambitos;
           const item = target.name;
           const id = target.id;
@@ -65884,14 +65908,14 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "d-flex flex-row justify-content-center items-align-center h-50"
+        className: "d-flex flex-row justify-content-around align-items-center h-15"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "w-40"
+        className: "w-40 mb-5"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Img__WEBPACK_IMPORTED_MODULE_1__["default"], {
         className: "w-auto px-2",
         imageType: "header"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "jumbotron w-60 mh-header"
+        className: "d-flex jumbotronSAE w-60 h-100 mb-5 justify-content-center align-items-center pt-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, this.props.title), this.props.subtitle ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.subtitle) : null));
     }
   }]);
@@ -66101,8 +66125,8 @@ module.exports = "/images/sae.png?749860837e93f2c2e4ec61bce173ca8b";
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/johancanales/Desktop/Integradora_SAE /SAE_Competencias/SAE/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/johancanales/Desktop/Integradora_SAE /SAE_Competencias/SAE/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\User\Desktop\Integradora\SAE_ESPOL\SAE\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\User\Desktop\Integradora\SAE_ESPOL\SAE\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -67,7 +67,7 @@
         </style>
     </head>
     <body class="bg-light">
-        <div class="text-white bg-light">
+        <div class="text-white bg-light" hidden>
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -87,11 +87,11 @@
                 </div>
             @endif
         </div>
-        <div class="bg-light">
+        <div class="bg-light h-100">
 
-            <div class="mx-2 content">
+            <div class="content h-100">
 
-                <div id="select-postulation-type"></div>
+                <div id="select-postulation-type" class="h-100"></div>
 
             </div>
         </div>

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AmbitoTableSeeder::class,
             SectorTableSeeder::class,
             AlcanceTableSeeder::class,
+            SectorRequerimientoTableSeeder::class,
         ]);
     }
 }

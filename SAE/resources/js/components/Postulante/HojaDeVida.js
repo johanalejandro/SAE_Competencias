@@ -6,6 +6,7 @@ import DatosPersonales from './DatosPersonales';
 import EducacionFormal from './EducacionFormal';
 import ExperienciaLaboral from './ExperienciaLaboral';
 import Referencia from './Referencia';
+import {capitalize} from 'lodash';
 
 export default class HojaDeVida extends Component {
 
@@ -26,20 +27,18 @@ export default class HojaDeVida extends Component {
         fechaNacimiento: "",
         correo: "",
         estadoCivil: "selec",
-        telConv: "",
-        telCel: "",
+        telefono: "",
         ciudad:"",
-        pais: "",
         provincia: "",
         direccion: "",
         disponibilidad: "selec",
-        genero: "selec",
+        genero: 'selec',
         agregado: false,
         //Educación Formal
 
-        nombreInstitucion: "Inst Prueba",
-        tituloObtenido:"Titulo Prueba",
-        tipoFormacion:"Tercer Nivel",
+        nombreInstitucion: "",
+        tituloObtenido:"",
+        tipoFormacion:"selec",
         archivoAnexo:"Archivo Prueba"
         
     }
@@ -105,17 +104,19 @@ export default class HojaDeVida extends Component {
         let postulante = {
             nombres: this.state.nombres,
             apellidos: this.state.apellidos,
-            genero: this.state.genero,
+            genero: capitalize(this.state.genero),
             cedula: this.state.identificacion,
             email: this.state.correo,
             fechaNacimiento: this.state.fechaNacimiento,
             telefono: this.state.telefono,
+            ciudad: this.state.ciudad,
             provincia: this.state.provincia,
-            disponibilidad:this.state.disponibilidad,
             nombreInstitucion:this.state.nombreInstitucion,
             tituloObtenido:this.state.tituloObtenido,
             tipoFormacion:this.state.tipoFormacion,
-            archivoAnexo:this.state.archivoAnexo
+            archivoAnexo:this.state.archivoAnexo,
+            tipoPostulacion: this.state.tipo,
+            disponibilidad: parseInt(this.state.disponibilidad),
         }
 
         console.log("PAYLOAD DE POSTULANTE",postulante);
@@ -163,7 +164,7 @@ export default class HojaDeVida extends Component {
                 <React.Fragment>
                     <Header title="Hoja de Vida"/>
                     <div className="d-flex flex-row" >
-                        <div className="d-flex flex-column align-items-center w-25">
+                        <div className="d-flex flex-column align-items-center w-20">
                                     {this.state.form === "datos"?(
                                         <React.Fragment>
                                             <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"} onClick={this.handleChangeTipo}>
@@ -232,7 +233,7 @@ export default class HojaDeVida extends Component {
                                 )}
                         </div>
                             
-                        <div className="cardSAE containersae w-100 w-75">
+                        <div className="cardSAE containersae w-100 w-80">
                                 
                             <div className="cardSAE-body">
                                 {/*this.state.tipo === "ambitos"?(
@@ -256,18 +257,13 @@ export default class HojaDeVida extends Component {
                                         fechaNacimiento={this.state.fechaNacimiento}
                                         correo={this.state.correo}
                                         estadoCivil={this.state.estadoCivil}
-                                        telConv={this.state.telConv}
-                                        telCel={this.state.telCel}
-                                        pais={this.state.pais}
+                                        telefono={this.state.telefono}
+                                        ciudad={this.state.ciudad}
                                         provincia={this.state.provincia}
                                         direccion={this.state.direccion}
                                         disponibilidad={this.state.disponibilidad}
                                         genero={this.state.genero}
                                         agregado={this.state.agregado}
-                                        nombreInstitucion={this.state.nombreInstitucion} 
-                                        tituloObtenido={this.state.tituloObtenido}
-                                        tipoFormacion={this.state.tipoFormacion}
-                                        archivoAnexo={this.state.archivoAnexo}
         
 
                                     />
@@ -275,6 +271,12 @@ export default class HojaDeVida extends Component {
                                 {this.state.form === "educacion" && (
                                     <EducacionFormal
                                     handleChangeTipo={this.handleChangeTipo}
+                                    nombreInstitucion={this.state.nombreInstitucion} 
+                                        tituloObtenido={this.state.tituloObtenido}
+                                        tipoFormacion={this.state.tipoFormacion}
+                                        archivoAnexo={this.state.archivoAnexo}
+                                        handleChange={this.handleChange}
+                                        handlePostulante={this.handlePostulante}
                                     />
                                 )}
                                 {this.state.form === "experiencia" && (

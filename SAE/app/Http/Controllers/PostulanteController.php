@@ -52,10 +52,13 @@ class PostulanteController extends Controller
         $campos['telefono']=$request->telefono;
         $campos['provincia']=$request->provincia;
         $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
-        $campos['disponibilidadViajar']=$request->disponibilidadViajar;
+        $campos['disponibilidadViajar']=$request->disponibilidad;
         $campos['fechaHabilitacion']=$current_date_time;
         $campos['tipoPostulacion']=$request->tipoPostulacion;
-       
+        $campos['nombreInstitucion']= $request->nombreInstitucion;
+        $campos['tituloObtenido'] = $request->tituloObtenido;
+        $campos['tipoFormacion'] = $request->tipoFormacion;
+        $campos['archivoAnexo'] = $request->archivoAnexo;
 
        
        
@@ -68,7 +71,7 @@ class PostulanteController extends Controller
                 'nombreInstitucion' =>  $request->nombreInstitucion,
                 'tituloObtenido'    =>  $request->tituloObtenido,
                 'tipoFormacion'     =>  $request->tipoFormacion,
-                'archivoAnexo'      =>  $request->archivoAnexo->store()
+                'archivoAnexo'      =>  $request->archivoAnexo//->store()
         ]);
     
                 

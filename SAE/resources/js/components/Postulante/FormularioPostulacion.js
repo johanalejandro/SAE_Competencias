@@ -75,8 +75,8 @@ export default class FormularioPostulacion extends Component {
               ): (
                 <React.Fragment>
                     <Header title="Opciones de Postulación"/>
-                    <div className="d-flex flex-row" >
-                        <div className="d-flex flex-column align-items-center w-25">
+                    <div className="d-flex flex-row h-85" >
+                        <div className="d-flex flex-column align-items-center w-20">
                                     {this.state.tipo === "ambitos"?(
                                         <React.Fragment>
                                             <div id="ambitos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"}>
@@ -121,7 +121,7 @@ export default class FormularioPostulacion extends Component {
                                 )}
                         </div>
                             
-                        <div className="cardSAE containersae w-100 w-75">
+                        <div className="cardSAE containersae w-100 w-80">
                                 
                             <div className="cardSAE-body">
                                 {this.state.tipo === "ambitos"?(
