@@ -39,7 +39,7 @@ export default class HojaDeVida extends Component {
         nombreInstitucion: "",
         tituloObtenido:"",
         tipoFormacion:"selec",
-        archivoAnexo:"Archivo Prueba"
+        archivoAnexo:{},
         
     }
 
@@ -99,6 +99,13 @@ export default class HojaDeVida extends Component {
         })
     }
 
+    handleChangeFile = ({target},file) => {
+        const name = target.name;
+        this.setState({
+            [name] : file,
+        })
+    }
+
     handlePostulante = () => {
 
         let postulante = {
@@ -152,6 +159,7 @@ export default class HojaDeVida extends Component {
     }
 
     render() {
+        console.log("PROPS ANEXO",this.state.archivoAnexo);
         return (
             this.state.prerrequisitos==="si" ? (
                  <Prerrequisitos 
@@ -163,7 +171,7 @@ export default class HojaDeVida extends Component {
               ): (
                 <React.Fragment>
                     <Header title="Hoja de Vida"/>
-                    <div className="d-flex flex-row" >
+                    <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
                                     {this.state.form === "datos"?(
                                         <React.Fragment>
@@ -276,7 +284,9 @@ export default class HojaDeVida extends Component {
                                         tipoFormacion={this.state.tipoFormacion}
                                         archivoAnexo={this.state.archivoAnexo}
                                         handleChange={this.handleChange}
+                                        handleChangeFile={this.handleChangeFile}
                                         handlePostulante={this.handlePostulante}
+                                        archivoAnexo={this.state.archivoAnexo}
                                     />
                                 )}
                                 {this.state.form === "experiencia" && (

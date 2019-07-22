@@ -28,7 +28,8 @@
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "babel-preset-env": "^1.7.0",
         "react-router": "^5.0.1",
-        "react-router-dom": "^5.0.1"
+        "react-router-dom": "^5.0.1",
+        "react-spinners": "^0.5.13"
     },
     "babel": {
         "presets": [

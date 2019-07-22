@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {clone, isEmpty, pull} from 'lodash';
+import { isEmpty, size } from 'lodash';
+import { ClipLoader } from "react-spinners";
 import Label from '../common/Label';
 
 export default class EducacionFormal extends Component {
 
     constructor(props) {
         super(props);
+      }
+
+      state={
+          loading: false,
+          anexo: {},
       }
 
     handleSubmit = (e) => {
@@ -16,6 +22,26 @@ export default class EducacionFormal extends Component {
          *state is passed as a param
          */
         this.props.handlePostulante();
+      }
+
+      setLoading = () =>{
+          this.setState({
+              loading: false,
+          })
+      }
+
+      handleLoadLocalFile = async (e) => {
+        e.preventDefault();
+        this.setState({
+            loading: true,
+        })
+        const { files } = event.target;
+        const file = files[0];
+        await this.props.handleChangeFile(e,file);
+        await this.setState({
+            anexo: file,
+        })
+        await this.setLoading();
       }
 
     /*componentDidMount(){
@@ -57,9 +83,10 @@ export default class EducacionFormal extends Component {
 
     render() {
         //console.log("ambitos escogidos: ",this.state.ambitosArray);
+        console.log("Anexo",this.state.anexo);
         return (
             <React.Fragment>
-                <div className="d-flex flex-column align-items-center w-100">
+                <div className="d-flex flex-column align-items-center justify-content-between w-100">
                         <h2>Educación Formal</h2>
                         <div className="w-100 mb-2">
                                 <div className="d-flex flex-row justify-content-between w-65">
@@ -84,6 +111,38 @@ export default class EducacionFormal extends Component {
                                             <option value="Cuarto Nivel">Cuarto Nivel</option>
                                             <option value="Doctorado(PHD)">Doctorado(PHD)</option>
                                         </select>
+                                    </div>
+                                    <div className="d-flex flex-column w-50 mr-4">
+                                        <Label name="Anexo"/>
+                                        <label id="anexo-label" className="w-25 text-left text-normal h-50">
+                                              {this.state.loading ? (
+                                                  <div className="d-flex flex-column justify-content-center w-100 align-items-center">
+                                                      <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
+                                                      <div className="text-primary text-center">Cargando anexo</div>
+                                                  </div>
+                                              ) : (
+                                                  !this.props.archivoAnexo.size? (
+                                                      <React.Fragment>
+                                                          <div className="d-flex justify-content-center text-blue align-items-center btn btn-secondary h-100">
+                                                              <span className="text-center">Cargar archivo</span>
+                                                          </div>
+                                                          <input
+                                                              type="file"
+                                                              name="archivoAnexo"
+                                                              className="d-none"
+                                                              onChange={this.handleLoadLocalFile}
+                                                              id="anexo-educacion"
+                                                          />
+                                                      </React.Fragment>
+                                                  ):(
+                                                    <div className="d-flex flex-column justify-content-center w-100 align-items-center">
+                                                      <div className="text-primary text-center">Archivo Cargado</div>
+                                                  </div>
+                                                  )
+                                              )}
+                                              <div id="fileDisplayArea" className="mt--6 ml--10 inset-0 h-0" />
+                                          </label>
+
                                     </div>
                         </div>
                 </div>
