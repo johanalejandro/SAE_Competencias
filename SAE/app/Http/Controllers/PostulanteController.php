@@ -45,7 +45,6 @@ class PostulanteController extends Controller
         $campos['nombres']=$request->nombres;
         $campos['apellidos']=$request->apellidos;
         $campos['ciudad']=$request->ciudad;
-        $campos['genero']=$request->genero;
         $campos['email']=$request->email;
         $campos['cedula']=$request->cedula;
         $campos['fechaNacimiento']=$current_date_time;
@@ -71,7 +70,7 @@ class PostulanteController extends Controller
                 'nombreInstitucion' =>  $request->nombreInstitucion,
                 'tituloObtenido'    =>  $request->tituloObtenido,
                 'tipoFormacion'     =>  $request->tipoFormacion,
-                'archivoAnexo'      =>  $request->archivoAnexo//->store()
+                'archivoAnexo'      =>  $request->file('archivoAnexo')->store()
         ]);
     
                 

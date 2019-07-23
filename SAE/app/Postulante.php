@@ -19,7 +19,6 @@ class Postulante extends Model
         'nombres', 
         'apellidos', 
         'ciudad',
-        'genero',
         'email',
         'cedula',
         'fechaNacimiento',

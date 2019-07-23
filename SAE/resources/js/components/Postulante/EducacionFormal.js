@@ -131,7 +131,7 @@ export default class EducacionFormal extends Component {
                                                               name="archivoAnexo"
                                                               className="d-none"
                                                               onChange={this.handleLoadLocalFile}
-                                                              id="anexo-educacion"
+                                                              id="archivoAnexo"
                                                           />
                                                       </React.Fragment>
                                                   ):(

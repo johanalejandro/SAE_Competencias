@@ -17,7 +17,7 @@ class CreateEducacionFormalsTable extends Migration
             $table->bigIncrements('id_educacion')->autoIncrement();
             $table->timestamps();
             $table->unsignedBigInteger('id_postulante');
-            $table->text('archivoAnexo');
+            $table->string('archivoAnexo');
             $table->text('nombreInstitucion');
             $table->text('tituloObtenido');
             $table->set('tipoFormacion',['Tercer Nivel', 'Cuarto Nivel','Doctorado(PHD)']);

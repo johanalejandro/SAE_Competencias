@@ -20,7 +20,6 @@ class CreatePostulantesTable extends Migration
             $table->string('nombres',100);
             $table->string('apellidos',100);
             $table->string('ciudad',50);
-            $table->set('genero',['Masculino', 'Femenimo']);
             $table->string('email');
             $table->bigInteger('cedula');
             $table->date('fechaNacimiento');
