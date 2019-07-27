@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Postulante;
 use App\educacionFormal;
+use App\experienciaLaboral;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -100,6 +101,30 @@ class PostulanteController extends Controller
         $postulantes = DB::table('postulantes')->where('estado', 'Habilitado')->get();
         return response()->json($postulantes);
     }
+
+    public function mostarPostulantePorAsignar(){
+
+        $postulantes = DB::table('postulantes')->where('estado', 'Por Asignar')->get();
+        return response()->json($postulantes);
+
+    }
+
+    public function verEstadoPostulacion($cedula){
+          $postulantes = DB::table('postulantes')->select('estado')->where('cedula', $cedula)->get();
+          return response()->json($postulantes);
+    }
+
+    public function verDetallesAlcance($id){
+        $alcancesDePostulante = DB::table('experiencia_laborals')->where('id_postulante',$id)->get();
+        return response()->json($alcancesDePostulante);
+    }
+    public function verPostulantesPorAlcance($id){
+        $id_postulante = experienciaLaboral::with('postulante')->where('id_alcance',$id)->get();
+        return response()->json($id_postulante);
+
+    }
+    
+
 
     
 

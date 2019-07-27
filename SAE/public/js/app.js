@@ -67787,7 +67787,7 @@ function (_Component) {
         name: "archivoAnexo",
         className: "d-none",
         onChange: this.handleLoadLocalFile,
-        id: "anexo-educacion"
+        id: "archivoAnexo"
       })) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "d-flex flex-column justify-content-center w-100 align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {

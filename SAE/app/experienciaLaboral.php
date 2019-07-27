@@ -23,4 +23,15 @@ class experienciaLaboral extends Model
          
     }
 
+    protected $fillable = [
+        'id_postulante', 
+        'id_alcance', 
+        'descripcion',
+        'cargoEjercido',
+        'nombreEmpresa',
+        'fecha_inicio',
+        'fecha_fin',
+        'esTrabajoActual'
+    ];
+
 }

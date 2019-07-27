@@ -23,6 +23,16 @@ Route::get('sector','SectorController@index');
 
 Route::get('alcance','AlcanceController@index');
 
+Route::get('alcance','AlcanceController@index');
+
+
+
+
+
+
+
+/*------------------------------------------------------------------------------------------------------*/
+
 /* Api para tabla postulantes */
 
 Route::get('/postulantes', 'PostulanteController@index');
@@ -35,6 +45,21 @@ Route::get('postulantePorHabilitar', 'PostulanteController@mostrarPostulantePorH
 
 Route::get('postulanteHabilitado', 'PostulanteController@mostrarPostulanteHabilitado');
 
+Route::get('postulanteAsignar', 'PostulanteController@mostarPostulantePorAsignar');
+
+
+Route::get('estadoPostulante/{cedula}', 'PostulanteController@verEstadoPostulacion');
+
+/*Muestra el detalle de los alcances del postulante con {{ id }} */
+Route::get('detallesAlcances/{id}', 'PostulanteController@verDetallesAlcance'); 
+
+Route::get('postulantePorAlcance/{id}','PostulanteController@verPostulantesPorAlcance');
+
+/*------------------------------------------------------------------------------------------------------*/
+
+Route::post('/expeciencias', 'experienciaLaboralController@store');
+
+/*------------------------------------------------------------------------------------------------------*/
 /*Api para mostrar requerimientos segun sector (se pasa id de sector)*/
 
 Route::get('requerimientosSector/{id}', 'SectorRequerimientoController@verRequerimientosPorSector');
