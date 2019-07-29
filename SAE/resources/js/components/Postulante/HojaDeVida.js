@@ -147,7 +147,7 @@ export default class HojaDeVida extends Component {
             /* headers are important*/
             headers: {
             'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json'
             },
             
             body: JSON.stringify(postulante)
