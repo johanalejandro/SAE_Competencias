@@ -40,6 +40,9 @@ export default class HojaDeVida extends Component {
         tituloObtenido:"",
         tipoFormacion:"selec",
         archivoAnexo:{},
+
+        //Experiencia Laboral
+        experienciaLaboral: [],
         
     }
 
@@ -99,8 +102,7 @@ export default class HojaDeVida extends Component {
         })
     }
 
-    handleChangeFile = ({target},file) => {
-        const name = target.name;
+    handleChangeFile = (name,file) => {
         this.setState({
             [name] : file,
         })
@@ -130,6 +132,12 @@ export default class HojaDeVida extends Component {
 
         this.handleSubmitPostulante(postulante);
         
+    }
+
+    updateExperienciaLaboral = (experiencia) => {
+        this.setState({
+            experienciaLaboral: experiencia,
+        })
     }
 
     handleSubmitPostulante(postulante) {
@@ -173,7 +181,7 @@ export default class HojaDeVida extends Component {
                     <Header title="Hoja de Vida"/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
-                                    {this.state.form === "datos"?(
+                                    {this.state.form === "datos" && (
                                         <React.Fragment>
                                             <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"} onClick={this.handleChangeTipo}>
                                                 Datos Generales
@@ -183,14 +191,9 @@ export default class HojaDeVida extends Component {
                                             </div>
                                             <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Experiencia Laboral
-                                            </div>  
-                                            <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                Referencia
-                                            </div>                                    
-                                        </React.Fragment>
-        
-                                ):(
-                                    this.state.form === "educacion"?(
+                                            </div>                                  
+                                        </React.Fragment>)}
+                                    {this.state.form === "educacion" && (
                                         <React.Fragment>
                                             <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
                                                 Datos Generales
@@ -201,12 +204,8 @@ export default class HojaDeVida extends Component {
                                             <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Experiencia Laboral
                                             </div>
-                                            <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                Referencia
-                                            </div>
-                                        </React.Fragment>
-        
-                                    ):(this.state.form === "experiencia"?(
+                                        </React.Fragment>)}
+                                    {this.state.form === "experiencia" && (
                                             <React.Fragment>
                                                 <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
                                                     Datos Generales
@@ -217,43 +216,13 @@ export default class HojaDeVida extends Component {
                                                 <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
                                                     Experiencia Laboral
                                                 </div>
-                                                <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Referencia
-                                                </div>
-                                            </React.Fragment>
-                                        ):(
-                                            <React.Fragment>
-                                                <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
-                                                    Datos Generales
-                                                </div>
-                                                <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Educación Formal
-                                                </div>
-                                                <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 " onClick={this.handleChangeTipo}>
-                                                    Experiencia Laboral
-                                                </div>
-                                                <div id="referencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
-                                                    Referencia
-                                                </div>
-                                            </React.Fragment>
-                                        )
-                                    )
-                                )}
+                                            </React.Fragment>)}
                         </div>
                             
-                        <div className="cardSAE containersae w-100 w-80">
+                        <div className="cardSAE containersae w-80">
                                 
                             <div className="cardSAE-body">
-                                {/*this.state.tipo === "ambitos"?(
-                                    <SeleccionarAmbito updateAmbitos={this.updateAmbitos} handleChangeTipo={this.handleChangeTipo}/>
-                                ):(
-                                    this.state.tipo === "sectores"?(
-                                        <SeleccionarSector ambitosArray={this.state.ambitosArray} updateSectores={this.updateSectores} handleChangeTipo={this.handleChangeTipo}/>
-                                    ):(
-                                        <SeleccionarAlcance sectoresArray={this.state.sectoresArray} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
-                                    )
-                                    )*/
-                                this.state.form === "datos" && (
+                                {this.state.form === "datos" && (
                                     <DatosPersonales
                                         handleChangeTipo={this.handleChangeTipo}
                                         handleChange={this.handleChange}
@@ -292,12 +261,9 @@ export default class HojaDeVida extends Component {
                                 {this.state.form === "experiencia" && (
                                     <ExperienciaLaboral
                                     handleChangeTipo={this.handleChangeTipo}
-                                    
-                                    />
-                                )}
-                                {this.state.form === "referencia" && (
-                                    <Referencia
-                                    handleChangeTipo={this.handleChangeTipo}
+                                    tipo={this.state.tipo}
+                                    alcances={this.state.alcancesArray}
+                                    experienciaLaboral={this.state.experienciaLaboral}
                                     
                                     />
                                 )}

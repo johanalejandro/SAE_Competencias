@@ -4,6 +4,8 @@ import { isEmpty, size } from 'lodash';
 import { ClipLoader } from "react-spinners";
 import Label from '../common/Label';
 
+let anexo = "";
+
 export default class EducacionFormal extends Component {
 
     constructor(props) {
@@ -12,7 +14,6 @@ export default class EducacionFormal extends Component {
 
       state={
           loading: false,
-          anexo: {},
       }
 
     handleSubmit = (e) => {
@@ -35,13 +36,20 @@ export default class EducacionFormal extends Component {
         this.setState({
             loading: true,
         })
-        const { files } = event.target;
+        const name = e.target.name;
+        const { files } = e.target;
         const file = files[0];
-        await this.props.handleChangeFile(e,file);
-        await this.setState({
-            anexo: file,
-        })
-        await this.setLoading();
+        file['enctype'] = "multipart/form-data";
+        let reader = new FileReader();
+            reader.onload = (e) => {
+                anexo= e.target.result;
+            };
+            reader.readAsDataURL(file);
+        await setTimeout(()=>{
+            const formData = {file: anexo}
+            this.props.handleChangeFile(name,formData);
+            this.setLoading();
+        },10000);
       }
 
     /*componentDidMount(){
@@ -83,7 +91,7 @@ export default class EducacionFormal extends Component {
 
     render() {
         //console.log("ambitos escogidos: ",this.state.ambitosArray);
-        console.log("Anexo",this.state.anexo);
+        console.log("Anexo",anexo);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center justify-content-between w-100">
@@ -121,8 +129,8 @@ export default class EducacionFormal extends Component {
                                                       <div className="text-primary text-center">Cargando anexo</div>
                                                   </div>
                                               ) : (
-                                                  !this.props.archivoAnexo.size? (
-                                                      <React.Fragment>
+                                                  isEmpty(this.props.archivoAnexo)? (
+                                                      <form encType="multipart/form-data" method="POST"> 
                                                           <div className="d-flex justify-content-center text-blue align-items-center btn btn-secondary h-100">
                                                               <span className="text-center">Cargar archivo</span>
                                                           </div>
@@ -133,7 +141,7 @@ export default class EducacionFormal extends Component {
                                                               onChange={this.handleLoadLocalFile}
                                                               id="archivoAnexo"
                                                           />
-                                                      </React.Fragment>
+                                                      </form>
                                                   ):(
                                                     <div className="d-flex flex-column justify-content-center w-100 align-items-center">
                                                       <div className="text-primary text-center">Archivo Cargado</div>

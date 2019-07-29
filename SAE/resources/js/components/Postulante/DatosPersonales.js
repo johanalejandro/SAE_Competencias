@@ -122,8 +122,8 @@ export default class DatosPersonales extends Component {
 
             </div>
             {this.props.agregado &&(
-            <div className="d-flex flex-row justify-content-end align-items-center py-4">
-                <label className="text-center text-normal">Postulante agregado con éxito</label>
+            <div className="d-flex flex-row justify-content-end align-items-center bg-success">
+                <label className="text-center text-white text-normal">Postulante agregado con éxito</label>
             </div>)}
             <div className="d-flex flex-row justify-content-end align-items-center py-4 px-3">
                 <button name="educacion" className="btn-primary-sae w-20" 

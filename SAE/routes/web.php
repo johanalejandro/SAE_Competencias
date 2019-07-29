@@ -15,6 +15,10 @@ Route::get('/postulacion', function () {
     return view('welcome');
 });
 
+Route::get('/gestion-calidad', function () {
+    return view('gestionInicio');
+});
+
 Route::get('/postulacion-formulario', function () {
     return view('pages/formPostulacion');
 });

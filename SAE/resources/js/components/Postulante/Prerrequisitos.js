@@ -160,10 +160,10 @@ export default class Prerrequisitos extends Component {
                     ):(
                         <React.Fragment>
                             <Header title="Postulación"/>
-                            <div className="containersae d-flex flex-column justify-content-center align-items-center">
-                                <div className="d-flex flex-column align-items-center w-100 mx-4">
+                            <div className="containersae d-flex flex-column w-100 h-85">
+                                <div className="d-flex flex-column align-items-center mx-2">
                                     <h2>Requisitos mínimos</h2>
-                                    <h3>Lea con atención, debe poseer todos los requisitos a continuación para proseguir</h3>
+                                    <h3>Lea con atención, debe poseer todos los requisitos para proseguir</h3>
                                     <div className="card w-100 mb-4">
 
                                         <div className="flex-row justify-content-between">

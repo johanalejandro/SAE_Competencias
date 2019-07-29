@@ -14,3 +14,4 @@ require('./bootstrap');
 
 require('./components/Postulante/Postulacion');
 require('./components/Postulante/FormularioPostulacion');
+require('./components/GestionCalidad/GestionCalidad');
