@@ -43,6 +43,13 @@ export default class HojaDeVida extends Component {
 
         //Experiencia Laboral
         experienciaLaboral: [],
+        fechaInicio: "",
+        fechaFin: "",
+        esTrabajoActual: false,
+        descripcion: "",
+        cargoEjercido: "",
+        nombreEmpresa: "",
+        alcanceActual: "selec",
         
     }
 
@@ -261,10 +268,17 @@ export default class HojaDeVida extends Component {
                                 {this.state.form === "experiencia" && (
                                     <ExperienciaLaboral
                                     handleChangeTipo={this.handleChangeTipo}
+                                    handleChange={this.handleChange}
                                     tipo={this.state.tipo}
                                     alcances={this.state.alcancesArray}
                                     experienciaLaboral={this.state.experienciaLaboral}
-                                    
+                                    fechaInicio={this.state.fechaInicio}
+                                    fechaFin={this.state.fechaFin}
+                                    esTrabajoActual={this.state.esTrabajoActual}
+                                    descripcion={this.state.descripcion}
+                                    cargoEjercido={this.state.cargoEjercido}
+                                    nombreEmpresa={this.state.nombreEmpresa}
+                                    alcanceActual={this.state.alcanceActual}
                                     />
                                 )}
                             </div>
