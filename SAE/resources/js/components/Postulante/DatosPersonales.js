@@ -60,56 +60,34 @@ export default class DatosPersonales extends Component {
                                 </div>
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-30 mr-2">
-                                        <Label name="Género"/>
-                                        <select className="h-50" name="genero" defaultValue={this.props.genero} onChange={this.props.handleChange}>
-                                            <option disabled value='selec'>Seleccione</option>
-                                            <option value='masculino'>Masculino</option>
-                                            <option value='femenino'>Femenino</option>
-                                            <option value='otro'>Otro</option>
-                                        </select>
-                                    </div>
-                                    <div className="d-flex flex-column w-30 mr-2">
                                         <Label name="Correo Electrónico"/>
                                         <input type="email" name="correo" className="h-50" defaultValue={this.props.correo} onChange={this.props.handleChange}></input>
 
                                     </div>
-                                    <div className="d-flex flex-column w-30">
-                                        <Label name="Estado Civil"/>
-                                        <select className="h-50" name="estadoCivil" defaultValue={this.props.estadoCivil} onChange={this.props.handleChange}>
-                                            <option disabled value="selec" >Seleccione</option>
-                                            <option value="soltero">Soltero/a</option>
-                                            <option value="casado">Casado/a</option>
-                                            <option value="divorciado">Divorciado/a</option>
-                                            <option value="union">Unión Libre</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-30 mr-2">
                                         <Label name="Teléfono"/>
                                         <input type="tel" name="telefono" className="h-50" defaultValue={this.props.telefono} onChange={this.props.handleChange}></input>
 
                                     </div>
-                                    <div className="d-flex flex-column w-30 mr-2">
+                                    <div className="d-flex flex-column w-30">
                                         <Label name="Dirección"/>
                                         <input type="text" name="direccion"  className="h-50" defaultValue={this.props.direccion} onChange={this.props.handleChange}></input>
 
                                     </div>
-                                    <div className="d-flex flex-column w-30">
-                                        <Label name="Provincia"/>
-                                        <input type="text" name="provincia" className="h-50" defaultValue={this.props.provincia} onChange={this.props.handleChange}></input>
-                                    </div>
-                                    
                                 </div>
                                 <div className="d-flex flex-row justify-content-between mb-1">
                                     
-                                    <div className="d-flex flex-column w-30">
+                                    <div className="d-flex flex-column w-30 mr-2">
+                                        <Label name="Provincia"/>
+                                        <input type="text" name="provincia" className="h-50" defaultValue={this.props.provincia} onChange={this.props.handleChange}></input>
+                                    </div>
+                                    <div className="d-flex flex-column w-30 mr-2">
                                         <Label name="Ciudad"/>
                                         <input type="text" name="ciudad" className="h-50" defaultValue={this.props.ciudad} onChange={this.props.handleChange}></input>
 
                                     </div>
-                                    <div className="d-flex flex-column w-60">
-                                        <Label name="Disponibilidad para viajar"/>
+                                    <div className="d-flex flex-column w-30">
+                                    <label className="w-100 text-left text-normal h-50">Disponibilidad para viajar</label>
                                         <select className="h-50" name="disponibilidad" defaultValue={this.props.disponibilidad} onChange={this.props.handleChange}>
                                             <option disabled value="selec">Seleccione</option>
                                             <option value="1">Si</option>

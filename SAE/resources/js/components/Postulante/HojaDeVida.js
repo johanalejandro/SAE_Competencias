@@ -5,8 +5,7 @@ import Prerrequisitos from './Prerrequisitos';
 import DatosPersonales from './DatosPersonales';
 import EducacionFormal from './EducacionFormal';
 import ExperienciaLaboral from './ExperienciaLaboral';
-import Referencia from './Referencia';
-import {capitalize} from 'lodash';
+import {capitalize, pull} from 'lodash';
 
 export default class HojaDeVida extends Component {
 
@@ -42,14 +41,18 @@ export default class HojaDeVida extends Component {
         archivoAnexo:{},
 
         //Experiencia Laboral
+        experiencias : [],
         experienciaLaboral: [],
+        alcances: [],
         fechaInicio: "",
         fechaFin: "",
-        esTrabajoActual: false,
+        esTrabajoActual: 0,
         descripcion: "",
         cargoEjercido: "",
         nombreEmpresa: "",
         alcanceActual: "selec",
+        alcanceItem: "",
+        checkedItems: new Map(),
         
     }
 
@@ -70,6 +73,7 @@ export default class HojaDeVida extends Component {
             ambitosArray: this.props.ambitos,
             sectoresArray: this.props.sectores,
             alcancesArray: this.props.alcances,
+            alcances: this.props.alcances,
             form: "datos",
             prerrequisitos: "si",
         })
@@ -86,6 +90,39 @@ export default class HojaDeVida extends Component {
                 form: target.id,
             })
         }
+    }
+
+     handleCheckBoxChange = ({target}) => {
+        const item = target.name;
+        const isChecked =target.checked;
+        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+        if(isChecked){
+            this.setState({
+                esTrabajoActual: 1,
+            })
+        }else{
+            this.setState({
+                esTrabajoActual: 0,
+            })
+        }
+    }
+
+    agregar = async() => {
+        let experiencia = {}
+        experiencia['nombreEmpresa'] = this.state.nombreEmpresa;
+        experiencia['cargoEjercido'] = this.state.cargoEjercido;
+        experiencia['descripcion'] = this.state.descripcion;
+        experiencia['fechaInicio'] = this.state.fechaInicio;
+        experiencia['fechaFin'] = this.state.fechaFin;
+        experiencia['id_alcance'] = this.state.alcanceActual;
+        experiencia['alcance'] = this.state.alcanceItem;
+        experiencia['esTrabajoActual'] = this.state.esTrabajoActual;
+        const { experiencias } = this.state;
+        const filterData = experiencias;
+        filterData.push(experiencia);
+        await this.setState({ experiencias: filterData });
+        await this.updateExperienciaLaboral(this.state.experiencias);
+        await this.clean(this.state.alcanceActual);
     }
 
     handleHojaDeVida = () => {
@@ -106,6 +143,16 @@ export default class HojaDeVida extends Component {
         const name = target.name;
         this.setState({
             [name] : value,
+        })
+    }
+
+    handleChangeAlcance = (evt) => {
+        let index = evt.nativeEvent.target.selectedIndex;
+        let text = evt.nativeEvent.target[index].text;
+        const {value} = evt.target;
+        this.setState({
+            alcanceActual: parseInt(value,10),
+            alcanceItem: text,
         })
     }
 
@@ -142,9 +189,35 @@ export default class HojaDeVida extends Component {
     }
 
     updateExperienciaLaboral = (experiencia) => {
+        const { experienciaLaboral } = this.state;
+        const filterData = experienciaLaboral;
+        filterData.push(experiencia);
         this.setState({
-            experienciaLaboral: experiencia,
+            experienciaLaboral: filterData,
         })
+    }
+
+    clean = async (alcanceActual) => {
+        console.log(alcanceActual);
+        const { alcances } = this.state;
+        let filterData = [];
+        filterData = alcances;
+        const alcanceAEliminar = await filterData.find((alcance)=>{
+            return alcance.id_alcance === alcanceActual;
+        })
+        console.log("eliminar",alcanceAEliminar)
+        await pull(filterData,alcanceAEliminar);
+        await this.setState({ alcances: filterData });
+        await this.setState({
+            fechaInicio: "",
+            fechaFin: "",
+            esTrabajoActual: 0,
+            descripcion: "",
+            cargoEjercido: "",
+            nombreEmpresa: "",
+            alcanceActual: "selec",
+            checkedItems: new Map(),
+        });
     }
 
     handleSubmitPostulante(postulante) {
@@ -269,9 +342,11 @@ export default class HojaDeVida extends Component {
                                     <ExperienciaLaboral
                                     handleChangeTipo={this.handleChangeTipo}
                                     handleChange={this.handleChange}
+                                    handleCheckBoxChange={this.handleCheckBoxChange}
+                                    checkedItems={this.state.checkedItems}
+                                    handleChangeAlcance={this.handleChangeAlcance}
                                     tipo={this.state.tipo}
-                                    alcances={this.state.alcancesArray}
-                                    experienciaLaboral={this.state.experienciaLaboral}
+                                    alcances={this.state.alcances}
                                     fechaInicio={this.state.fechaInicio}
                                     fechaFin={this.state.fechaFin}
                                     esTrabajoActual={this.state.esTrabajoActual}
@@ -279,6 +354,8 @@ export default class HojaDeVida extends Component {
                                     cargoEjercido={this.state.cargoEjercido}
                                     nombreEmpresa={this.state.nombreEmpresa}
                                     alcanceActual={this.state.alcanceActual}
+                                    experiencias={this.state.experiencias}
+                                    agregar={this.agregar}
                                     />
                                 )}
                             </div>
