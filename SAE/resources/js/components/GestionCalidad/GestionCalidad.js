@@ -7,15 +7,21 @@ export default class GestionCalidad extends Component {
 
     state = {
         postulante: [],
+        porhabilitar: [],
+        porasignar: [],
         form: "",
+        tipo: "",
     }
 
     componentWillMount= async()=>{
         this.setState({
             form: "todos",
+            tipo: "",
         });
 
         let postulantes = [];
+        let porasignar = [];
+        let porhabilitar = [];
         await fetch('/api/postulantes')
         .then(response => {
             return response.json();
@@ -37,17 +43,77 @@ export default class GestionCalidad extends Component {
         await this.setState({
             postulante: postulantes,
         })
+
+        await fetch('/api/postulanteAsignar')
+        .then(response => {
+            return response.json();
+        })
+        .then(postulantesResponse => {
+            postulantesResponse.map((postulante)=>{
+                let post ={};
+                post['nombres'] = postulante.nombres;
+                post['apellidos'] = postulante.apellidos;
+                post['estado']= postulante.estado;
+                post['email'] = postulante.email;
+                post['tipoPostulacion'] = postulante.tipoPostulacion;
+                porasignar.push(post);
+            })
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+
+        await this.setState({
+            porasignar: porasignar,
+        })
+
+        await fetch('/api/postulantePorHabilitar')
+        .then(response => {
+            return response.json();
+        })
+        .then(postulantesResponse => {
+            postulantesResponse.map((postulante)=>{
+                let post ={};
+                post['nombres'] = postulante.nombres;
+                post['apellidos'] = postulante.apellidos;
+                post['estado']= postulante.estado;
+                post['email'] = postulante.email;
+                post['tipoPostulacion'] = postulante.tipoPostulacion;
+                porhabilitar.push(post);
+            })
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+
+        await this.setState({
+            porhabilitar: porhabilitar,
+        })
+
     }
 
     handleChangeTipo = ({target}) => {
         if(target.name){
             this.setState({
                 form: target.name,
+                tipo: "",
             })
         }
         if(target.id){
             this.setState({
                 form: target.id,
+                tipo: "",
+            })
+        }
+    }
+
+    handleChangeTipoPost = ({target}) => {
+        if(target.name){
+            this.setState({
+                tipo: target.name,
+            })
+        }
+        if(target.id){
+            this.setState({
+                tipo: target.id,
             })
         }
     }
@@ -125,6 +191,8 @@ export default class GestionCalidad extends Component {
            ];
             
            let data = this.state.postulante;
+           let dataasignar = this.state.porasignar;
+           let dataporhabilitar = this.state.porhabilitar;
 
            const datos = [
             ["Joe James", "Test Corp", "Yonkers", "NY"],
@@ -179,11 +247,19 @@ export default class GestionCalidad extends Component {
                     <Header title="Gestión de Calidad"/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
-                                    {this.state.form === "todos" && (
+                        {this.state.form === "todos" && this.state.tipo==="" && (
                                         <React.Fragment>
                                             <div id="todos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"} onClick={this.handleChangeTipo}>
                                                 Postulantes
                                             </div>
+                                            <div className="d-flex flex-column w-100 align-items-end">
+                                                <div id="porasignar" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
+                                                    Por Asignar
+                                                </div>
+                                                <div id="porhabilitar" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
+                                                    Por Habilitar
+                                                </div>     
+                                            </div>   
                                             <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Expertos
                                             </div>
@@ -191,7 +267,47 @@ export default class GestionCalidad extends Component {
                                                 Evaluadores
                                             </div>                                  
                                         </React.Fragment>)}
-                                    {this.state.form === "expertos" && (
+                                    {this.state.form === "todos" && this.state.tipo==="porhabilitar" && (
+                                        <React.Fragment>
+                                            <div id="todos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"} onClick={this.handleChangeTipo}>
+                                                Postulantes
+                                            </div>
+                                            <div className="d-flex flex-column w-100 align-items-end">
+                                                <div id="porasignar" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
+                                                    Por Asignar
+                                                </div>
+                                                <div id="porhabilitar" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" onClick={this.handleChangeTipoPost}>
+                                                    Por Habilitar
+                                                </div>     
+                                            </div>  
+                                            <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Expertos
+                                            </div>
+                                            <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Evaluadores
+                                            </div>                                  
+                                        </React.Fragment>)}
+                                        {this.state.form === "todos" && this.state.tipo==="porasignar" && (
+                                        <React.Fragment>
+                                            <div id="todos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current"} onClick={this.handleChangeTipo}>
+                                                Postulantes
+                                            </div>
+                                            <div className="d-flex flex-column w-100 align-items-end">
+                                                <div id="porasignar" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" onClick={this.handleChangeTipoPost}>
+                                                    Por Asignar
+                                                </div>
+                                                <div id="porhabilitar" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
+                                                    Por Habilitar
+                                                </div>     
+                                            </div>   
+                                            <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Expertos
+                                            </div>
+                                            <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                Evaluadores
+                                            </div>                                  
+                                        </React.Fragment>)}
+                                    {this.state.form === "expertos"&& this.state.tipo==="" && (
                                         <React.Fragment>
                                             <div id="todos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
                                                 Postulantes
@@ -203,7 +319,7 @@ export default class GestionCalidad extends Component {
                                                 Evaluadores
                                             </div>
                                         </React.Fragment>)}
-                                    {this.state.form === "evaluadores" && (
+                                    {this.state.form === "evaluadores"&& this.state.tipo==="" && (
                                             <React.Fragment>
                                                 <div id="todos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
                                                     Postulantes
@@ -220,7 +336,7 @@ export default class GestionCalidad extends Component {
                         <div className="cardSAE containersae w-80">
                                 
                             <div className="cardSAE-body">
-                                {this.state.form === "todos" && (
+                                {this.state.form === "todos" && this.state.tipo===""&&(
                                     <MUIDataTable className="data-table"
                                         title={"Listado de Postulantes a Expertos/Evaluadores"}
                                         data={data}
@@ -228,7 +344,23 @@ export default class GestionCalidad extends Component {
                                         options={options}
                                     />
                                 )}
-                                {this.state.form === "expertos" && (
+                                {this.state.form === "todos" && this.state.tipo==="porhabilitar"&&(
+                                    <MUIDataTable className="data-table"
+                                        title={"Listado de Postulantes por habilitar"}
+                                        data={dataporhabilitar}
+                                        columns={columns}
+                                        options={options}
+                                    />
+                                )}
+                                {this.state.form === "todos" && this.state.tipo==="porasignar"&&(
+                                    <MUIDataTable className="data-table"
+                                        title={"Listado de Postulantes por asignar"}
+                                        data={dataasignar}
+                                        columns={columns}
+                                        options={options}
+                                    />
+                                )}
+                                {this.state.form === "expertos" && this.state.tipo==="" &&(
                                     <MUIDataTable className="data-table"
                                         title={"Listado de Expertos"}
                                         data={datos}
@@ -236,7 +368,7 @@ export default class GestionCalidad extends Component {
                                         options={options}
                                     />
                                 )}
-                                {this.state.form === "evaluadores" && (
+                                {this.state.form === "evaluadores" && this.state.tipo===""&&(
                                     <MUIDataTable className="data-table"
                                         title={"Listado de Evaluadores"}
                                         data={datos}

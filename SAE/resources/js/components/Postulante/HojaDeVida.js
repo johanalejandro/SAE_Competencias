@@ -7,6 +7,22 @@ import EducacionFormal from './EducacionFormal';
 import ExperienciaLaboral from './ExperienciaLaboral';
 import {capitalize, pull} from 'lodash';
 
+
+const getCurrentMonth = () => {
+    var date = new Date();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    return new Date(year, month, 1);
+};
+
+const getCurrentDate = () => {
+    var date = new Date();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const day = date.getDate();
+    return new Date(year, month, day !== 1 ? day : 1, 23, 59, 59);
+};
+
 export default class HojaDeVida extends Component {
 
     state = {
@@ -23,7 +39,7 @@ export default class HojaDeVida extends Component {
         apellidos: "",
         tipoId: "selec",
         identificacion: "",
-        fechaNacimiento: "",
+        fechaNacimiento: new Date(),
         correo: "",
         estadoCivil: "selec",
         telefono: "",
@@ -44,8 +60,8 @@ export default class HojaDeVida extends Component {
         experiencias : [],
         experienciaLaboral: [],
         alcances: [],
-        fechaInicio: "",
-        fechaFin: "",
+        fechaInicio: getCurrentMonth(),
+        fechaFin: getCurrentDate(),
         esTrabajoActual: 0,
         descripcion: "",
         cargoEjercido: "",
@@ -78,6 +94,43 @@ export default class HojaDeVida extends Component {
             prerrequisitos: "si",
         })
     }
+
+    handleChangeStart = async (date) => {
+        const { fechaFin } = this.state;
+        const startDateTmp = new Date(date);
+        const endDateTmp = new Date(fechaFin);
+        if (startDateTmp >= endDateTmp) {
+            await this.setState({
+                fechaInicio: date,
+                fechaFin: date,
+            });
+        } else {
+            await this.setState({
+                fechaInicio: date,
+            });
+        }
+    };
+    handleChangeEnd = async (date) => {
+        const { fechaInicio } = this.state;
+        const startDateTmp = new Date(fechaInicio);
+        const endDateTmp = new Date(date);
+        if (endDateTmp >= startDateTmp) {
+            await this.setState({
+                fechaFin: date,
+            });
+        } else {
+            await this.setState({
+                fechaInicio: date,
+                fechaFin: date,
+            });
+        }
+    };
+
+    handleChangeDate = (date) => {
+        this.setState({
+          fechaNacimiento: date
+        });
+      }
 
     handleChangeTipo = ({target}) => {
         if(target.name){
@@ -162,7 +215,7 @@ export default class HojaDeVida extends Component {
         })
     }
 
-    handlePostulante = () => {
+    handlePostulante = async () => {
 
         let postulante = {
             nombres: this.state.nombres,
@@ -182,10 +235,17 @@ export default class HojaDeVida extends Component {
             disponibilidad: parseInt(this.state.disponibilidad),
         }
 
-        console.log("PAYLOAD DE POSTULANTE",postulante);
+        await console.log("PAYLOAD DE POSTULANTE",postulante);
 
-        this.handleSubmitPostulante(postulante);
+        await this.handleSubmitPostulante(postulante);
         
+    }
+
+    handleExp = async () => {
+        let experiencias =this.state.experiencias;
+        await console.log("PAYLOAD DE EXPERIENCIAS",experiencias);
+
+        //this.handleSubmitExperiencia(experiencia);
     }
 
     updateExperienciaLaboral = (experiencia) => {
@@ -209,8 +269,8 @@ export default class HojaDeVida extends Component {
         await pull(filterData,alcanceAEliminar);
         await this.setState({ alcances: filterData });
         await this.setState({
-            fechaInicio: "",
-            fechaFin: "",
+            fechaInicio: getCurrentMonth(),
+            fechaFin: getCurrentDate(),
             esTrabajoActual: 0,
             descripcion: "",
             cargoEjercido: "",
@@ -246,8 +306,33 @@ export default class HojaDeVida extends Component {
         });
     }
 
+    handleSubmitExperiencia(experiencia) {
+        /*Fetch API for post request */
+        fetch( 'api/experiencias', {
+            method:'post',
+            /* headers are important*/
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify(experiencia)
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then( data => {
+            //update the state of products and currentProduct
+            console.log("POST EXPERIENCIAS",data);
+            this.setState({
+                agregado: true,
+            });
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+    }
+
     render() {
-        console.log("PROPS ANEXO",this.state.archivoAnexo);
         return (
             this.state.prerrequisitos==="si" ? (
                  <Prerrequisitos 
@@ -321,7 +406,7 @@ export default class HojaDeVida extends Component {
                                         disponibilidad={this.state.disponibilidad}
                                         genero={this.state.genero}
                                         agregado={this.state.agregado}
-        
+                                        handleChangeDate={this.handleChangeDate}
 
                                     />
                                 )}
@@ -343,6 +428,8 @@ export default class HojaDeVida extends Component {
                                     handleChangeTipo={this.handleChangeTipo}
                                     handleChange={this.handleChange}
                                     handleCheckBoxChange={this.handleCheckBoxChange}
+                                    handleChangeStart={this.handleChangeStart}
+                                    handleChangeEnd={this.handleChangeEnd}
                                     checkedItems={this.state.checkedItems}
                                     handleChangeAlcance={this.handleChangeAlcance}
                                     tipo={this.state.tipo}
@@ -356,6 +443,8 @@ export default class HojaDeVida extends Component {
                                     alcanceActual={this.state.alcanceActual}
                                     experiencias={this.state.experiencias}
                                     agregar={this.agregar}
+                                    handleExp={this.handleExp}
+                                    handlePostulante={this.handlePostulante}
                                     />
                                 )}
                             </div>

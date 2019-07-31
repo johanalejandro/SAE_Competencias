@@ -4,13 +4,45 @@ import Label from '../common/Label';
 import {isEmpty} from 'lodash';
 import MUIDataTable from 'mui-datatables';
 import Checkbox from '../common/Checkbox';
+import DatePicker from "react-datepicker";
+import dayjs from 'dayjs';
+import { ClipLoader } from "react-spinners";
 
+import "react-datepicker/dist/react-datepicker.css";
 
 export default class ExperienciaLaboral extends Component {
 
+    constructor(props) {
+        super(props);
+      }
+
+      state={
+          loading: false,
+      }
+
+    handleSubmit = async (e) => {
+        //preventDefault prevents page reload   
+        e.preventDefault();
+        /*A call back to the onAdd props. The current
+         *state is passed as a param
+         */
+        this.setState({
+            loading: true,
+        })
+
+        await this.props.handlePostulante();
+        await this.props.handleExp();
+
+        this.setLoading();
+      }
+
+      setLoading = () =>{
+          this.setState({
+              loading: false,
+          })
+      }
+
     render() {
-        console.log("EXP ALCANCES",this.props.alcances);
-        console.log("EXPERIENCIAS",this.props.experiencias);
         const columns = [
             {
                 name: "alcance",
@@ -50,6 +82,9 @@ export default class ExperienciaLaboral extends Component {
            options: {
             filter: true,
             sort: true,
+            customBodyRender: (value)=>{
+                return <span>{dayjs(value).format("DD-MM-YYYY")}</span>
+             },
            }
           },
           {
@@ -58,6 +93,9 @@ export default class ExperienciaLaboral extends Component {
             options: {
              filter: true,
              sort: true,
+             customBodyRender: (value)=>{
+                return <span>{dayjs(value).format("DD-MM-YYYY")}</span>
+             },
             }
            },
            {
@@ -159,11 +197,33 @@ export default class ExperienciaLaboral extends Component {
                                         </div>
                                         <div className="d-flex flex-column w-30">
                                             <Label name="Fecha Inicio"/>
-                                            <input type="date" className="h-25" name="fechaInicio" value={this.props.fechaInicio} onChange={this.props.handleChange}></input>
+                                            <DatePicker
+                                                selected={this.props.fechaInicio}
+                                                selectsStart
+                                                startDate={this.props.fechaInicio}
+                                                endDate={this.props.fechaFin}
+                                                onChange={(evt) => {
+                                                    this.props.handleChangeStart(evt);
+                                                }}
+                                                dateFormat="dd-MM-yyyy"
+                                                className="w-100 z-dropdown"
+                                            />
+
                                         </div>
                                         <div className="d-flex flex-column w-30">
                                             <Label name="Fecha Fin"/>
-                                            <input type="date" className="h-25" name="fechaFin" value={this.props.fechaFin} onChange={this.props.handleChange}></input>
+                                            <DatePicker
+                                                selected={this.props.fechaFin}
+                                                selectsEnd
+                                                startDate={this.props.fechaInicio}
+                                                endDate={this.props.fechaFin}
+                                                dateFormat="dd-MM-yyyy"
+                                                onChange={(evt) => {
+                                                    this.props.handleChangeEnd(evt);
+                                                }}
+                                                className="w-100"
+                                            />
+
                                         </div>
                                     </div>
                                     <div className="d-flex flex-row justify-content-between w-100">
@@ -189,11 +249,17 @@ export default class ExperienciaLaboral extends Component {
                     />
                 </div>
                 <div className="d-flex flex-row justify-content-end align-items-center w-100 py-2">
-                    <button name="referencia" className="btn-primary-sae w-20" 
+                    {this.state.loading?(
+                        <div className="d-flex flex-column justify-content-center w-100 align-items-center">
+                            <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
+                            <div className="text-primary text-center">Enviando Postulación</div>
+                        </div>):(
+                        <button name="referencia" className="btn-primary-sae w-20" 
                         onClick={(evt)=>{
-                            this.props.handleChangeTipo(evt);
+                            this.handleSubmit(evt);
                             }}
-                    >Siguiente</button>
+                    >Siguiente</button>)}
+                    
                 </div>
 
             </div>

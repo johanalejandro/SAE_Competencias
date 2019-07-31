@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Label from '../common/Label';
+import DatePicker from "react-datepicker";
 
 export default class DatosPersonales extends Component {
 
@@ -54,7 +55,12 @@ export default class DatosPersonales extends Component {
                                     </div>
                                     <div className="d-flex flex-column w-30">
                                         <Label name="Fecha de Nacimiento"/>
-                                        <input type="date" className="h-50" name="fechaNacimiento" defaultValue={this.props.fechaNacimiento} onChange={this.props.handleChange}></input>
+                                        <DatePicker
+                                            selected={this.props.fechaNacimiento}
+                                            onChange={this.props.handleChangeDate}
+                                            dateFormat="dd-MM-yyyy"
+                                            className="w-100"
+                                        />
 
                                     </div>
                                 </div>

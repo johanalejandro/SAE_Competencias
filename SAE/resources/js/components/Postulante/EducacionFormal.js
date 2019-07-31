@@ -158,8 +158,7 @@ export default class EducacionFormal extends Component {
             <div className="d-flex flex-row justify-content-end align-items-center py-4">
                 <button name="experiencia" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.handleSubmit(evt);
-                        //this.props.handleChangeTipo(evt);
+                        this.props.handleChangeTipo(evt);
                         }}
                 >Siguiente</button>
             </div>
