@@ -8,6 +8,10 @@ use App\experienciaLaboral;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class PostulanteController extends Controller
 {
@@ -39,8 +43,50 @@ class PostulanteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+
     {
+        /****** DESCOMENTA PARA PROBAR ********/
+
+        /*
+        $validator = Validator::make($request->all(), [
+        'archivoAnexo' => 'file',
+       ]);
         //$todayDate = new DateTime();
+        $current_date_time = Carbon::now()->toDateTimeString();
+        $campos = $request->all();
+        $campos['nombres']=$request->nombres;
+        $campos['apellidos']=$request->apellidos;
+        $campos['ciudad']=$request->ciudad;
+        $campos['email']=$request->email;
+        $campos['cedula']=$request->cedula;
+        $campos['fechaNacimiento']=$current_date_time;
+        $campos['telefono']=$request->telefono;
+        $campos['provincia']=$request->provincia;
+        $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
+        $campos['disponibilidadViajar']="1";
+        $campos['fechaHabilitacion']=$current_date_time;
+        $campos['tipoPostulacion']= "$request->tipoPostulacion";
+
+       
+       
+        $postulante= Postulante::create($campos);
+
+        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
+
+       
+             $educacion = educacionFormal::create([
+                'id_postulante'     =>  $keypostulante->id_postulante,
+                'nombreInstitucion' =>  "$request->nombreInstitucion",
+                'tituloObtenido'    =>  "$request->tituloObtenido",
+                'tipoFormacion'     =>  "$request->tipoFormacion",
+                'archivoAnexo'      =>  $request->file('archivoAnexo')->store('')
+        ]);
+             return response()->json('Postulante creado');
+       */
+        
+        $validator = Validator::make($request->all(), [
+        'archivoAnexo' => 'file',
+         ]);
         $current_date_time = Carbon::now()->toDateTimeString();
         $campos = $request->all();
         $campos['nombres']=$request->nombres;
@@ -54,29 +100,29 @@ class PostulanteController extends Controller
         $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
         $campos['disponibilidadViajar']=$request->disponibilidad;
         $campos['fechaHabilitacion']=$current_date_time;
-        $campos['tipoPostulacion']=$request->tipoPostulacion;
-        $campos['nombreInstitucion']= $request->nombreInstitucion;
-        $campos['tituloObtenido'] = $request->tituloObtenido;
-        $campos['tipoFormacion'] = $request->tipoFormacion;
-        $campos['archivoAnexo'] = $request->archivoAnexo;
+        $campos['tipoPostulacion']= $request->tipoPostulacion;
 
        
        
         $postulante= Postulante::create($campos);
 
         $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
-    
-            $educacion = educacionFormal::create([
+
+       
+             $educacion = educacionFormal::create([
                 'id_postulante'     =>  $keypostulante->id_postulante,
                 'nombreInstitucion' =>  $request->nombreInstitucion,
                 'tituloObtenido'    =>  $request->tituloObtenido,
                 'tipoFormacion'     =>  $request->tipoFormacion,
-                'archivoAnexo'      =>  $request->file('archivoAnexo')->store()
+                'archivoAnexo'      =>  $request->file('archivoAnexo')->store('')
         ]);
+             return response()->json('Postulante creado');
+       
+           
     
                 
         
-        return response()->json('Postulante creado');
+        
     }
 
     /**
@@ -150,4 +196,16 @@ class PostulanteController extends Controller
     {
         //
     }
+    /*
+    public function descargarCV($id) {
+        $headers = [
+              'Content-Type' => 'application/pdf',
+           ];
+        $content = DB::table('educacion_formals')->select('archivoAnexo')->where('id_postulante', $id)->get();
+        $postulantes = Storage::get("3YyMQNMiCUJlKGd1G0ttMruk2GB85BaOdE0Hu5tU.png");
+
+         return Storage::download($postulantes,'archivo', $headers);
+
+    }
+    */
 }

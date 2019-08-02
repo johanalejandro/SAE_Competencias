@@ -91,10 +91,14 @@
             <div class="bg-light h-100">
 
             <div class="content h-100">
-
-                    <div id="postulation-form" class="h-100 w-100">
+                    {{ csrf_field() }}
+                
+                    <div id="postulation-form" class="h-100 w-100" >
 
                     </div>
+                    
+               
+                    
 
             </div>
         </div>

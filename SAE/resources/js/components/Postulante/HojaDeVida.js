@@ -54,7 +54,7 @@ export default class HojaDeVida extends Component {
         nombreInstitucion: "",
         tituloObtenido:"",
         tipoFormacion:"selec",
-        archivoAnexo:{},
+        archivoAnexo:"",
 
         //Experiencia Laboral
         experiencias : [],
@@ -245,7 +245,7 @@ export default class HojaDeVida extends Component {
         let experiencias =this.state.experiencias;
         await console.log("PAYLOAD DE EXPERIENCIAS",experiencias);
 
-        //this.handleSubmitExperiencia(experiencia);
+        this.handleSubmitExperiencia(experiencia);
     }
 
     updateExperienciaLaboral = (experiencia) => {

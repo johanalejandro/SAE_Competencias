@@ -17,6 +17,7 @@ class CreateSectorRequerimientosTable extends Migration
             $table->bigIncrements('id_sector_requerimiento');
             $table->unsignedBigInteger('id_sector');
             $table->text('requerimiento');
+            $table->string('anexoEvaluar');
             $table->timestamps();
         });
         Schema::table('sector_requerimientos', function($table) {

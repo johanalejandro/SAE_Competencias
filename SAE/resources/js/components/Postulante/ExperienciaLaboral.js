@@ -77,7 +77,7 @@ export default class ExperienciaLaboral extends Component {
            }
           },
           {
-           name: "fechaInicio",
+           name: "fecha_inicio",
            label: "Inicio",
            options: {
             filter: true,
@@ -88,7 +88,7 @@ export default class ExperienciaLaboral extends Component {
            }
           },
           {
-            name: "fechaFin",
+            name: "fecha_fin",
             label: "Fin",
             options: {
              filter: true,

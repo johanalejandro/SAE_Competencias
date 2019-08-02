@@ -55,6 +55,10 @@ Route::get('detallesAlcances/{id}', 'PostulanteController@verDetallesAlcance');
 
 Route::get('postulantePorAlcance/{id}','PostulanteController@verPostulantesPorAlcance');
 
+//Route::get('descargarCV/{id}','PostulanteController@descargarCV');
+
+
+
 /*------------------------------------------------------------------------------------------------------*/
 
 Route::post('/expeciencias', 'experienciaLaboralController@store');

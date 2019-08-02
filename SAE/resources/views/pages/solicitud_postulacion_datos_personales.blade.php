@@ -7,7 +7,7 @@
 	<h1>Solicitud Postulacion</h1>
 
     <hr>
-     <form action="/tasks" method="post">
+     <form action="api/postulantes" method="post"  enctype="multipart/form-data">
      {{ csrf_field() }}
      <div class="form-group">
         <label for="title">Apellidos</label>
@@ -15,11 +15,19 @@
       </div>
       <div class="form-group">
         <label for="title">Nombres</label>
-        <input type="text" class="form-control" id="nombre"  name="nombre">
+        <input type="text" class="form-control" id="nombres"  name="nombres">
+      </div>
+      <div class="form-group">
+        <label for="title">Cedula</label>
+        <input type="text" class="form-control" id="cedula"  name="cedula">
+      </div>
+      <div class="form-group">
+        <label for="title">provincia</label>
+        <input type="text" class="form-control" id="provincia"  name="provincia">
       </div>
       <div class="form-group">
         <label for="title">Fecha Nacimiento</label>
-        <input type="date" class="form-control" id="fecNac"  name="fecNac">
+        <input type="date" class="form-control" id="fechaNacimiento"  name="fechaNacimiento">
       </div>
       <div class="form-group">
         <label for="title">Correo Electronico</label>
@@ -31,25 +39,29 @@
       </div>
       <div class="form-group">
         <label for="date">Telefono Celular</label>
-        <input type="text" class="form-control" id="telecel"  name="telecel">
+        <input type="text" class="form-control" id="telefono"  name="telefono">
       </div>
       <div class="form-group">
         <label for="title">Pais</label>
-        <input type="text" class="form-control" id="pais"  name="pais">
+        <input type="text" class="form-control" id="estado"  name="estado">
       </div>
       <div class="form-group">
         <label for="date">Direccion</label>
         <input type="text" class="form-control" id="direccion"  name="direccion">
       </div>
       <div class="form-group">
-      	<label for="text">Disponibilidad para viajar</label>
-      	<input type="checkbox" name="viajar" value="Si"> Si
-  		<input type="checkbox" name="viajar" value="No" checked="checked"> No
+        <label for="date">Ciudad</label>
+        <input type="text" class="form-control" id="ciudad"  name="ciudad">
       </div>
+
       <div class="form-group">
-      	 <label for="text">Genero</label>
-      	<input type="checkbox" name="genero" value="masculino"> Masculino
-  		<input type="checkbox" name="genero" value="femenino" checked="checked"> Femenino
+      	<label for="text">Disponibilidad para viajar</label>
+      	<input type="checkbox" id="disponibilidadViajar" name="disponibilidadViajar" value="1"> Si
+  		<input type="checkbox" id="disponibilidadViajar" name="disponibilidadViajar" value="0" checked="checked"> No
+      </div>
+       <div class="form-group">
+        <label for="archivoAnexo">Archivo</label>
+        <input type="file" class="form-control" id="archivoAnexo"  name="archivoAnexo">
       </div>
       <button type="submit" class="btn btn-primary">Guardar</button>
       

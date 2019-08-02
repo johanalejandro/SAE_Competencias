@@ -24,17 +24,7 @@ class experienciaLaboralController extends Controller
      */
     public function create()
     {
-        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
-        $campos = $request->all();
-        $campos['id_postulante']=$keypostulante;
-        $campos['id_alcance']=$request->id_alcance;
-        $campos['descripcion']=$request->descripcion;
-        $campos['cargoEjercido']=$request->cargoEjercido;
-        $campos['fecha_inicio']=$request->fecha_inicio;
-        $campos['fecha_fin']=$request->fecha_fin;
-        $campos['esTrabajoActual']=$request->esTrabajoActual;
-        $experiencia= experienciaLaboral::create($campos);
-        return response()->json('Experiencia creada');
+        
     }
 
     /**
@@ -45,6 +35,22 @@ class experienciaLaboralController extends Controller
      */
     public function store(Request $request)
     {
+        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
+
+        $current_date_time = Carbon::now()->toDateTimeString();
+        $experiencia = experienciaLaboral::create([
+                'id_postulante'     =>  $keypostulante->id_postulante,
+                'id_alcance' =>  $request->id_alcance,
+                'descripcion'    =>  $request->descripcion,
+                'nombreEmpresa'     =>  $request->nombreEmpresa,
+                'cargoEjercido'      =>  $request->cargoEjercido,
+                'fecha_inicio'    =>  $current_date_time,
+                'fecha_fin'     =>  $current_date_time,
+                'esTrabajoActual'     =>  $request->esTrabajoActual
+
+        ]);
+        
+        return response()->json('Experiencia creada');
         
     }
 
