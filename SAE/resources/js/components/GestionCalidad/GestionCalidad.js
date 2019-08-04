@@ -159,7 +159,7 @@ export default class GestionCalidad extends Component {
                 label: "Estado",
                 options: {
                  filter: true,
-                 sort: false,
+                 sort: true,
                  customBodyRender: (value) => {
                     return (
                       <span className="text-warning-dark">
@@ -207,10 +207,11 @@ export default class GestionCalidad extends Component {
             rowsPerPage: 5,
             rowsPerPageOptions: [5,10,15],
             filterType: 'checkbox',
+            print: false,
             textLabels: {
                 body: {
                   noMatch: "Aun no hay datos que mostrar",
-                  toolTip: "Sort",
+                  toolTip: "Ordenar",
                 },
                 pagination: {
                   next: "Siguiente",

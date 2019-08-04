@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import Header from '../common/Header'
-import Prerrequisitos from './Prerrequisitos';
-import DatosPersonales from './DatosPersonales';
-import EducacionFormal from './EducacionFormal';
-import ExperienciaLaboral from './ExperienciaLaboral';
-import {capitalize, pull} from 'lodash';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import Header from "../common/Header";
+import Prerrequisitos from "./Prerrequisitos";
+import DatosPersonales from "./DatosPersonales";
+import EducacionFormal from "./EducacionFormal";
+import ExperienciaLaboral from "./ExperienciaLaboral";
+import capitalize from "lodash/capitalize";
+import pull from "lodash/pull";
+import axios from "axios";
 
 
 const getCurrentMonth = () => {
@@ -23,6 +25,21 @@ const getCurrentDate = () => {
     return new Date(year, month, day !== 1 ? day : 1, 23, 59, 59);
 };
 
+const formatDate = (date) =>{
+    let monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ];
+  
+    let day = date.getDate();
+    let monthIndex = date.getMonth();
+    let year = date.getFullYear();
+  
+    return day + ' ' + monthNames[monthIndex] + ' ' + year;
+  }; 
+
 export default class HojaDeVida extends Component {
 
     state = {
@@ -34,6 +51,7 @@ export default class HojaDeVida extends Component {
         form: "",
         prerrequisitosArray : [],
         datosPersonales: [],
+
         //Datos Generales
         nombres: "",
         apellidos: "",
@@ -49,12 +67,13 @@ export default class HojaDeVida extends Component {
         disponibilidad: "selec",
         genero: 'selec',
         agregado: false,
-        //Educación Formal
 
+        //Educación Formal
         nombreInstitucion: "",
         tituloObtenido:"",
         tipoFormacion:"selec",
         archivoAnexo:"",
+        loadingFile: false,
 
         //Experiencia Laboral
         experiencias : [],
@@ -209,8 +228,11 @@ export default class HojaDeVida extends Component {
         })
     }
 
-    handleChangeFile = (name,file) => {
-        this.setState({
+    handleChangeFile = async (e) => {
+        const name = e.target.name;
+        const { files } = e.target;
+        const file = files[0];
+        await this.setState({
             [name] : file,
         })
     }
@@ -243,6 +265,21 @@ export default class HojaDeVida extends Component {
 
     handleExp = async () => {
         let experiencias =this.state.experiencias;
+        for (let index = 0; index < experiencias.length; index++) {
+            const element = experiencias[index];
+            let experiencia = {
+                cargoEjercido: element.cargoEjercido,
+                descripcion: element.descripcion,
+                esTrabajoActual: element.esTrabajoActual,
+                fechaFin: element.fechaFin,
+                fechaInicio: element.fechaInicio,
+                id_alcance: element.id_alcance,
+                nombreEmpresa: element.nombreEmpresa,
+            }
+
+            this.handleSubmitExperiencia(experiencia);
+            
+        }
         await console.log("PAYLOAD DE EXPERIENCIAS",experiencias);
 
         this.handleSubmitExperiencia(experiencia);
@@ -281,10 +318,41 @@ export default class HojaDeVida extends Component {
     }
 
     handleSubmitPostulante(postulante) {
-        /*Fetch API for post request */
+        const formData = new FormData();
+        formData.append("nombres", postulante.nombres);
+        formData.append("apellidos", postulante.apellidos);
+        formData.append("genero", postulante.genero);
+        formData.append("cedula", postulante.cedula);
+        formData.append("genero", postulante.genero);
+        formData.append("cedula", postulante.cedula);
+        formData.append("telefono", postulante.telefono);
+        formData.append("email", postulante.email);
+        formData.append("fechaNacimiento", formatDate(postulante.fechaNacimiento));
+        formData.append("ciudad", postulante.ciudad);
+        formData.append("provincia", postulante.provincia);
+        formData.append("nombreInstitucion", postulante.nombreInstitucion);
+        formData.append("tituloObtenido", postulante.tituloObtenido);
+        formData.append("tipoFormacion", postulante.tipoFormacion);
+        formData.append("archivoAnexo", postulante.archivoAnexo,postulante.archivoAnexo.name);
+        formData.append("tipoPostulacion", postulante.tipoPostulacion);
+        formData.append("disponibilidad", postulante.disponibilidad);
+
+        axios
+            .post("api/postulantes", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                this.setState({
+                    agregado: true,
+                });
+            })
+            .catch(console.error);
+        /*Fetch API for post request 
         fetch( 'api/postulantes', {
             method:'post',
-            /* headers are important*/
+            /* headers are important
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -303,7 +371,7 @@ export default class HojaDeVida extends Component {
             });
         }).catch(error => {
             console.log("===ERROR: ",error);
-        });
+        });*/
     }
 
     handleSubmitExperiencia(experiencia) {

@@ -4,53 +4,10 @@ import { isEmpty, size } from 'lodash';
 import { ClipLoader } from "react-spinners";
 import Label from '../common/Label';
 
-let anexo = "";
+
 
 export default class EducacionFormal extends Component {
 
-    constructor(props) {
-        super(props);
-      }
-
-      state={
-          loading: false,
-      }
-
-    handleSubmit = (e) => {
-        //preventDefault prevents page reload   
-        e.preventDefault();
-        /*A call back to the onAdd props. The current
-         *state is passed as a param
-         */
-        this.props.handlePostulante();
-      }
-
-      setLoading = () =>{
-          this.setState({
-              loading: false,
-          })
-      }
-
-      handleLoadLocalFile = async (e) => {
-        e.preventDefault();
-        this.setState({
-            loading: true,
-        })
-        const name = e.target.name;
-        const { files } = e.target;
-        const file = files[0];
-        file['enctype'] = "multipart/form-data";
-        let reader = new FileReader();
-            reader.onload = (e) => {
-                anexo= e.target.result;
-            };
-            reader.readAsDataURL(file);
-        await setTimeout(()=>{
-            const formData = {file: anexo}
-            this.props.handleChangeFile(name,formData);
-            this.setLoading();
-        },10000);
-      }
 
     /*componentDidMount(){
 
@@ -91,7 +48,6 @@ export default class EducacionFormal extends Component {
 
     render() {
         //console.log("ambitos escogidos: ",this.state.ambitosArray);
-        console.log("Anexo",anexo);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center justify-content-between w-100">
@@ -123,27 +79,27 @@ export default class EducacionFormal extends Component {
                                     <div className="d-flex flex-column w-50 mr-4">
                                         <Label name="Anexo"/>
                                         <label id="anexo-label" className="w-25 text-left text-normal h-50">
-                                              {this.state.loading ? (
+                                              {this.props.loadingFile ? (
                                                   <div className="d-flex flex-column justify-content-center w-100 align-items-center">
                                                       <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
                                                       <div className="text-primary text-center">Cargando anexo</div>
                                                   </div>
                                               ) : (
                                                   isEmpty(this.props.archivoAnexo)? (
-                                                      <form encType="multipart/form-data" method="POST"> 
-                                                          <div className="d-flex justify-content-center text-blue align-items-center btn btn-secondary h-100">
-                                                              <span className="text-center">Cargar archivo</span>
-                                                          </div>
-                                                          <input
-                                                              type="file"
-                                                              name="archivoAnexo"
-                                                              className="d-none"
-                                                              onChange={this.handleLoadLocalFile}
-                                                              id="archivoAnexo"
-                                                          />
-                                                      </form>
+                                                    <React.Fragment>
+                                                    <div className="d-flex justify-content-start text-blue align-items-center btn btn-secondary h-100">
+                                                        <span className="text-center">Cargar archivo</span>
+                                                    </div>
+                                                    <input
+                                                        type="file"
+                                                        name="archivoAnexo"
+                                                        className="d-none"
+                                                        onChange={this.props.handleChangeFile}
+                                                        id="archivoAnexo"
+                                                    />
+                                                </React.Fragment>
                                                   ):(
-                                                    <div className="d-flex flex-column justify-content-center w-100 align-items-center">
+                                                    <div className="d-flex flex-column justify-content-start w-100 align-items-center">
                                                       <div className="text-primary text-center">Archivo Cargado</div>
                                                   </div>
                                                   )

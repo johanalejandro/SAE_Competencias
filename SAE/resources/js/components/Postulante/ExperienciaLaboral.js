@@ -77,7 +77,7 @@ export default class ExperienciaLaboral extends Component {
            }
           },
           {
-           name: "fecha_inicio",
+           name: "fechaInicio",
            label: "Inicio",
            options: {
             filter: true,
@@ -88,7 +88,7 @@ export default class ExperienciaLaboral extends Component {
            }
           },
           {
-            name: "fecha_fin",
+            name: "fechaFin",
             label: "Fin",
             options: {
              filter: true,
@@ -250,7 +250,7 @@ export default class ExperienciaLaboral extends Component {
                 </div>
                 <div className="d-flex flex-row justify-content-end align-items-center w-100 py-2">
                     {this.state.loading?(
-                        <div className="d-flex flex-column justify-content-center w-100 align-items-center">
+                        <div className="d-flex flex-row justify-content-end w-100 align-items-center">
                             <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
                             <div className="text-primary text-center">Enviando Postulación</div>
                         </div>):(
