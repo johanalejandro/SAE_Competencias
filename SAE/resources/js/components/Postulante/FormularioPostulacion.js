@@ -47,6 +47,10 @@ export default class FormularioPostulacion extends Component {
         this.setState({
             sectoresArray: sectores,
         })
+
+        if(window.location.search ==="?tipo=evaluador"){
+            this.handlePostulacion();
+        }
     }
 
     updateAlcances = async (alcances) => {
@@ -85,9 +89,11 @@ export default class FormularioPostulacion extends Component {
                                             <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
                                                 Sectores
                                             </div>
+                                            {window.location.search==="?tipo=experto" &&(
                                             <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
                                                 Alcances
-                                            </div>                                    
+                                            </div>    
+                                            )}                                
                                         </React.Fragment>
         
                                 ):(
@@ -99,9 +105,11 @@ export default class FormularioPostulacion extends Component {
                                             <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current">
                                                 Sectores
                                             </div>
-                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4">
+                                            {window.location.search==="?tipo=experto" &&(
+                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
                                                 Alcances
-                                            </div>
+                                            </div>    
+                                            )}
                                         </React.Fragment>
         
                                     ):(
@@ -112,9 +120,11 @@ export default class FormularioPostulacion extends Component {
                                             <div id="sectores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 ">
                                                 Sectores
                                             </div>
-                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current">
+                                            {window.location.search==="?tipo=experto" &&(
+                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
                                                 Alcances
-                                            </div>
+                                            </div>    
+                                            )}
                                         </React.Fragment>
         
                                     )
@@ -128,10 +138,12 @@ export default class FormularioPostulacion extends Component {
                                     <SeleccionarAmbito updateAmbitos={this.updateAmbitos} handleChangeTipo={this.handleChangeTipo}/>
                                 ):(
                                     this.state.tipo === "sectores"?(
-                                        <SeleccionarSector ambitosArray={this.state.ambitosArray} updateSectores={this.updateSectores} handleChangeTipo={this.handleChangeTipo}/>
+                                        <SeleccionarSector ambitosArray={this.state.ambitosArray} tipoPostulacion={window.location.search} updateSectores={this.updateSectores} handleChangeTipo={this.handleChangeTipo}/>
                                     ):(
-                                        <SeleccionarAlcance sectoresArray={this.state.sectoresArray} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
-                                    )
+                                        window.location.search==="?tipo=experto" &&(
+                                        <SeleccionarAlcance sectoresArray={this.state.sectoresArray} tipoPostulacion={window.location.search} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
+                                        )
+                                        )
                                 )}
         
                             </div>

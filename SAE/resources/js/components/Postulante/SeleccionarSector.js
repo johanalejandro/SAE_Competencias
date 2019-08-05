@@ -11,6 +11,15 @@ export default class SeleccionarSector extends Component {
         checkedItems: new Map(),
     }
 
+    validar = (evt) => {
+        if(!isEmpty(this.state.sectoresArray)){
+            this.props.updateSectores(this.state.sectoresArray);
+            this.props.handleChangeTipo(evt);
+        }else{
+            $('#alcancesModal').modal();
+        }
+    }
+
     componentDidMount(){
 
         fetch('/api/sector')
@@ -99,12 +108,20 @@ export default class SeleccionarSector extends Component {
                         </div>
                 </div>
             <div className="d-flex flex-row justify-content-end align-items-center my-4">
+                {this.props.tipoPostulacion ==="?tipo=experto"?(
                 <button name="alcances" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
                         this.props.updateSectores(this.state.sectoresArray);
                         this.props.handleChangeTipo(evt);
                         }}
                     >Siguiente</button>
+                ):(
+                <button name="sectores" className="btn-primary-sae w-20" 
+                    onClick={(evt)=>{
+                        this.validar(evt);
+                        }}
+                    >Siguiente</button>
+                )}
             </div>
             </React.Fragment>)
 }
