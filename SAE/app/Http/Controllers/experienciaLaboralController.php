@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\experienciaLaboral;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class experienciaLaboralController extends Controller
 {
@@ -44,9 +46,9 @@ class experienciaLaboralController extends Controller
                 'descripcion'    =>  $request->descripcion,
                 'nombreEmpresa'     =>  $request->nombreEmpresa,
                 'cargoEjercido'      =>  $request->cargoEjercido,
-                'fecha_inicio'    =>  $current_date_time,
-                'fecha_fin'     =>  $current_date_time,
-                'esTrabajoActual'     =>  $request->esTrabajoActual
+                'fecha_inicio'    =>  \Carbon\Carbon::parse($request->fechaInicio),
+                'fecha_fin'     =>  \Carbon\Carbon::parse($request->fechaFin),
+                'esTrabajoActual'     =>  $request->esTrabajoActual,
 
         ]);
         

@@ -281,8 +281,6 @@ export default class HojaDeVida extends Component {
             
         }
         await console.log("PAYLOAD DE EXPERIENCIAS",experiencias);
-
-        this.handleSubmitExperiencia(experiencia);
     }
 
     updateExperienciaLaboral = (experiencia) => {
@@ -374,11 +372,31 @@ export default class HojaDeVida extends Component {
         });*/
     }
 
-    handleSubmitExperiencia(experiencia) {
-        /*Fetch API for post request */
+    handleSubmitExperiencia = (experiencia) => {
+        const formData = new FormData();
+        formData.append("cedula",this.state.identificacion);
+        formData.append("nombreEmpresa", experiencia.nombreEmpresa);
+        formData.append("id_alcance", experiencia.id_alcance);
+        formData.append("cargoEjercido", experiencia.cargoEjercido);
+        formData.append("descripcion", experiencia.descripcion);
+        formData.append("esTrabajoActual", experiencia.esTrabajoActual);
+        formData.append("fechaInicio", formatDate(experiencia.fechaInicio));
+        formData.append("fechaFin", formatDate(experiencia.fechaFin));
+
+        axios
+            .post("api/experiencias", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                console.log("agregado")
+            })
+            .catch(console.error);
+        /*Fetch API for post request
         fetch( 'api/experiencias', {
             method:'post',
-            /* headers are important*/
+            /* headers are important
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -397,7 +415,7 @@ export default class HojaDeVida extends Component {
             });
         }).catch(error => {
             console.log("===ERROR: ",error);
-        });
+        });*/
     }
 
     render() {
