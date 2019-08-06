@@ -14,4 +14,14 @@ class Alcance extends Model
     {
         return $this->belongsTo('App\Sector');
     }
+
+    protected $fillable = [
+        'id_sector', 
+        'nombreAlcance', 
+        'detalleAlcance',
+        'normaRequerida',
+        'anexoAlcance'
+    ];
+
+   
 }

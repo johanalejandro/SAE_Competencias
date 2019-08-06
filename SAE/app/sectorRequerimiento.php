@@ -14,4 +14,9 @@ class sectorRequerimiento extends Model
         return $this->belongsTo('App\Sector');
     }
 
+    public function curso_evaluador()
+    {
+        return $this->belongsTo('App\Cursos_Evaluador');
+    }
+
 }

@@ -63,10 +63,20 @@ Route::get('postulantePorAlcance/{id}','PostulanteController@verPostulantesPorAl
 
 Route::post('/experiencias', 'experienciaLaboralController@store');
 
+Route::post('/experienciasEvaluador', 'ExperienciaEvaludorController@store');
+
+
+
 /*------------------------------------------------------------------------------------------------------*/
 /*Api para mostrar requerimientos segun sector (se pasa id de sector)*/
 
 Route::get('requerimientosSector/{id}', 'SectorRequerimientoController@verRequerimientosPorSector');
 
 Route::get('/sector/{id}', 'SectorRequerimientoController@show');
+
+
+/*------------------------------------------------------------------------------------------------------*/
+
+Route::post('/cursosEvaluador', 'CursosEvaluadorController@store');
+
 

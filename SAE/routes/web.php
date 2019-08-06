@@ -35,3 +35,7 @@ Route::get('/ambitosSAE', function () {
 
 Route::resource('ambitos','AmbitoController');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

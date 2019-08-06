@@ -20,6 +20,7 @@ class CreateAlcancesTable extends Migration
             $table->timestamps();
             $table->text('detalleAlcance');
             $table->text('normaRequerida');
+            $table->string('anexoAlcance');
             
         });
         Schema::table('alcances', function($table) {

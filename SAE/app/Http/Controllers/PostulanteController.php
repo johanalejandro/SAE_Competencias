@@ -45,44 +45,7 @@ class PostulanteController extends Controller
     public function store(Request $request)
 
     {
-        /****** DESCOMENTA PARA PROBAR ********/
-
-        /*
-        $validator = Validator::make($request->all(), [
-        'archivoAnexo' => 'file',
-       ]);
-        //$todayDate = new DateTime();
-        $current_date_time = Carbon::now()->toDateTimeString();
-        $campos = $request->all();
-        $campos['nombres']=$request->nombres;
-        $campos['apellidos']=$request->apellidos;
-        $campos['ciudad']=$request->ciudad;
-        $campos['email']=$request->email;
-        $campos['cedula']=$request->cedula;
-        $campos['fechaNacimiento']=\Carbon\Carbon::parse($request->fechaNacimiento);
-        $campos['telefono']=$request->telefono;
-        $campos['provincia']=$request->provincia;
-        $campos['estado']=Postulante::POSTULANTE_POR_ASIGNAR;
-        $campos['disponibilidadViajar']="1";
-        $campos['fechaHabilitacion']=$current_date_time;
-        $campos['tipoPostulacion']= "$request->tipoPostulacion";
-
        
-       
-        $postulante= Postulante::create($campos);
-
-        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
-
-       
-             $educacion = educacionFormal::create([
-                'id_postulante'     =>  $keypostulante->id_postulante,
-                'nombreInstitucion' =>  "$request->nombreInstitucion",
-                'tituloObtenido'    =>  "$request->tituloObtenido",
-                'tipoFormacion'     =>  "$request->tipoFormacion",
-                'archivoAnexo'      =>  $request->file('archivoAnexo')->store('')
-        ]);
-             return response()->json('Postulante creado');
-       */
         
         $validator = Validator::make($request->all(), [
         'archivoAnexo' => 'file',

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\solicitudPostulacion;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class SolicitudPostulacionController extends Controller
 {

@@ -25,6 +25,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '8',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -33,6 +34,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '3',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -41,6 +43,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '3',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -49,6 +52,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '1',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -57,6 +61,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '1',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -65,6 +70,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '1',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -73,6 +79,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '4',
                 'detalleAlcance' => "Tipo A, Tipo B o Tipo C",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -81,6 +88,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '5',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
         DB::table('alcances')->insert(
@@ -89,6 +97,7 @@ class AlcanceTableSeeder extends Seeder
                 'id_sector' => '5',
                 'detalleAlcance' => "",
                 "normaRequerida" => "",
+                "anexoAlcance" =>"",
             ]
         );
     }
