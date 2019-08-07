@@ -368,7 +368,7 @@ export default class GestionCalidad extends Component {
                                                     <div id="porhabilitarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 " onClick={this.handleChangeTipoPost}>
                                                         Por Habilitar
                                                     </div>
-                                                    <div id="habilitadosEv" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 "} onClick={this.handleChangeTipoPost}>
+                                                    <div id="habilitadosEv" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 bg-current"} onClick={this.handleChangeTipoPost}>
                                                         Habilitados
                                                     </div>    
                                                 </div> 
@@ -421,7 +421,7 @@ export default class GestionCalidad extends Component {
                                 {this.state.form === "evaluadores" && this.state.tipo==="habilitadosEv"&&(
                                     <MUIDataTable className="data-table"
                                         title={"Matriz de Evaluadores habilitados"}
-                                        data={datahabilitadosEvaluadores}
+                                        data={datahabilitadosEvaluador}
                                         columns={columns}
                                         options={options}
                                     />
