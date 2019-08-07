@@ -10,6 +10,8 @@ export default class GestionCalidad extends Component {
         postulante: [],
         porhabilitar: [],
         porasignar: [],
+        habilitadosExperto: [],
+        habilitadosEvaluador: [],
         form: "",
         tipo: "",
     }
@@ -23,6 +25,8 @@ export default class GestionCalidad extends Component {
         let postulantes = [];
         let porasignar = [];
         let porhabilitar = [];
+        let habilitadosExperto = [];
+        let habilitadosEvaluador = [];
         await axios.get("api/postulantes")
         .then(({data} )=> {
             console.log(data);
@@ -72,6 +76,38 @@ export default class GestionCalidad extends Component {
         await this.setState({
             porhabilitar: porhabilitar,
         })
+        await axios.get("api/mostrarEvaluadoresHabilitado")
+        .then(({data} ) => {
+            data.map((postulante)=>{
+                let post ={};
+                post['nombres'] = postulante.nombres;
+                post['apellidos'] = postulante.apellidos;
+                post['estado']= postulante.estado;
+                post['email'] = postulante.email;
+                post['tipoPostulacion'] = postulante.tipoPostulacion;
+                habilitadosEvaluador.push(post);
+            })
+        })
+        .catch(console.error);
+        await this.setState({
+            habilitadosEvaluador: habilitadosEvaluador,
+        })
+        await axios.get("api/mostrarExpertosHabilitado")
+        .then(({data} ) => {
+            data.map((postulante)=>{
+                let post ={};
+                post['nombres'] = postulante.nombres;
+                post['apellidos'] = postulante.apellidos;
+                post['estado']= postulante.estado;
+                post['email'] = postulante.email;
+                post['tipoPostulacion'] = postulante.tipoPostulacion;
+                habilitadosExperto.push(post);
+            })
+        })
+        .catch(console.error);
+        await this.setState({
+            habilitadosExperto: habilitadosExperto,
+        })
 }
 
     handleChangeTipo = ({target}) => {
@@ -105,7 +141,6 @@ export default class GestionCalidad extends Component {
    
     render() {
         console.log("POSTULANTE RESPONSE",this.state.postulante);
-        console.log("FORM",this.state.form);
         const columns = [
             {
              name: "apellidos",
@@ -187,13 +222,6 @@ export default class GestionCalidad extends Component {
                 return postulante.tipoPostulacion==="Experto"
             });
             let dataporhabilitarEvaluador = dataporhabilitar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Evaluador"
-            });
-            let datahabilitados = this.state.postulante;
-            let datahabilitadosExperto = datahabilitados.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Experto"
-            });
-            let datahabilitadosEvaluador = datahabilitados.filter((postulante)=>{
                 return postulante.tipoPostulacion==="Evaluador"
             });
             
@@ -397,7 +425,7 @@ export default class GestionCalidad extends Component {
                                 {this.state.form === "expertos" && this.state.tipo==="habilitadosExp"&&(
                                     <MUIDataTable className="data-table"
                                         title={"Matriz de Expertos habilitados"}
-                                        data={datahabilitadosExperto}
+                                        data={this.state.habilitadosExperto}
                                         columns={columns}
                                         options={options}
                                     />
@@ -421,7 +449,7 @@ export default class GestionCalidad extends Component {
                                 {this.state.form === "evaluadores" && this.state.tipo==="habilitadosEv"&&(
                                     <MUIDataTable className="data-table"
                                         title={"Matriz de Evaluadores habilitados"}
-                                        data={datahabilitadosEvaluador}
+                                        data={this.state.habilitadosEvaluador}
                                         columns={columns}
                                         options={options}
                                     />
