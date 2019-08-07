@@ -59,6 +59,12 @@ Route::get('mostrarEvaluadoresHabilitado','PostulanteController@mostrarEvaluador
 
 Route::get('mostrarExpertosHabilitado','PostulanteController@mostrarExpertosHabilitado');
 
+Route::get('mostrarDetallesEvaluador/{id}','PostulanteController@mostrarDetallesEvaluador');
+
+Route::get('habilitarPostulante/{id}','PostulanteController@habilitarPostulante');
+Route::get('mostrarDetallesExperto/{id}','PostulanteController@mostrarDetallesExperto');
+
+
 
 //Route::get('descargarCV/{id}','PostulanteController@descargarCV');
 
