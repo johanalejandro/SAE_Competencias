@@ -109,6 +109,28 @@ class PostulanteController extends Controller
         return response()->json($postulantes);
     }
 
+     public function mostrarEvaluadoresHabilitado()
+    {
+        $evaluadores = DB::table('postulantes')
+            ->join('experiencia_evaludors', 'experiencia_evaludors.id_postulante', '=', 'postulantes.id_postulante')
+            ->select('postulantes.*', 'experiencia_evaludors.*')
+            ->where('postulantes.tipoPostulacion','Evaluador')
+            ->where('postulantes.estado','Habilitado')
+            ->get();
+        return response()->json($evaluadores);
+    }
+
+     public function mostrarExpertosHabilitado()
+    {
+        $evaluadores = DB::table('postulantes')
+            ->join('experiencia_expertos', 'experiencia_expertos.id_postulante', '=', 'postulantes.id_postulante')
+            ->select('postulantes.*', 'experiencia_expertos.*')
+            ->where('postulantes.tipoPostulacion','Experto')
+            ->where('postulantes.estado','Habilitado')
+            ->get();
+        return response()->json($evaluadores);
+    }
+
     public function mostarPostulantePorAsignar(){
 
         $postulantes = DB::table('postulantes')->where('estado', 'Por Asignar')->get();

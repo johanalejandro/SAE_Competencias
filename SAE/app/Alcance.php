@@ -15,6 +15,16 @@ class Alcance extends Model
         return $this->belongsTo('App\Sector');
     }
 
+
+    public function experienciaExpertos()
+    {
+        return $this->hasMany('App\experienciaExperto');
+    }
+
+    
+
+
+
     protected $fillable = [
         'id_sector', 
         'nombreAlcance', 
