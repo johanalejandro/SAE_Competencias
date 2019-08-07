@@ -18,7 +18,7 @@ class CreateEvaluacionPostulacionsTable extends Migration
             $table->timestamps();
             $table->text('detalleEvaluacion');
             $table->set('tipoEvaluacion',['Entrevista', 'Prueba']);
-            $table->set('resultadoEvaluacion',['Aprueba', 'No Aprueba']);
+            $table->set('resultadoEvaluacion',['Aprueba', 'No Aprueba','Pendiente'])->default('Pendiente');
         });
     }
 

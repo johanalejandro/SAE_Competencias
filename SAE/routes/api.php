@@ -55,13 +55,18 @@ Route::get('detallesAlcances/{id}', 'PostulanteController@verDetallesAlcance');
 
 Route::get('postulantePorAlcance/{id}','PostulanteController@verPostulantesPorAlcance');
 
+Route::get('mostrarEvaluadoresHabilitado','PostulanteController@mostrarEvaluadoresHabilitado');
+
+Route::get('mostrarExpertosHabilitado','PostulanteController@mostrarExpertosHabilitado');
+
+
 //Route::get('descargarCV/{id}','PostulanteController@descargarCV');
 
 
 
 /*------------------------------------------------------------------------------------------------------*/
 
-Route::post('/experiencias', 'experienciaLaboralController@store');
+Route::post('/experiencias', 'experienciaExpertoController@store');
 
 Route::post('/experienciasEvaluador', 'ExperienciaEvaludorController@store');
 

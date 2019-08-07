@@ -25,6 +25,14 @@ class CreateExperienciaEvaludorsTable extends Migration
             $table->date('fecha_fin');
             $table->boolean('esTrabajoActual');
         });
+
+        Schema::table('experiencia_evaludors', function($table) {
+        $table->foreign('id_postulante')->references('id_postulante')->on('postulantes');
+        });
+
+        Schema::table('experiencia_evaludors', function($table) {
+        $table->foreign('id_sector_requerimiento')->references('id_sector_requerimiento')->on('sector_requerimientos');
+        });
     }
 
     /**

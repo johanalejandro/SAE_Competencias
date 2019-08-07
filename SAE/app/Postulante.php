@@ -37,6 +37,12 @@ class Postulante extends Model
         return $this->hasMany('App\experienciaLaboral');
 
     }
+
+     public function experienciaEvaluadors()
+    {
+        return $this->hasMany('App\Experiencia_evaludor');
+
+    }
     public function educacionFormals()
     {
         return $this->hasMany('App\educacionFormal');
@@ -45,6 +51,10 @@ class Postulante extends Model
 
     public function solicitudPostulacion(){
         return $this->belongsTo('App\solicitudPostulacion');
+    }
+
+    public function cursosEvaluadors(){
+        return $this->hasMany('App\Cursos_Evaluador');
     }
 
 
