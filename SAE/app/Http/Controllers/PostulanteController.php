@@ -124,7 +124,8 @@ class PostulanteController extends Controller
     {
         $evaluadores = DB::table('postulantes')
             ->join('experiencia_expertos', 'experiencia_expertos.id_postulante', '=', 'postulantes.id_postulante')
-            ->select('postulantes.*', 'experiencia_expertos.*')
+            ->join('alcances','alcances.id_alcance','=','experiencia_expertos.id_alcance')
+            ->select('postulantes.*', 'experiencia_expertos.*','alcances.nombreAlcance')
             ->where('postulantes.tipoPostulacion','Experto')
             ->where('postulantes.estado','Habilitado')
             ->get();
