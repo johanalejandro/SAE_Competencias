@@ -111,7 +111,6 @@ export default class GestionCalidad extends Component {
 }
 
     handleChangeTipo = ({target}) => {
-        console.log(target);
         if(target.name){
             this.setState({
                 form: target.name,

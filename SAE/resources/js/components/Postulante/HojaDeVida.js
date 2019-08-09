@@ -6,8 +6,11 @@ import DatosPersonales from "./DatosPersonales";
 import EducacionFormal from "./EducacionFormal";
 import ExperienciaLaboral from "./ExperienciaLaboral";
 import capitalize from "lodash/capitalize";
+import clone from "lodash/clone";
 import pull from "lodash/pull";
 import axios from "axios";
+import EducacionCursos from "./EducacionCursos";
+import ExperienciaLaboralEv from "./ExperienciaLaboralEv";
 
 
 const getCurrentMonth = () => {
@@ -74,6 +77,13 @@ export default class HojaDeVida extends Component {
         tipoFormacion:"selec",
         archivoAnexo:"",
         loadingFile: false,
+        cursos: [],
+        archivoAnexoCurso:"",
+        nombreInstitucionCurso:"",
+        numeroHoras:0,
+        reqActual:"selec",
+        reqItem:"",
+        reqs:[],
 
         //Experiencia Laboral
         experiencias : [],
@@ -86,6 +96,9 @@ export default class HojaDeVida extends Component {
         cargoEjercido: "",
         nombreEmpresa: "",
         alcanceActual: "selec",
+        requerimientos:[],
+        requerimientoActual: "selec",
+        requerimientoItem: "",
         alcanceItem: "",
         checkedItems: new Map(),
         
@@ -197,6 +210,39 @@ export default class HojaDeVida extends Component {
         await this.clean(this.state.alcanceActual);
     }
 
+    agregarCurso=async() => {
+        let curso = {}
+        curso['nombreInstitucion'] = this.state.nombreInstitucionCurso;
+        curso['id_sector_requerimiento'] = this.state.reqActual;
+        curso['requerimiento'] = this.state.reqItem;
+        curso['numeroHoras'] = this.state.numeroHoras;
+        curso['archivoAnexoCurso'] = this.state.archivoAnexoCurso;
+        const { cursos } = this.state;
+        const filterData = cursos;
+        filterData.push(curso);
+        await this.setState({ cursos: filterData });
+        await this.cleanCurso(this.state.reqActual);
+    }
+
+
+    agregarEv = async() => {
+        let experiencia = {}
+        experiencia['nombreEmpresa'] = this.state.nombreEmpresa;
+        experiencia['cargoEjercido'] = this.state.cargoEjercido;
+        experiencia['descripcion'] = this.state.descripcion;
+        experiencia['fechaInicio'] = this.state.fechaInicio;
+        experiencia['fechaFin'] = this.state.fechaFin;
+        experiencia['id_sector_requerimiento'] = this.state.requerimientoActual;
+        experiencia['requerimiento'] = this.state.requerimientoItem;
+        experiencia['esTrabajoActual'] = this.state.esTrabajoActual;
+        const { experiencias } = this.state;
+        const filterData = experiencias;
+        filterData.push(experiencia);
+        await this.setState({ experiencias: filterData });
+        await this.updateExperienciaLaboral(this.state.experiencias);
+        await this.cleanEv(this.state.requerimientoActual);
+    }
+
     handleHojaDeVida = () => {
         this.setState({
             prerrequisitos: "no",
@@ -206,7 +252,9 @@ export default class HojaDeVida extends Component {
     updatePrerrequisitos = (requerimientos) => {
         console.log("requerimientos que llegan" ,requerimientos);
         this.setState({
-            prerrequisitosArray: requerimientos,
+            prerrequisitosArray: clone(requerimientos),
+            reqs: clone(requerimientos),
+            requerimientos: clone(requerimientos),
         })
     } 
 
@@ -228,7 +276,36 @@ export default class HojaDeVida extends Component {
         })
     }
 
+    handleChangeReq = (evt) => {
+        let index = evt.nativeEvent.target.selectedIndex;
+        let text = evt.nativeEvent.target[index].text;
+        const {value} = evt.target;
+        this.setState({
+            reqActual: parseInt(value,10),
+            reqItem: text,
+        })
+    }
+
+    handleChangeRequerimiento = (evt) => {
+        let index = evt.nativeEvent.target.selectedIndex;
+        let text = evt.nativeEvent.target[index].text;
+        const {value} = evt.target;
+        this.setState({
+            requerimientoActual: parseInt(value,10),
+            requerimientoItem: text,
+        })
+    }
+
     handleChangeFile = async (e) => {
+        const name = e.target.name;
+        const { files } = e.target;
+        const file = files[0];
+        await this.setState({
+            [name] : file,
+        })
+    }
+
+    handleChangeFileCurso = async (e) => {
         const name = e.target.name;
         const { files } = e.target;
         const file = files[0];
@@ -257,7 +334,7 @@ export default class HojaDeVida extends Component {
             disponibilidad: parseInt(this.state.disponibilidad),
         }
 
-        await console.log("PAYLOAD DE POSTULANTE",postulante);
+        
 
         await this.handleSubmitPostulante(postulante);
         
@@ -280,7 +357,44 @@ export default class HojaDeVida extends Component {
             this.handleSubmitExperiencia(experiencia);
             
         }
-        await console.log("PAYLOAD DE EXPERIENCIAS",experiencias);
+       
+    }
+
+    handleExpEv = async () => {
+        let experiencias =this.state.experiencias;
+        for (let index = 0; index < experiencias.length; index++) {
+            const element = experiencias[index];
+            let experiencia = {
+                cargoEjercido: element.cargoEjercido,
+                descripcion: element.descripcion,
+                esTrabajoActual: element.esTrabajoActual,
+                fechaFin: element.fechaFin,
+                fechaInicio: element.fechaInicio,
+                id_sector_requerimiento: element.id_sector_requerimiento,
+                nombreEmpresa: element.nombreEmpresa,
+            }
+
+            this.handleSubmitExperienciaEv(experiencia);
+            
+        }
+       
+    }
+
+    handleCursos = async () => {
+        let cursos =this.state.cursos;
+        for (let index = 0; index < cursos.length; index++) {
+            const element = cursos[index];
+            let curso = {
+                id_sector_requerimiento: element.id_sector_requerimiento,
+                nombreInstitucion: element.nombreInstitucion,
+                numeroHoras: element.numeroHoras,
+                archivoAnexoCurso: element.archivoAnexoCurso
+            }
+
+            this.handleSubmitCursos(curso);
+            
+        }
+       
     }
 
     updateExperienciaLaboral = (experiencia) => {
@@ -315,6 +429,48 @@ export default class HojaDeVida extends Component {
         });
     }
 
+    cleanCurso = async (reqActual) => {
+        console.log(reqActual);
+        const { reqs } = this.state;
+        let filter = [];
+        filter = reqs;
+        const reqAEliminar = await filter.find((req)=>{
+            return req.id_sector_requerimiento === reqActual;
+        })
+        console.log("eliminar",reqAEliminar)
+        await pull(filter,reqAEliminar);
+        await this.setState({ reqs: filter });
+        await this.setState({
+            numeroHoras: 0,
+            nombreInstitucionCurso: "",
+            archivoAnexoCurso: "",
+            reqActual: "selec",
+        });
+    }
+
+    cleanEv = async (requerimientoActual) => {
+        console.log(requerimientoActual);
+        const { requerimientos } = this.state;
+        let filterData = [];
+        filterData = requerimientos;
+        const requerimientoAEliminar = await filterData.find((requerimiento)=>{
+            return requerimiento.id_sector_requerimiento === requerimientoActual;
+        })
+        console.log("eliminar",requerimientoAEliminar)
+        await pull(filterData,requerimientoAEliminar);
+        await this.setState({ requerimientos: filterData });
+        await this.setState({
+            fechaInicio: getCurrentMonth(),
+            fechaFin: getCurrentDate(),
+            esTrabajoActual: 0,
+            descripcion: "",
+            cargoEjercido: "",
+            nombreEmpresa: "",
+            requerimientoActual: "selec",
+            checkedItems: new Map(),
+        });
+    }
+
     handleSubmitPostulante(postulante) {
         const formData = new FormData();
         formData.append("nombres", postulante.nombres);
@@ -335,6 +491,11 @@ export default class HojaDeVida extends Component {
         formData.append("tipoPostulacion", postulante.tipoPostulacion);
         formData.append("disponibilidad", postulante.disponibilidad);
 
+        console.log("PAYLOAD DE POSTULANTE");
+        for(let pair of formData.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+         }
+
         axios
             .post("api/postulantes", formData, {
                 headers: {
@@ -347,29 +508,33 @@ export default class HojaDeVida extends Component {
                 });
             })
             .catch(console.error);
-        /*Fetch API for post request 
-        fetch( 'api/postulantes', {
-            method:'post',
-            /* headers are important
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-            
-            body: JSON.stringify(postulante)
-        })
-        .then(response => {
-            return response.json();
-        })
-        .then( data => {
-            //update the state of products and currentProduct
-            console.log("POST POSTULANTE",data);
-            this.setState({
-                agregado: true,
-            });
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });*/
+    }
+
+    handleSubmitCursos(curso) {
+        const formData = new FormData();
+        formData.append("cedula",this.state.identificacion);
+        formData.append("nombreInstitucion", curso.nombreInstitucion);
+        formData.append("id_sector_requerimiento", curso.id_sector_requerimiento);
+        formData.append("numeroHoras", curso.numeroHoras);
+        formData.append("archivoAnexo", curso.archivoAnexoCurso);
+
+        console.log("PAYLOAD DE CURSO");
+
+        for(let pair of formData.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+         }
+
+
+        axios
+            .post("api/cursosEvaluador", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                console.log("agregado")
+            })
+            .catch(console.error);
     }
 
     handleSubmitExperiencia = (experiencia) => {
@@ -383,6 +548,13 @@ export default class HojaDeVida extends Component {
         formData.append("fechaInicio", formatDate(experiencia.fechaInicio));
         formData.append("fechaFin", formatDate(experiencia.fechaFin));
 
+        console.log("PAYLOAD DE EXPERIENCIA");
+
+        for(let pair of formData.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+         }
+
+
         axios
             .post("api/experiencias", formData, {
                 headers: {
@@ -393,29 +565,35 @@ export default class HojaDeVida extends Component {
                 console.log("agregado")
             })
             .catch(console.error);
-        /*Fetch API for post request
-        fetch( 'api/experiencias', {
-            method:'post',
-            /* headers are important
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-            
-            body: JSON.stringify(experiencia)
-        })
-        .then(response => {
-            return response.json();
-        })
-        .then( data => {
-            //update the state of products and currentProduct
-            console.log("POST EXPERIENCIAS",data);
-            this.setState({
-                agregado: true,
-            });
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });*/
+    }
+
+    handleSubmitExperienciaEv = (experiencia) => {
+        const formData = new FormData();
+        formData.append("cedula",this.state.identificacion);
+        formData.append("nombreEmpresa", experiencia.nombreEmpresa);
+        formData.append("id_sector_requerimiento", experiencia.id_sector_requerimiento);
+        formData.append("cargoEjercido", experiencia.cargoEjercido);
+        formData.append("descripcion", experiencia.descripcion);
+        formData.append("esTrabajoActual", experiencia.esTrabajoActual);
+        formData.append("fechaInicio", formatDate(experiencia.fechaInicio));
+        formData.append("fechaFin", formatDate(experiencia.fechaFin));
+
+        console.log("PAYLOAD DE EXPERIENCIA");
+
+        for(let pair of formData.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+         }
+
+        axios
+            .post("api/experienciasEvaluador", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => {
+                console.log("agregado")
+            })
+            .catch(console.error);
     }
 
     render() {
@@ -440,6 +618,11 @@ export default class HojaDeVida extends Component {
                                             <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Educación Formal
                                             </div>
+                                            {this.state.tipo === "evaluador" && (
+                                                <div id="educacionEvaluador" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                    Educación por Curso
+                                                </div>  
+                                            )}
                                             <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Experiencia Laboral
                                             </div>                                  
@@ -452,21 +635,48 @@ export default class HojaDeVida extends Component {
                                             <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
                                                 Educación Formal
                                             </div>
+                                            {this.state.tipo === "evaluador" && (
+                                                <div id="educacionEvaluador" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                    Educación por Curso
+                                                </div>  
+                                            )}
                                             <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Experiencia Laboral
-                                            </div>
+                                            </div> 
                                         </React.Fragment>)}
-                                    {this.state.form === "experiencia" && (
+                                        {this.state.form === "educacionEvaluador" && (
                                             <React.Fragment>
-                                                <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
+                                               <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
                                                     Datos Generales
                                                 </div>
                                                 <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                     Educación Formal
                                                 </div>
-                                                <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
+                                                {this.state.tipo === "evaluador" && (
+                                                    <div id="educacionEvaluador" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" onClick={this.handleChangeTipo}>
+                                                        Educación por Curso
+                                                    </div>  
+                                                )}
+                                                <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 " onClick={this.handleChangeTipo}>
                                                     Experiencia Laboral
+                                                </div> 
+                                            </React.Fragment>)}
+                                    {this.state.form === "experiencia" && (
+                                            <React.Fragment>
+                                               <div id="datos" className={" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4"} onClick={this.handleChangeTipo}>
+                                                    Datos Generales
                                                 </div>
+                                                <div id="educacion" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                    Educación Formal
+                                                </div>
+                                                {this.state.tipo === "evaluador" && (
+                                                    <div id="educacionEvaluador" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
+                                                        Educación por Curso
+                                                    </div>  
+                                                )}
+                                                <div id="experiencia" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4  bg-current" onClick={this.handleChangeTipo}>
+                                                    Experiencia Laboral
+                                                </div> 
                                             </React.Fragment>)}
                         </div>
                             
@@ -480,7 +690,7 @@ export default class HojaDeVida extends Component {
                                         handlePostulante={this.handlePostulante}
                                         nombres={this.state.nombres}
                                         apellidos={this.state.apellidos}
-                                        tipo={this.state.tipoId}
+                                        tipoId={this.state.tipoId}
                                         identificacion={this.state.identificacion}
                                         fechaNacimiento={this.state.fechaNacimiento}
                                         correo={this.state.correo}
@@ -506,10 +716,31 @@ export default class HojaDeVida extends Component {
                                         handleChange={this.handleChange}
                                         handleChangeFile={this.handleChangeFile}
                                         handlePostulante={this.handlePostulante}
-                                        archivoAnexo={this.state.archivoAnexo}
+                                        tipo={this.state.tipo}
                                     />
                                 )}
-                                {this.state.form === "experiencia" && (
+                                {this.state.form === "educacionEvaluador" && (
+                                    <EducacionCursos
+                                        handleChangeTipo={this.handleChangeTipo}
+                                        handleChange={this.handleChange}
+                                        handleChangeFileCurso={this.handleChangeFileCurso}
+                                        handleChangeReq={this.handleChangeReq}
+                                        /*handleChangeStart={this.handleChangeStart}
+                                handleChangeEnd={this.handleChangeEnd}
+                                        checkedItems={this.state.checkedItems}*/
+                                        tipo={this.state.tipo}
+                                        /*fechaInicio={this.state.fechaInicio}
+                                        fechaFin={this.state.fechaFin}*/
+                                        archivoAnexoCurso={this.state.archivoAnexoCurso}
+                                        nombreInstitucionCurso={this.state.nombreInstitucionCurso}
+                                        numeroHoras={this.state.numeroHoras}
+                                        cursos={this.state.cursos}
+                                        reqActual={this.state.reqActual}
+                                        reqs={this.state.reqs}
+                                        agregarCurso={this.agregarCurso}
+                                    />
+                                )}
+                                {this.state.form === "experiencia" && this.state.tipo==="experto"&&(
                                     <ExperienciaLaboral
                                     handleChangeTipo={this.handleChangeTipo}
                                     handleChange={this.handleChange}
@@ -530,6 +761,31 @@ export default class HojaDeVida extends Component {
                                     experiencias={this.state.experiencias}
                                     agregar={this.agregar}
                                     handleExp={this.handleExp}
+                                    handlePostulante={this.handlePostulante}
+                                    />
+                                )}
+                                {this.state.form === "experiencia" && this.state.tipo==="evaluador"&&(
+                                    <ExperienciaLaboralEv
+                                    handleChangeTipo={this.handleChangeTipo}
+                                    handleChange={this.handleChange}
+                                    handleCheckBoxChange={this.handleCheckBoxChange}
+                                    handleChangeStart={this.handleChangeStart}
+                                    handleChangeEnd={this.handleChangeEnd}
+                                    checkedItems={this.state.checkedItems}
+                                    handleChangeRequerimiento={this.handleChangeRequerimiento}
+                                    tipo={this.state.tipo}
+                                    requerimientos={this.state.requerimientos}
+                                    requerimientoActual={this.state.requerimientoActual}
+                                    fechaInicio={this.state.fechaInicio}
+                                    fechaFin={this.state.fechaFin}
+                                    esTrabajoActual={this.state.esTrabajoActual}
+                                    descripcion={this.state.descripcion}
+                                    cargoEjercido={this.state.cargoEjercido}
+                                    nombreEmpresa={this.state.nombreEmpresa}
+                                    experiencias={this.state.experiencias}
+                                    agregarEv={this.agregarEv}
+                                    handleExpEv={this.handleExpEv}
+                                    handleCursos={this.handleCursos}
                                     handlePostulante={this.handlePostulante}
                                     />
                                 )}

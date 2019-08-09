@@ -249,6 +249,11 @@ export default class ExperienciaLaboral extends Component {
                     />
                 </div>
                 <div className="d-flex flex-row justify-content-end align-items-center w-100 py-2">
+                    <button name={this.props.tipo==="educacion"} className="btn-secondary w-20" 
+                        onClick={(evt)=>{
+                            this.props.handleChangeTipo(evt);
+                            }}
+                    >Artrás</button>
                     {this.state.loading?(
                         <div className="d-flex flex-row justify-content-end w-100 align-items-center">
                             <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
