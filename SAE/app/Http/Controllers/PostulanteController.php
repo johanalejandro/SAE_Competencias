@@ -124,11 +124,43 @@ class PostulanteController extends Controller
     {
         $evaluadores = DB::table('postulantes')
             ->join('experiencia_expertos', 'experiencia_expertos.id_postulante', '=', 'postulantes.id_postulante')
-            ->select('postulantes.*', 'experiencia_expertos.*')
+            ->join('alcances','alcances.id_alcance','=','experiencia_expertos.id_alcance')
+            ->select('postulantes.*', 'experiencia_expertos.*','alcances.nombreAlcance')
             ->where('postulantes.tipoPostulacion','Experto')
             ->where('postulantes.estado','Habilitado')
             ->get();
         return response()->json($evaluadores);
+    }
+
+    public function mostrarDetallesEvaluador($id){
+        $evaluadores = DB::table('postulantes')
+          ->join('experiencia_evaludors', 'experiencia_evaludors.id_postulante', '=', 'postulantes.id_postulante')
+          ->join('educacion_formals','educacion_formals.id_postulante', '=', 'postulantes.id_postulante')
+            ->select('postulantes.*', 'experiencia_evaludors.*','educacion_formals.*')
+            ->where('postulantes.id_postulante',$id)
+            ->get();
+        return response()->json($evaluadores);
+
+    }
+
+    public function mostrarDetallesExperto($id){
+        $evaluadores = DB::table('postulantes')
+          ->join('experiencia_expertos', 'experiencia_expertos.id_postulante', '=', 'postulantes.id_postulante')
+          ->join('educacion_formals','educacion_formals.id_postulante', '=', 'postulantes.id_postulante')
+            ->select('postulantes.*', 'educacion_formals.*','experiencia_expertos.*')
+            ->where('postulantes.id_postulante',$id)
+            ->get();
+        return response()->json($evaluadores);
+
+    }
+
+    public function habilitarPostulante($id){
+        $current_date_time = Carbon::now()->toDateTimeString();
+        DB::table('postulantes')
+            ->where('id_postulante', $id)
+            ->update(['estado' => 'Habilitado'
+           ,'fechaHabilitacion'=>$current_date_time]);
+        return response()->json('Postulante Habilitado!');
     }
 
     public function mostarPostulantePorAsignar(){

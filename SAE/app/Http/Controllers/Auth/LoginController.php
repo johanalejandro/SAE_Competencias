@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class LoginController extends Controller
 {
@@ -25,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    
 
     /**
      * Create a new controller instance.
@@ -35,5 +39,40 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function redirectTo(){
+        
+        // User role
+        $userId = Auth::id();
+
+        $role = DB::table('usuario_rols')->select('tipoUsuario')->where('id_usuario', $userId)->first();
+
+        
+        // Check user role
+        switch ($role->tipoUsuario) {
+            case 'Visualizador':
+                   return ('/solicitud-postulacion');
+                break;
+            case 'Evaluador':
+                  return ('/solicitud-postulacion');
+                break; 
+            case 'Experto':
+                    return ('/solicitud-postulacion'); 
+                break;
+            case 'Calidad':
+                   return ('/gestion-calidad');
+                break;
+            default:
+                 return ('/solicitud-postulacion');
+
+
+           
+        }
+    }
+
+    public function logout(Request $request) {
+      Auth::logout();
+      return redirect('/login');
     }
 }

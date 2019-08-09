@@ -55,9 +55,30 @@ Route::get('detallesAlcances/{id}', 'PostulanteController@verDetallesAlcance');
 
 Route::get('postulantePorAlcance/{id}','PostulanteController@verPostulantesPorAlcance');
 
+/*Muestra evaluadores habilitados mas toda la infon necesaria de mostrar */
+
 Route::get('mostrarEvaluadoresHabilitado','PostulanteController@mostrarEvaluadoresHabilitado');
 
+/*Muestra expertos habilitados mas toda la info necesaria de mostrar */
+
 Route::get('mostrarExpertosHabilitado','PostulanteController@mostrarExpertosHabilitado');
+
+
+/*Muestra toda la info del evaluador {{ id }} esto lo usaras en ver detalle para evaluar */
+
+
+Route::get('mostrarDetallesEvaluador/{id}','PostulanteController@mostrarDetallesEvaluador');
+
+/*Muestra toda la info del experto {{ id }} esto lo usaras en ver detalle para evaluar */
+
+Route::get('mostrarDetallesExperto/{id}','PostulanteController@mostrarDetallesExperto');
+
+/*Cambia el estado a habilitado {{ id }} */
+
+Route::get('habilitarPostulante/{id}','PostulanteController@habilitarPostulante');
+
+
+
 
 
 //Route::get('descargarCV/{id}','PostulanteController@descargarCV');

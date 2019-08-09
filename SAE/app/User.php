@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
-    private $primaryKey = 'id_usuario';
+    protected $primaryKey = 'id_usuario';
 
     /**
      * The attributes that are mass assignable.
@@ -42,9 +42,9 @@ class User extends Authenticatable
     ];
 
 
-    public function usuario_rol()
+    public function usuario_rols()
     {
-        return $this->hasOne('App\Usuario_rol');
+        return $this->hasMany('App\Usuario_rol');
 
          
     }

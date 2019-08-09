@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario_rol extends Model
 {
-	private $primaryKey = 'id_usuaario_rol';
+	protected $primaryKey = 'id_usuario_rol';
     
-    public function user()
+    public function users()
     {
         return $this->belongsTo('App\User');
     }
