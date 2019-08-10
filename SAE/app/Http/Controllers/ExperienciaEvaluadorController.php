@@ -42,8 +42,8 @@ class ExperienciaEvaludorController extends Controller
 
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = Experiencia_evaludor::create([
-                'id_postulante'     =>  $request->id_postulante,
-                'id_sector_requerimiento' =>  $request->id_alcance,
+                'id_postulante'     =>  $keypostulante->id_postulante,
+                'id_sector_requerimiento' =>  $request->id_sector_requerimiento,
                 'descripcion'    =>  $request->descripcion,
                 'nombreEmpresa'     =>  $request->nombreEmpresa,
                 'cargoEjercido'      =>  $request->cargoEjercido,

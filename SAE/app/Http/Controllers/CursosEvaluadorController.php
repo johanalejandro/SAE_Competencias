@@ -41,7 +41,7 @@ class CursosEvaluadorController extends Controller
 
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = Cursos_Evaluador::create([
-                'id_postulante'     =>  $keypostulante,
+                'id_postulante'     =>  $keypostulante->id_postulante,
                 'id_sector_requerimiento' =>  $request->id_sector_requerimiento,
                 'nombreInstitucion'    =>  $request->nombreInstitucion,
                 'numeroHoras'     =>  $request->numeroHoras,
