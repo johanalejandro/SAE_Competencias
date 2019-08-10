@@ -1,5 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-light">
+@if (Auth::user())
+
     <head class="bg-light">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,4 +99,7 @@
         </div>
         <script src="{{mix('js/app.js')}}"></script>
     </body>
+    @else
+        <li><a href="{{ url("logout") }}">logout</a></li>
+    @endif
 </html>

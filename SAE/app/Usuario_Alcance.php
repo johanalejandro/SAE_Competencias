@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Usuario_rol extends Model
+class Usuario_Alcance extends Model
 {
-	protected $primaryKey = 'id_usuario_rol';
-    
+    protected $primaryKey = 'id_usuario_alcance';
+
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -15,7 +15,6 @@ class Usuario_rol extends Model
 
     protected $fillable = [
         'id_usuario', 
-        'tipoUsuario'
+        'id_alcance'
     ];
-
 }

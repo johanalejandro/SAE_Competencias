@@ -22,10 +22,19 @@ class CreateSolicitudPostulacionsTable extends Migration
         });
         Schema::table('solicitud_postulacions', function($table) {
             $table->foreign('id_usuario')->references('id_usuario')->on('users');
-            $table->foreign('id_evaluacion')->references('id_evaluacion')->on('evaluacion_postulacions');
-            $table->foreign('id_postulante')->references('id_postulante')->on('postulantes');
-
+           
         });
+        Schema::table('solicitud_postulacions', function($table) {
+            $table->foreign('id_evaluacion')->references('id_evaluacion')->on('evaluacion_postulacions');
+           
+        });
+         Schema::table('solicitud_postulacions', function($table) {
+            $table->foreign('id_postulante')->references('id_postulante')->on('postulantes');
+           
+        });
+        
+          
+
     }
 
     /**

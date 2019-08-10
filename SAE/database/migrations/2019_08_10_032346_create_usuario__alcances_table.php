@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsuarioRolsTable extends Migration
+class CreateUsuarioAlcancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,22 @@ class CreateUsuarioRolsTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuario_rols', function (Blueprint $table) {
-            $table->bigIncrements('id_usuario_rol');
+        Schema::create('usuario__alcances', function (Blueprint $table) {
+            $table->bigIncrements('id_usuario_alcance');
             $table->unsignedBigInteger('id_usuario');
-            $table->set('tipoUsuario',['Visualizador', 'Evaluador','Calidad','Experto'])->default('Visualizador');
+            $table->unsignedBigInteger('id_alcance');
             $table->timestamps();
-            
         });
-        Schema::table('usuario_rols', function($table) {
-            $table->foreign('id_usuario')->references('id_usuario')->on('users');
-            
 
+        Schema::table('usuario__alcances', function($table) {
+            $table->foreign('id_usuario')->references('id_usuario')->on('users');
+        });
+
+         Schema::table('usuario__alcances', function($table) {
+            $table->foreign('id_alcance')->references('id_alcance')->on('alcances');
         });
     }
 
-    
     /**
      * Reverse the migrations.
      *
@@ -35,6 +36,6 @@ class CreateUsuarioRolsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuario_rols');
+        Schema::dropIfExists('usuario__alcances');
     }
 }

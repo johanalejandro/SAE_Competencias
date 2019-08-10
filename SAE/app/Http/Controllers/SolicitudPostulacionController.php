@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\solicitudPostulacion;
+use App\evaluacionPostulacion;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -25,6 +26,21 @@ class SolicitudPostulacionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function crearNuevaSolicitud(Request $request){
+             $evaluacion_postulacion = new evaluacionPostulacion;
+             $evaluacion_postulacion->save();
+             $solicitud = solicitudPostulacion::create([
+                'id_postulante'     =>  $request->id_postulante,
+                'id_usuario'        =>  $request->id_usuario,
+                'id_evaluacion'     =>  $evaluacion_postulacion->id_evaluacion,
+            
+            ]);
+            return response()->json('Solicitud creada');
+
+
+
+    }
     public function create()
     {
         //

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Usuario_rol;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -27,8 +30,10 @@ class RegisterController extends Controller
      * Where to redirect users after registration.
      *
      * @var string
+
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
+   
 
     /**
      * Create a new controller instance.
@@ -64,11 +69,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+       $usuario = User::create([
             'nombre' => $data['nombre'],
             'apellido' => $data['apellido'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+   
+
+       $userInfo = Usuario_rol::create([
+            'id_usuario' => $usuario->id_usuario,
+            'tipoUsuario' => 'Visualizador',
+        ]);
+
+      
     }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        return redirect($this->redirectPath())->with('message', 'Usuario registrado');
+    }
+
 }

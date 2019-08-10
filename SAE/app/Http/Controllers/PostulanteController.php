@@ -72,11 +72,11 @@ class PostulanteController extends Controller
        
         $postulante= Postulante::create($campos);
 
-        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
+        //$keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
 
        
              $educacion = educacionFormal::create([
-                'id_postulante'     =>  $keypostulante->id_postulante,
+                'id_postulante'     =>  $postulante->id_postulante,
                 'nombreInstitucion' =>  $request->nombreInstitucion,
                 'tituloObtenido'    =>  $request->tituloObtenido,
                 'tipoFormacion'     =>  $request->tipoFormacion,

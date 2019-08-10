@@ -33,6 +33,9 @@ class PostulantesTableSeeder extends Seeder
             ]
         );
 
+        
+          
+
          DB::table('postulantes')->insert(
             [
                 'nombres' => 'Carlos',

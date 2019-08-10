@@ -64,12 +64,12 @@ Route::get('mostrarEvaluadoresHabilitado','PostulanteController@mostrarEvaluador
 Route::get('mostrarExpertosHabilitado','PostulanteController@mostrarExpertosHabilitado');
 
 
-/*Muestra toda la info del evaluador {{ id }} esto lo usaras en ver detalle para evaluar */
+/*Muestra toda la info del porstulante a evaluador {{id}} esto lo usaras en ver detalle para evaluar o calidad */
 
 
 Route::get('mostrarDetallesEvaluador/{id}','PostulanteController@mostrarDetallesEvaluador');
 
-/*Muestra toda la info del experto {{ id }} esto lo usaras en ver detalle para evaluar */
+/*Muestra toda la info del postulante a experto {{id}} esto lo usaras en ver detalle para evaluar o calidad */
 
 Route::get('mostrarDetallesExperto/{id}','PostulanteController@mostrarDetallesExperto');
 
@@ -103,6 +103,27 @@ Route::get('/sector/{id}', 'SectorRequerimientoController@show');
 
 /*------------------------------------------------------------------------------------------------------*/
 
+/* Para guardar los cursos al que postulo el evaluador*/
+
 Route::post('/cursosEvaluador', 'CursosEvaluadorController@store');
+
+/*------------------------------------------------------------------------------------------------------*/
+
+/* Para obtener listado de expertos que evaluaran a los postulantes pasas el id del alcance al que postulo */
+ 
+
+Route::get('obtenerUsuariosPorAlcance/{id}', 'UsuarioAlcanceController@obtenerUsuariosPorAlcance');
+
+/*------------------------------------------------------------------------------------------------------*/
+
+/* Para obtener listado de evaluadores que evaluaran a los postulantes pasas el id del sector al que postulo */
+
+Route::get('obtenerUsuariosPorSector/{id}','UsuarioSectorController@obtenerUsuariosPorSector');
+
+/*------------------------------------------------------------------------------------------------------*/
+
+/* Para crear la solicitud de postulacion una vez seleccionado el evaluador/experto que evaluara */
+
+Route::post('/crearNuevaSolicitud', 'SolicitudPostulacionController@crearNuevaSolicitud');
 
 

@@ -42,10 +42,22 @@ class User extends Authenticatable
     ];
 
 
-    public function usuario_rols()
+    public function usuario_rol()
     {
-        return $this->hasMany('App\Usuario_rol');
+        return $this->hasOne('App\Usuario_rol');
+    
+    }
 
-         
+
+    public function usuario_alcances()
+    {
+        return $this->hasMany('App\Usuario_Alcance');
+    
+    }
+
+    public function usuario_sectos()
+    {
+        return $this->hasMany('App\Usuario_Sector');
+    
     }
 }

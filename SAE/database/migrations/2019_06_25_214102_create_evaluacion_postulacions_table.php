@@ -16,8 +16,8 @@ class CreateEvaluacionPostulacionsTable extends Migration
         Schema::create('evaluacion_postulacions', function (Blueprint $table) {
             $table->bigIncrements('id_evaluacion');
             $table->timestamps();
-            $table->text('detalleEvaluacion');
-            $table->set('tipoEvaluacion',['Entrevista', 'Prueba']);
+            $table->text('detalleEvaluacion')->nullable();
+            $table->set('tipoEvaluacion',['Entrevista', 'Prueba'])->nullable();
             $table->set('resultadoEvaluacion',['Aprueba', 'No Aprueba','Pendiente'])->default('Pendiente');
         });
     }

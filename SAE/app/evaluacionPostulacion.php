@@ -13,4 +13,10 @@ class evaluacionPostulacion extends Model
     {
         return $this->belongsTo('App\solicitudPostulacion');
     }
+
+     protected $fillable = [
+        'detalleEvaluacion', 
+        'tipoEvaluacion', 
+        'resultadoEvaluacion'
+    ];
 }
