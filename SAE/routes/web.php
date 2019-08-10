@@ -19,6 +19,10 @@ Route::get('/gestion-calidad', function () {
     return view('gestionInicio');
 });
 
+Route::get('/visualizador', function () {
+    return view('visualizadorInicio');
+});
+
 Route::get('/postulacion-formulario', function () {
     return view('pages/formPostulacion');
 });
