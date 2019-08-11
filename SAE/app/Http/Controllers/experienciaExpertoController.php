@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\experienciaLaboral;
+use App\experienciaExperto;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +40,7 @@ class experienciaExpertoController extends Controller
         $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
 
         $current_date_time = Carbon::now()->toDateTimeString();
-        $experiencia = experienciaLaboral::create([
+        $experiencia = experienciaExperto::create([
                 'id_postulante'     =>  $keypostulante->id_postulante,
                 'id_alcance' =>  $request->id_alcance,
                 'descripcion'    =>  $request->descripcion,
