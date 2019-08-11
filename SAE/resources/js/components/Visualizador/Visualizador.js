@@ -179,7 +179,7 @@ export default class Visualizador extends Component {
         return (
 
             <React.Fragment>
-                    <Header title="Gestión de Calidad"/>
+                    <Header title="Visualizador"/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
                        
@@ -189,13 +189,6 @@ export default class Visualizador extends Component {
                                                 Expertos
                                             </div>
                                             <div className="d-flex flex-column w-100 align-items-end">
-                                                
-                                                <div id="porasignarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                    Por Asignar
-                                                </div>
-                                                <div id="porhabilitarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                    Por Habilitar
-                                                </div>
                                                 <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 bg-current"} onClick={this.handleChangeTipoPost}>
                                                     Habilitados
                                                 </div>    
@@ -214,13 +207,6 @@ export default class Visualizador extends Component {
                                                     Evaluadores
                                                 </div> 
                                                 <div className="d-flex flex-column w-100 align-items-end">
-                                                    
-                                                    <div id="porasignarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 " onClick={this.handleChangeTipoPost}>
-                                                        Por Asignar
-                                                    </div>
-                                                    <div id="porhabilitarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 " onClick={this.handleChangeTipoPost}>
-                                                        Por Habilitar
-                                                    </div>
                                                     <div id="habilitadosEv" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 bg-current"} onClick={this.handleChangeTipoPost}>
                                                         Habilitados
                                                     </div>    

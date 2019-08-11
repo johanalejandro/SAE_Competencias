@@ -20,7 +20,7 @@ Route::get('/gestion-calidad', function () {
 });
 
 Route::get('/visualizador', function () {
-    return view('visualizadorInicio');
+    return view('pages/visualizadorInicio');
 });
 
 Route::get('/postulacion-formulario', function () {

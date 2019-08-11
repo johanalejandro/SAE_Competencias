@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-light">
-@if (Auth::user())
+
 
     <head class="bg-light">
         <meta charset="utf-8">
@@ -69,6 +69,7 @@
         </style>
     </head>
     <body class="bg-light">
+    @if (Auth::user())
         <div class="text-white bg-light" hidden>
             $.ajaxSetup({
                 headers: {
@@ -89,7 +90,11 @@
                 </div>
             @endif
         </div>
-        <div class="bg-light h-100">
+        @else
+            <div class="top-right links">
+                <a  href="{{ url('logout') }}">logout</a>
+            </div>
+            <div class="bg-light h-100">
 
             <div class="content h-100">
 
@@ -97,9 +102,7 @@
 
             </div>
         </div>
+    @endif
         <script src="{{mix('js/app.js')}}"></script>
     </body>
-    @else
-        <li><a href="{{ url("logout") }}">logout</a></li>
-    @endif
 </html>
