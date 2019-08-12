@@ -11,21 +11,33 @@
 |
 */
 
+/* Rutas con inicio de sesion requerido */
+Route::group(['middleware' => ['auth']], function () {
+   
+    Route::get('/gestion-calidad', function () {
+    return view('gestionInicio');
+	});
+
+	Route::get('/visualizador', function () {
+    return view('pages/visualizadorInicio');
+	});
+    
+});
+
+Auth::routes();
+
+
+
 Route::get('/postulacion', function () {
     return view('welcome');
 });
 
-Route::get('/gestion-calidad', function () {
-    return view('gestionInicio');
-});
-
-Route::get('/visualizador', function () {
-    return view('pages/visualizadorInicio');
-});
 
 Route::get('/postulacion-formulario', function () {
     return view('pages/formPostulacion');
 });
+
+
 
 Route::get('/solicitud-postulacion', function () {
     return view('pages/solicitud_postulacion_datos_personales');
@@ -40,8 +52,14 @@ Route::get('/ambitosSAE', function () {
 Route::resource('ambitos','AmbitoController');
 
 
-Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
+
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+
+
+
+
+
+

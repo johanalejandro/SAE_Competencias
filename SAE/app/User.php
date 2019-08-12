@@ -60,4 +60,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Usuario_Sector');
     
     }
+    public function getId()
+    {
+      return $this->$primaryKey;
+    }
+
 }

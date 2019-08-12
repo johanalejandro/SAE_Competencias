@@ -20,6 +20,7 @@ class PostulanteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
         $listadoPostulante = Postulante::all();

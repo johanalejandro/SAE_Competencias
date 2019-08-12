@@ -47,12 +47,11 @@ class LoginController extends Controller
         $userId = Auth::id();
 
         $role = DB::table('usuario_rols')->select('tipoUsuario')->where('id_usuario', $userId)->first();
-
         
         // Check user role
         switch ($role->tipoUsuario) {
             case 'Visualizador':
-                   return ('/solicitud-postulacion');
+                   return ('/visualizador');
                 break;
             case 'Evaluador':
                   return ('/solicitud-postulacion');
@@ -64,7 +63,7 @@ class LoginController extends Controller
                    return ('/gestion-calidad');
                 break;
             default:
-                 return ('/solicitud-postulacion');
+                 return ('/visualizador');
 
 
            

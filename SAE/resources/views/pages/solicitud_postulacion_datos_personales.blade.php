@@ -7,7 +7,7 @@
 	<h1>Solicitud Postulacion</h1>
 
     <hr>
-     <form action="api/crearNuevaSolicitud" method="post"  enctype="multipart/form-data">
+     <form action="api/verSolicitudesPorUsuario" method="get"  enctype="multipart/form-data">
      {{ csrf_field() }}
      <div class="form-group">
         <label for="title">IDP</label>
@@ -20,6 +20,8 @@
       
        
       <button type="submit" class="btn btn-primary">Guardar</button>
+
+      <a href="{{ url('api/verSolicitudPorUsuario/') }}" class="btn btn-xs btn-info pull-right">Edit</a>
       
 </body>
 </html>

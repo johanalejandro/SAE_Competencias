@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 
 Route::get('ambito','AmbitoController@index');//localhost:[port]/api/ambito
 
@@ -24,6 +22,8 @@ Route::get('sector','SectorController@index');
 Route::get('alcance','AlcanceController@index');
 
 Route::get('alcance','AlcanceController@index');
+
+
 
 
 
@@ -125,5 +125,21 @@ Route::get('obtenerUsuariosPorSector/{id}','UsuarioSectorController@obtenerUsuar
 /* Para crear la solicitud de postulacion una vez seleccionado el evaluador/experto que evaluara */
 
 Route::post('/crearNuevaSolicitud', 'SolicitudPostulacionController@crearNuevaSolicitud');
+
+/*------------------------------------------------------------------------------------------------------*/
+
+/* Para ver las solicitudes de postulantes que evaluar */
+
+Route::get('/verSolicitudPorUsuario','SolicitudPostulacionController@verSolicitudesPorUsuario');
+
+/* Para finalizar evaluacion y guardar resultado de evaluacion debes pasar *id_solicitud* te lo mande en el api anterior, *detalleEvaluacion*, *resultadoEvaluacion*(debe ser aprobado), *tipoEvaluacion*/
+
+
+Route::post('/finalizarEvaluacionPostulante', 'SolicitudPostulacionController@finalizarEvaluacionPostulante');
+
+/* Para GUARDAR  (no finalizar)  estado evaluacion y guardar resultado de evaluacion debes pasar *id_solicitud* te lo mande en el api anterior, *detalleEvaluacion*, *resultadoEvaluacion*(debe ser aprobado), *tipoEvaluacion*/
+
+
+Route::post('/guardarEvaluacionPostulante', 'SolicitudPostulacionController@guardarEvaluacionPostulante');
 
 

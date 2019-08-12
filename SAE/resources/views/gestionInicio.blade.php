@@ -69,7 +69,7 @@
         </style>
     </head>
     <body class="bg-light">
-    @if (Auth::user())
+
         <div class="text-white bg-light" hidden>
             $.ajaxSetup({
                 headers: {
@@ -88,9 +88,8 @@
                         @endif
                     @endauth
                 </div>
-            @endif
+            
         </div>
-        @else
             <div class="top-right links">
                 <a  href="{{ url('logout') }}">logout</a>
             </div>
