@@ -50,12 +50,11 @@ class SolicitudPostulacionController extends Controller
 
 
     public function verSolicitudesPorUsuario(){
-
-          $user = Auth::user();
+          $userId = Auth::id();
           $solicitudes = DB::table('solicitud_postulacions')
           ->join('postulantes', 'postulantes.id_postulante', '=', 'solicitud_postulacions.id_postulante')
-            ->select('postulantes.*')
-            ->where('postulantes.id_postulante',1)
+            ->select('postulantes.*','solicitud_postulacions.*')
+            ->where('postulantes.id_postulante',$userId)
             ->get();
           
           return response()->json($solicitudes);
