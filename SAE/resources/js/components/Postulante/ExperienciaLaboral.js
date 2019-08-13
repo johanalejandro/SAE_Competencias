@@ -43,6 +43,7 @@ export default class ExperienciaLaboral extends Component {
       }
 
     render() {
+
         const columns = [
             {
                 name: "alcance",
@@ -249,11 +250,11 @@ export default class ExperienciaLaboral extends Component {
                     />
                 </div>
                 <div className="d-flex flex-row justify-content-end align-items-center w-100 py-2">
-                    <button name={"educacion"} className="btn-secondary w-20" 
+                    <button name={"educacion"} className="btn-primary-sae bg-white text-gray w-20" 
                         onClick={(evt)=>{
                             this.props.handleChangeTipo(evt);
                             }}
-                    >Artrás</button>
+                    >Atrás</button>
                     {this.state.loading?(
                         <div className="d-flex flex-row justify-content-end w-100 align-items-center">
                             <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />

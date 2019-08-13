@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import MUIDataTable from "mui-datatables";
 import Header from "../common/Header";
+import Modal from "./Modal";
 import axios from "axios";
+import toUpper from "lodash/toUpper";
+import remove from "lodash/remove";
 
 export default class GestionCalidad extends Component {
 
@@ -14,7 +17,22 @@ export default class GestionCalidad extends Component {
         habilitadosEvaluador: [],
         form: "",
         tipo: "",
+        habilitarEv: false,
+        habilitarEx: false,
+        dataasignarEvaluador: [],
+        dataasignarExperto: [],
+        dataporhabilitarExperto:[],
+        dataporhabilitarEvaluador: [],
+        modal: false,
+        modalInfo: {},
     }
+      
+      selectModal = (info = {}) => {
+        this.setState({
+          modal: !this.state.modal,
+          modalInfo: info,
+        })
+      }
 
     componentWillMount= async()=>{
         this.setState({
@@ -32,6 +50,7 @@ export default class GestionCalidad extends Component {
             console.log(data);
             data.map((postulante)=>{
                 let post ={};
+                post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
                 post['apellidos'] = postulante.apellidos;
                 post['estado']= postulante.estado;
@@ -48,6 +67,7 @@ export default class GestionCalidad extends Component {
         .then(({data} ) => {
             data.map((postulante)=>{
                 let post ={};
+                post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
                 post['apellidos'] = postulante.apellidos;
                 post['estado']= postulante.estado;
@@ -57,13 +77,23 @@ export default class GestionCalidad extends Component {
             })
         })
         .catch(console.error);
+        let dataasignar = porasignar;
+        let dataasignarExperto = dataasignar.filter((postulante)=>{
+            return postulante.tipoPostulacion==="Experto"
+        });
+        let dataasignarEvaluador = dataasignar.filter((postulante)=>{
+            return postulante.tipoPostulacion==="Evaluador"
+        });
         await this.setState({
-            porasignar: porasignar,
-        })
+            porasignar: dataasignar,
+            dataasignarExperto: dataasignarExperto,
+            dataasignarEvaluador: dataasignarEvaluador,
+        });
         await axios.get("api/postulantePorHabilitar")
         .then(({data} ) => {
             data.map((postulante)=>{
                 let post ={};
+                post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
                 post['apellidos'] = postulante.apellidos;
                 post['estado']= postulante.estado;
@@ -73,13 +103,23 @@ export default class GestionCalidad extends Component {
             })
         })
         .catch(console.error);
+        let dataporhabilitar = porhabilitar;
+           let dataporhabilitarExperto = dataporhabilitar.filter((postulante)=>{
+                return postulante.tipoPostulacion==="Experto"
+            });
+            let dataporhabilitarEvaluador = dataporhabilitar.filter((postulante)=>{
+                return postulante.tipoPostulacion==="Evaluador"
+            });
         await this.setState({
             porhabilitar: porhabilitar,
+            dataporhabilitarExperto: dataporhabilitarExperto,
+            dataporhabilitarEvaluador: dataporhabilitarEvaluador,
         })
         await axios.get("api/mostrarEvaluadoresHabilitado")
         .then(({data} ) => {
             data.map((postulante)=>{
                 let post ={};
+                post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
                 post['apellidos'] = postulante.apellidos;
                 post['estado']= postulante.estado;
@@ -96,6 +136,7 @@ export default class GestionCalidad extends Component {
         .then(({data} ) => {
             data.map((postulante)=>{
                 let post ={};
+                post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
                 post['apellidos'] = postulante.apellidos;
                 post['estado']= postulante.estado;
@@ -109,6 +150,41 @@ export default class GestionCalidad extends Component {
             habilitadosExperto: habilitadosExperto,
         })
 }
+
+    habilitar =async(rowData,updateValue) => {
+        await axios.get("api/habilitarPostulante/"+rowData[0])
+        .then(async(response ) => {
+            console.log("RESPUESTA",response);
+            if(this.state.form==="evaluadores"){
+                await this.setState({
+                    habilitarEv: true,
+                })
+                const { dataporhabilitarEvaluador } = await this.state;
+                const  habilitado = await remove(dataporhabilitarEvaluador,(postulante)=>{
+                    return postulante.id_postulante === rowData[0];
+                });
+                const {habilitadosEvaluador} = await this.state;
+                await habilitadosEvaluador.push(habilitado)
+                await this.setState({ dataporhabilitarEvaluador,habilitadosEvaluador });
+            }
+            if(this.state.form==="expertos"){
+                await this.setState({
+                    habilitarExp: true,
+                })
+                const { dataporhabilitarExperto } = await this.state;
+                const  habilitado = await remove(dataporhabilitarExperto,(postulante)=>{
+                    return postulante.id_postulante === rowData[0];
+                });
+                const {habilitadosExperto} = await this.state;
+                await habilitadosExperto.push(habilitado)
+                await this.setState({ dataporhabilitarEvaluador,habilitadosExperto });
+                await this.setState({ dataporhabilitarExperto });
+            }
+        })
+        .catch(console.error);
+        console.log("===ROW DATA",rowData,"===");
+        console.log("===ROW DATA",rowData[0],"===");
+    }
 
     handleChangeTipo = ({target}) => {
         if(target.name){
@@ -141,6 +217,26 @@ export default class GestionCalidad extends Component {
     render() {
         console.log("POSTULANTE RESPONSE",this.state.postulante);
         const columns = [
+            {
+                name: "id_postulante",
+                label: "id",
+                options: {
+                 filter: true,
+                 sort: true,
+                 display: false,
+                 customHeadRender: (value) => {
+                    display: false;
+                    filter: false;
+                    sort: false;
+                    searcheable: false;
+                 },
+                 customBodyRender: (value) => {
+                    return (
+                        <span hidden className="w-0">{value}</span>
+                    );
+                  },
+                } 
+            },
             {
              name: "apellidos",
              label: "Apellidos",
@@ -180,16 +276,32 @@ export default class GestionCalidad extends Component {
                  filter: true,
                  sort: true,
                  customBodyRender: (value) => {
-                    return (
-                      <span className="text-warning-dark">
-                        {value}
-                      </span>
-                    );
+                    if(toUpper(value)==="POR ASIGNAR"){
+                        return (
+                            <span className="text-warning-dark">
+                              {value}
+                            </span>
+                        );
+                    }
+                    if(toUpper(value)==="POR HABILITAR"){
+                        return (
+                            <span className="text-success">
+                              {value}
+                            </span>
+                        );
+                    }
+                    if(toUpper(value)==="HABILITADO"){
+                        return (
+                            <span className="text-normal">
+                              {value}
+                            </span>
+                        );
+                    }
                   },
                 },
                },
                {
-                name:"acciones",
+                name:"estado",
                 label: "Acciones",
                 options: {
                  filter: true,
@@ -200,29 +312,26 @@ export default class GestionCalidad extends Component {
                     sort: false;
                     searcheable: false;
                  },
-                 customBodyRender: (value) => {
-                    return (
-                      <button className="btn-secondary">Asignar</button>
-                    );
+                 customBodyRender: (value, {rowData}, updateValue) => {
+                    if(toUpper(value)==="POR ASIGNAR"){
+                        return (
+                            <button className="btn-secondary">Asignar</button>
+                        );
+                    }
+                    if(toUpper(value)==="POR HABILITAR"){
+                        return (
+                            <button className="btn-secondary" onClick={() => this.selectModal({
+                                type:'Habilitar',
+                                data: rowData,
+                                updateValue: updateValue,
+                            })
+                            }>Habilitar</button>
+                        );
+                    }
                   },
                 },
                },
            ];
-
-           let dataasignar = this.state.porasignar;
-           let dataasignarExperto = dataasignar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Experto"
-            });
-            let dataasignarEvaluador = dataasignar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Evaluador"
-            });
-           let dataporhabilitar = this.state.porhabilitar;
-           let dataporhabilitarExperto = dataporhabilitar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Experto"
-            });
-            let dataporhabilitarEvaluador = dataporhabilitar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Evaluador"
-            });
             
            const options = {
             selectableRowsOnClick: false,
@@ -408,18 +517,27 @@ export default class GestionCalidad extends Component {
                             {this.state.form === "expertos" && this.state.tipo==="porasignarExp" &&(
                                     <MUIDataTable className="data-table"
                                         title={"Postulantes Expertos por Asignar Experto Padre"}
-                                        data={dataasignarExperto}
+                                        data={this.state.dataasignarExperto}
                                         columns={columns}
                                         options={options}
                                     />
                                 )}
                                 {this.state.form === "expertos" && this.state.tipo==="porhabilitarExp"&&(
-                                    <MUIDataTable className="data-table"
-                                        title={"Postulantes a Expertos aprobados por habilitar"}
-                                        data={dataporhabilitarExperto}
-                                        columns={columns}
-                                        options={options}
-                                    />
+                                    <React.Fragment>
+                                        <MUIDataTable className="data-table"
+                                            title={"Postulantes a Expertos aprobados por habilitar"}
+                                            data={this.state.dataporhabilitarExperto}
+                                            columns={columns}
+                                            options={options}
+                                        />
+                                        <div>
+                                            {this.state.habilitarExp && (
+                                                <div className="bg-success my-2 text-white">
+                                                    Postulante habilitado
+                                                </div>
+                                            )}
+                                        </div>
+                                    </React.Fragment>
                                 )}
                                 {this.state.form === "expertos" && this.state.tipo==="habilitadosExp"&&(
                                     <MUIDataTable className="data-table"
@@ -432,18 +550,27 @@ export default class GestionCalidad extends Component {
                                 {this.state.form === "evaluadores" && this.state.tipo==="porasignarEv"&&(
                                     <MUIDataTable className="data-table"
                                         title={"Postulantes a Evaluadores por Asignar Evaluador Padre"}
-                                        data={dataasignarEvaluador}
+                                        data={this.state.dataasignarEvaluador}
                                         columns={columns}
                                         options={options}
                                     />
                                 )}
                                 {this.state.form === "evaluadores" && this.state.tipo==="porhabilitarEv"&&(
-                                    <MUIDataTable className="data-table"
-                                        title={"Postulantes a Evaluadores aprobados por habilitar"}
-                                        data={dataporhabilitarEvaluador}
-                                        columns={columns}
-                                        options={options}
-                                    />
+                                    <React.Fragment>
+                                        <MUIDataTable className="data-table"
+                                            title={"Postulantes a Evaluadores aprobados por habilitar"}
+                                            data={this.state.dataporhabilitarEvaluador}
+                                            columns={columns}
+                                            options={options}
+                                        />
+                                        <div>
+                                            {this.state.habilitarEv && (
+                                                <div className="bg-success my-2 text-white">
+                                                    Postulante habilitado
+                                                </div>
+                                            )}
+                                        </div>
+                                    </React.Fragment>
                                 )}
                                 {this.state.form === "evaluadores" && this.state.tipo==="habilitadosEv"&&(
                                     <MUIDataTable className="data-table"
@@ -456,7 +583,12 @@ export default class GestionCalidad extends Component {
                             </div>
                         </div>
                     </div>
-                
+                    <Modal
+                        displayModal={this.state.modal}
+                        modalInfo={this.state.modalInfo}
+                        closeModal={this.selectModal}
+                        habilitar={this.habilitar}
+                    />
                 </React.Fragment>
         )
     }

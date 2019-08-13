@@ -160,7 +160,7 @@ class PostulanteController extends Controller
         DB::table('postulantes')
             ->where('id_postulante', $id)
             ->update(['estado' => 'Habilitado'
-           ,'fechaHabilitacion'=>$current_date_time]);
+           ,'fechaHabilitacion'=>$current_date_time, 'updated_at'=>$current_date_time]);
         return response()->json('Postulante Habilitado!');
     }
 

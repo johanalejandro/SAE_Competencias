@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        
+<!-- Styles -->
+<link href="/css/app.css" rel="stylesheet" type="text/css">
+<link href="/css/sae.css" rel="stylesheet" type="text/css">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -53,13 +59,13 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary-sae w-20">
                                     {{ __('Inicio') }}
                                 </button>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Olvido su contraseña?') }}
+                                        {{ __('¿Olvidó su contraseña?') }}
                                     </a>
                                 @endif
                             </div>

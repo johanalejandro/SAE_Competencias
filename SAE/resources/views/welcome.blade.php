@@ -81,7 +81,7 @@
                         <a href="{{ route('login') }}">Login</a>
 
                         @if (Route::has('regmt-4ister'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('register') }}">Registrarse</a>
                         @endif
                     @endauth
                 </div>
