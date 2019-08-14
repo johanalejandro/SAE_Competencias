@@ -5,15 +5,108 @@ import SeleccionarAmbito from './SeleccionarAmbito';
 import SeleccionarSector from './SeleccionarSector';
 import SeleccionarAlcance from './SeleccionarAlcance';
 import HojaDeVida from './HojaDeVida';
+import clone from 'lodash/clone';
+import pull from 'lodash/pull';
+import isEmpty from 'lodash/isEmpty';
+
 
 export default class FormularioPostulacion extends Component {
 
     state = {
         tipo: "ambitos",
+        ambitos: [],
         ambitosArray: [],
+        sectores: [],
         sectoresArray: [],
+        alcances: [],
         alcancesArray: [],
         hojaDeVida: false,
+        checkedItemsAmbitos: new Map(),
+        checkedItemsSectores: new Map(),
+        checkedItemsAlcances: new Map(),
+    }
+
+    handleCheckBoxChangeSector = ({target}) => {
+        const sectors = this.state.sectores;
+        const id = target.id;
+        const isChecked =target.checked;
+        this.setState(prevState => ({ checkedItemsSectores: prevState.checkedItemsSectores.set(id, isChecked) }));
+        const sector = sectors.find((sector)=>{
+            return sector.id_sector === parseInt(id);
+        });
+        const cloneArray = clone(this.state.sectoresArray);
+        if(isChecked){
+            const cloned = cloneArray.concat(sector);
+            this.setState({
+                sectoresArray: cloned,
+            })
+        }else{
+            const cloned = pull(cloneArray,sector);
+            this.setState({
+                sectoresArray: cloned,
+            })
+        }
+    }
+
+    validarSectores = (evt) => {
+        if(!isEmpty(this.state.sectoresArray)){
+            $('#revisarDatosPostulacion').modal();
+        }else{
+            $('#sectorModal').modal();
+        }
+    }
+
+    handleCheckBoxChangeAmbito = ({target}) => {
+        const ambitos = this.state.ambitos;
+        const item = target.name;
+        const id = target.id;
+        const isChecked =target.checked;
+        this.setState(prevState => ({ checkedItemsAmbitos: prevState.checkedItemsAmbitos.set(item, isChecked) }));
+        const ambito = ambitos.find((ambito)=>{
+            return ambito.id_ambito === parseInt(id);
+        });
+        const cloneArray = clone(this.state.ambitosArray);
+        if(isChecked){
+            const cloned = cloneArray.concat(ambito);
+            this.setState({
+                ambitosArray: cloned,
+            })
+        }else{
+            const cloned = pull(cloneArray,ambito);
+            this.setState({
+                ambitosArray: cloned,
+            })
+        }
+    }
+
+    handleCheckBoxChangeAlcance = ({target}) => {
+        const alcances = this.state.alcances;
+        const id = target.id;
+        const isChecked =target.checked;
+        this.setState(prevState => ({ checkedItemsAlcances: prevState.checkedItemsAlcances.set(id, isChecked) }));
+        const alcance = alcances.find((alcance)=>{
+            return alcance.id_alcance === parseInt(id);
+        });
+        const cloneArray = clone(this.state.alcancesArray);
+        if(isChecked){
+            const cloned = cloneArray.concat(alcance);
+            this.setState({
+                alcancesArray: cloned,
+            })
+        }else{
+            const cloned = pull(cloneArray,alcance);
+            this.setState({
+                alcancesArray: cloned,
+            })
+        }
+    }
+
+    validarAlcances = (evt) => {
+        if(!isEmpty(this.state.alcancesArray)){
+            $('#revisarDatosPostulacion').modal();
+        }else{
+            $('#alcancesModal').modal();
+        }
     }
 
     handleChangeTipo = ({target}) => {
@@ -37,9 +130,21 @@ export default class FormularioPostulacion extends Component {
         console.log("Opciones de Postulacion: ",payloadOpciones);
     }
 
-    updateAmbitos = (ambitos) => {
+    setAmbitos = (ambitos) =>{
         this.setState({
-            ambitosArray: ambitos,
+            ambitos: ambitos,
+        })
+    }
+
+    setSectores = (sectores) =>{
+        this.setState({
+            sectores: sectores,
+        })
+    }
+
+    setAlcances = (alcances)=>{
+        this.setState({
+            alcances: alcances,
         })
     }
 
@@ -51,14 +156,6 @@ export default class FormularioPostulacion extends Component {
         if(window.location.search ==="?tipo=evaluador"){
             this.handlePostulacion();
         }
-    }
-
-    updateAlcances = async (alcances) => {
-        await this.setState({
-            alcancesArray: alcances,
-        })
-
-        this.handlePostulacion();
     }
 
     handlePostulacion = () => {
@@ -121,7 +218,7 @@ export default class FormularioPostulacion extends Component {
                                                 Sectores
                                             </div>
                                             {window.location.search==="?tipo=experto" &&(
-                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" >
+                                            <div id="alcances" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4 bg-current" >
                                                 Alcances
                                             </div>    
                                             )}
@@ -135,13 +232,37 @@ export default class FormularioPostulacion extends Component {
                                 
                             <div className="cardSAE-body">
                                 {this.state.tipo === "ambitos"?(
-                                    <SeleccionarAmbito updateAmbitos={this.updateAmbitos} handleChangeTipo={this.handleChangeTipo}/>
+                                    <SeleccionarAmbito handleChangeTipo={this.handleChangeTipo} 
+                                    ambitos={this.state.ambitos} 
+                                    ambitosArray={this.state.ambitosArray} 
+                                    setAmbitos={this.setAmbitos} 
+                                    handleCheckBoxChangeAmbito={this.handleCheckBoxChangeAmbito} 
+                                    checkedItemsAmbitos={this.state.checkedItemsAmbitos}/>
                                 ):(
                                     this.state.tipo === "sectores"?(
-                                        <SeleccionarSector ambitosArray={this.state.ambitosArray} tipoPostulacion={window.location.search} updateSectores={this.updateSectores} handleChangeTipo={this.handleChangeTipo}/>
+                                        <SeleccionarSector ambitosArray={this.state.ambitosArray} 
+                                        sectores={this.state.sectores} 
+                                        sectoresArray={this.state.sectoresArray}
+                                        handleCheckBoxChangeSector={this.handleCheckBoxChangeSector} 
+                                        setSectores={this.setSectores} 
+                                        tipoPostulacion={window.location.search} 
+                                        updateSectores={this.updateSectores} 
+                                        handleChangeTipo={this.handleChangeTipo} 
+                                        checkedItemsSectores={this.state.checkedItemsSectores} 
+                                        validarSectores={this.validarSectores}
+                                        sectoresArray={this.state.sectoresArray}/>
                                     ):(
                                         window.location.search==="?tipo=experto" &&(
-                                        <SeleccionarAlcance sectoresArray={this.state.sectoresArray} tipoPostulacion={window.location.search} updateAlcances={this.updateAlcances}  handleChangeTipo={this.handleChangeTipo}/>
+                                        <SeleccionarAlcance sectoresArray={this.state.sectoresArray}
+                                        alcancesArray={this.state.alcancesArray}
+                                        alcances={this.state.alcances} 
+                                        setAlcances={this.setAlcances} 
+                                        tipoPostulacion={window.location.search} 
+                                        updateAlcances={this.updateAlcances}  
+                                        handleChangeTipo={this.handleChangeTipo} 
+                                        validarAlcances={this.validarAlcances} 
+                                        handleCheckBoxChangeAlcance={this.handleCheckBoxChangeAlcance} 
+                                        checkedItemsAlcances={this.state.checkedItemsAlcances}/>
                                         )
                                         )
                                 )}
@@ -149,6 +270,26 @@ export default class FormularioPostulacion extends Component {
                             </div>
                         </div>
                     </div>
+
+                    <div className="modal fade" id="revisarDatosPostulacion" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header text-center">
+                      <h5 className="modal-title" id="exampleModalLongTitle">ATENCIÓN</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                            <label className="w-90 text-normal text-danger text-justify">Verifique que las opciones de postulación seleccionadas son las que quiere aplicar para continuar sin inconvenientes</label>
+                    </div>
+                    <div className="modal-footer">
+                            <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal">Ok, revisaré</button>
+                            <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal" onClick={this.handlePostulacion}>No, continuar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
                 
                 </React.Fragment>
                )

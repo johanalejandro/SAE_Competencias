@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import AmbitoItem from './Items/AmbitoItem'
-import {clone, isEmpty, pull} from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 export default class SeleccionarAmbito extends Component {
-
-    state = {
-        ambitos: [],
-        ambitosArray: [],
-        checkedItems: new Map(),
-    }
 
     componentDidMount(){
 
@@ -19,37 +13,14 @@ export default class SeleccionarAmbito extends Component {
         })
         .then(ambitos => {
             //Fetched product is stored in the state
-            this.setState({ ambitos });
+            this.props.setAmbitos(ambitos);
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
     }
 
-    handleCheckBoxChange = ({target}) => {
-        const ambitos = this.state.ambitos;
-        const item = target.name;
-        const id = target.id;
-        const isChecked =target.checked;
-        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
-        const ambito = ambitos.find((ambito)=>{
-            return ambito.id_ambito === parseInt(id);
-        });
-        const cloneArray = clone(this.state.ambitosArray);
-        if(isChecked){
-            const cloned = cloneArray.concat(ambito);
-            this.setState({
-                ambitosArray: cloned,
-            })
-        }else{
-            const cloned = pull(cloneArray,ambito);
-            this.setState({
-                ambitosArray: cloned,
-            })
-        }
-    }
-
     render() {
-        console.log("ambitos escogidos: ",this.state.ambitosArray);
+        console.log("ambitos escogidos: ",this.props.ambitosArray);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center w-100">
@@ -61,15 +32,14 @@ export default class SeleccionarAmbito extends Component {
 
                                 <div className="card-body">
                                     <ul className="mb-0">
-                                        {!isEmpty(this.state.ambitos)?(
-                                            this.state.ambitos.map((ambito) => (
+                                        {!isEmpty(this.props.ambitos)?(
+                                            this.props.ambitos.map((ambito) => (
                                             <AmbitoItem
                                                 ambito={ambito}
                                                 id={ambito.id_ambito}
-                                                handleAmbitoChange={this.handleAmbitoChange}
-                                                handleCheckBoxChange={this.handleCheckBoxChange}
+                                                handleCheckBoxChange={this.props.handleCheckBoxChangeAmbito}
                                                 key={ambito.id_ambito}
-                                                checkedItems={this.state.checkedItems}
+                                                checkedItems={this.props.checkedItemsAmbitos}
                                             />
                                         ))):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)}
 
@@ -82,7 +52,6 @@ export default class SeleccionarAmbito extends Component {
             <div className="d-flex flex-row justify-content-end align-items-center my-4">
                 <button name="sectores" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.props.updateAmbitos(this.state.ambitosArray);
                         this.props.handleChangeTipo(evt);
                         }}
                 >Siguiente</button>

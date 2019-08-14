@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import AlcanceItem from './Items/AlcanceItem'
-import {clone, isEmpty, pull} from 'lodash';
+import AlcanceItem from './Items/AlcanceItem';
+import clone from 'lodash/clone';
+import isEmpty from 'lodash/isEmpty';
 
 export default class SeleccionarSector extends Component {
 
@@ -33,47 +34,14 @@ export default class SeleccionarSector extends Component {
                 }
             }
             console.log("alcances filtrados: ",alcances);
-            this.setState({
-                alcances: alcances,
-            })
+            this.props.setAlcances(alcances);
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
     }
 
-    handleCheckBoxChange = ({target}) => {
-        const alcances = this.state.alcances;
-        const id = target.id;
-        const isChecked =target.checked;
-        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(id, isChecked) }));
-        const alcance = alcances.find((alcance)=>{
-            return alcance.id_alcance === parseInt(id);
-        });
-        const cloneArray = clone(this.state.alcancesArray);
-        if(isChecked){
-            const cloned = cloneArray.concat(alcance);
-            this.setState({
-                alcancesArray: cloned,
-            })
-        }else{
-            const cloned = pull(cloneArray,alcance);
-            this.setState({
-                alcancesArray: cloned,
-            })
-        }
-    }
-
-    validar = (evt) => {
-        if(!isEmpty(this.state.alcancesArray)){
-            this.props.updateAlcances(this.state.alcancesArray);
-            this.props.handleChangeTipo(evt);
-        }else{
-            $('#alcancesModal').modal();
-        }
-    }
-
     render() {
-        console.log("alcances escogidos: ",this.state.alcancesArray);
+        console.log("alcances escogidos: ",this.props.alcancesArray);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center w-100">
@@ -85,15 +53,14 @@ export default class SeleccionarSector extends Component {
 
                                 <div className="card-body">
                                     <ul className="mb-0 flex flex-row row">
-                                        {!isEmpty(this.state.alcances)?(
-                                            this.state.alcances.map((alcance) => (
+                                        {!isEmpty(this.props.alcances)?(
+                                            this.props.alcances.map((alcance) => (
                                                 <AlcanceItem
                                                     alcance={alcance}
                                                     id={alcance.id_alcance}
-                                                    handlesectorChange={this.handlesectorChange}
-                                                    handleCheckBoxChange={this.handleCheckBoxChange}
+                                                    handleCheckBoxChange={this.props.handleCheckBoxChangeAlcance}
                                                     key={alcance.id_alcance}
-                                                    checkedItems={this.state.checkedItems}
+                                                    checkedItems={this.props.checkedItemsAlcances}
                                                 />
                                             ))
                                         ):(<div className="text-center">AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
@@ -106,17 +73,24 @@ export default class SeleccionarSector extends Component {
                         </div>
                 </div>
             <div className="d-flex flex-row justify-content-end align-items-center my-4">
+            <React.Fragment>
+                    <button name="sectores" className="btn-primary-sae w-20" 
+                    onClick={(evt)=>{
+                        this.props.handleChangeTipo(evt);
+                        }}
+                    >Atrás</button>
                 <button name="alcances" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.validar(evt);
+                        this.props.validarAlcances(evt);
                         }}
                     >Siguiente</button>
+                    </React.Fragment>
             </div>
             <div className="modal fade" id="alcancesModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
                     <div className="modal-header text-center">
-                      <h5 className="modal-title" id="exampleModalLongTitle">Recuerde</h5>
+                      <h5 className="modal-title" id="exampleModalLongTitle">ATENCIÓN</h5>
                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>

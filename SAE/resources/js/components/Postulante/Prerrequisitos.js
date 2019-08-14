@@ -189,7 +189,7 @@ export default class Prerrequisitos extends Component {
                 <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
                     <div className="modal-header text-center">
-                      <h5 className="modal-title" id="exampleModalLongTitle">Recuerde</h5>
+                      <h5 className="modal-title bg-danger" id="exampleModalLongTitle">ATENCIÓN</h5>
                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>

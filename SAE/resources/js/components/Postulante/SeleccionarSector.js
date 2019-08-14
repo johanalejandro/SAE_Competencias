@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import SectorItem from './Items/SectorItem'
-import {clone, isEmpty, pull} from 'lodash';
+import clone from 'lodash/clone';
+import isEmpty from 'lodash/isEmpty';
 
 export default class SeleccionarSector extends Component {
 
-    state = {
-        sectores: [],
-        sectoresArray: [],
-        checkedItems: new Map(),
-    }
-
-    validar = (evt) => {
-        if(!isEmpty(this.state.sectoresArray)){
-            this.props.updateSectores(this.state.sectoresArray);
-            this.props.handleChangeTipo(evt);
-        }else{
-            $('#alcancesModal').modal();
-        }
-    }
 
     componentDidMount(){
 
@@ -43,39 +30,17 @@ export default class SeleccionarSector extends Component {
                 }
             }
             console.log("sectores filtrados: ",sectors);
-            this.setState({
-                sectores: sectors,
-            });
+            this.props.setSectores(sectors);
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
 
     }
 
-    handleCheckBoxChange = ({target}) => {
-        const sectors = this.state.sectores;
-        const id = target.id;
-        const isChecked =target.checked;
-        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(id, isChecked) }));
-        const sector = sectors.find((sector)=>{
-            return sector.id_sector === parseInt(id);
-        });
-        const cloneArray = clone(this.state.sectoresArray);
-        if(isChecked){
-            const cloned = cloneArray.concat(sector);
-            this.setState({
-                sectoresArray: cloned,
-            })
-        }else{
-            const cloned = pull(cloneArray,sector);
-            this.setState({
-                sectoresArray: cloned,
-            })
-        }
-    }
+    
 
     render() {
-        console.log("sectores escogidos: ",this.state.sectoresArray);
+        console.log("sectores escogidos: ",this.props.sectoresArray);
         return(
         <React.Fragment>
                 <div className="d-flex flex-column align-items-center w-100">
@@ -87,15 +52,14 @@ export default class SeleccionarSector extends Component {
 
                                 <div className="card-body">
                                     <ul className="mb-0 flex flex-row row">
-                                        {!isEmpty(this.state.sectores)?(
-                                            this.state.sectores.map((sector) => (
+                                        {!isEmpty(this.props.sectores)?(
+                                            this.props.sectores.map((sector) => (
                                                 <SectorItem
                                                     sector={sector}
                                                     id={sector.id_sector}
-                                                    handlesectorChange={this.handlesectorChange}
-                                                    handleCheckBoxChange={this.handleCheckBoxChange}
+                                                    handleCheckBoxChange={this.props.handleCheckBoxChangeSector}
                                                     key={sector.id_sector}
-                                                    checkedItems={this.state.checkedItems}
+                                                    checkedItems={this.props.checkedItemsSectores}
                                                 />
                                             ))
                                         ):(<div>AÚN NO HAY INFORMACIÓN PARA MOSTRAR</div>)
@@ -109,20 +73,51 @@ export default class SeleccionarSector extends Component {
                 </div>
             <div className="d-flex flex-row justify-content-end align-items-center my-4">
                 {this.props.tipoPostulacion ==="?tipo=experto"?(
+                    <React.Fragment>
+                    <button name="ambitos" className="btn-primary-sae w-20" 
+                    onClick={(evt)=>{
+                        this.props.handleChangeTipo(evt);
+                        }}
+                    >Atrás</button>
                 <button name="alcances" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.props.updateSectores(this.state.sectoresArray);
                         this.props.handleChangeTipo(evt);
                         }}
                     >Siguiente</button>
+                    </React.Fragment>
                 ):(
+                    <React.Fragment>
+                    <button name="ambitos" className="btn-primary-sae w-20" 
+                    onClick={(evt)=>{
+                        this.props.handleChangeTipo(evt);
+                        }}
+                    >Atrás</button>
                 <button name="sectores" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
-                        this.validar(evt);
+                        this.props.validarSectores(evt);
                         }}
                     >Siguiente</button>
+                    </React.Fragment>
                 )}
             </div>
+            <div className="modal fade" id="sectorModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header text-center">
+                      <h5 className="modal-title" id="exampleModalLongTitle">ATENCIÓN</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                            <label className="w-90 text-normal text-danger text-justify">No ha seleccionado ningún sector a aplicar. Debe seleccionar al menos uno</label>
+                    </div>
+                    <div className="modal-footer">
+                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </React.Fragment>)
 }
 }
