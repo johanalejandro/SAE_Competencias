@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import MUIDataTable from "mui-datatables";
 import Header from "../common/Header";
 import Modal from "./Modal";
+import ModalAsignar from "./ModalAsignar";
 import axios from "axios";
 import toUpper from "lodash/toUpper";
 import remove from "lodash/remove";
 import uniqBy from "lodash/uniqBy";
 import clone from 'lodash/clone';
 import findKey from 'lodash/findKey';
+import isEmpty from 'lodash/isEmpty';
 
 
 
@@ -29,13 +31,23 @@ export default class GestionCalidad extends Component {
         dataporhabilitarExperto:[],
         dataporhabilitarEvaluador: [],
         modal: false,
+        modalAsignar: false,
         modalInfo: {},
+        modalAsignarInfo: {},
+
     }
       
       selectModal = (info = {}) => {
         this.setState({
           modal: !this.state.modal,
           modalInfo: info,
+        })
+      }
+
+      selectModalAsignar = (info = {}) => {
+        this.setState({
+            modalAsignar: !this.state.modalAsignar,
+            modalAsignarInfo: info,
         })
       }
 
@@ -278,6 +290,18 @@ getRequerimiento  =async (id) => {
         return alcance;
     }
 
+    asignar = async (formData)=>{
+        await axios.get("api/crearNuevaSolicitud", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then((response) => {
+           console.log(response);
+        })
+        .catch(console.error);
+    }
+
     habilitar =async(rowData,updateValue) => {
         await axios.get("api/habilitarPostulante/"+rowData[0])
         .then(async(response ) => {
@@ -308,6 +332,71 @@ getRequerimiento  =async (id) => {
             }
         })
         .catch(console.error);
+    }
+
+    getUsuario = async(rowData)=>{
+        console.log("aqui")
+        let id_Usuarios = [];
+        if(rowData[3]==="Experto"){
+            await axios.get('/api/mostrarDetallesExperto/'+rowData[0])
+        .then(async({data}) => {
+            const experiencias = data.map((postulante)=>{
+                let experiencia = {};
+                experiencia['id_alcance'] = postulante.id_sector_requerimiento;
+                return experiencia;
+            })
+            const experienciasUniq = uniqBy(experiencias,'id_alcance');
+            if(isEmpty(experienciasUniq)){
+                return id_Usuarios;
+            }
+            for (let index = 0; index < experienciasUniq.length; index++) {
+                const id_alcance = experienciasUniq[index].id_alcance;
+
+                 axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
+                .then(({data}) => {
+
+
+                        console.log("experto",data);
+                }).catch(error => {
+                    console.log("===ERROR: ",error);
+                });
+            }
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+
+        }
+       
+
+        if(rowData[3]==="Evaluador"){
+            await axios.get('/api/mostrarDetallesEvaluador/'+rowData[0])
+        .then(async({data}) => {
+            const experiencias = data.map((postulante)=>{
+                let experiencia = {};
+                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                return experiencia;
+            })
+            const experienciasUniq = uniqBy(experiencias,'id_sector_requerimiento');
+            for (let index = 0; index < experienciasUniq.length; index++) {
+                const id_sector_requerimiento = experienciasUniq[index].id_sector_requerimiento;
+                 axios.get('/api/sector/'+id_sector_requerimiento)
+                .then(async({data}) => {
+                const id_sector = data.id_sector;
+                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector)
+        .then(({data}) => {
+
+            console.log(data);
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+            }).catch(error => {
+                console.log("===ERROR: ",error);
+            });
+            }
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+        }
     }
 
     handleChangeTipo = ({target}) => {
@@ -445,6 +534,13 @@ getRequerimiento  =async (id) => {
                 options: {
                  filter: true,
                  sort: true,
+                 customBodyRender: (value, {rowData}, updateValue) => {
+                        if(value===1){
+                            return <span>Si</span>
+                        }else{
+                            return <span>No</span>
+                        }
+                  },
                 },
                },
                {
@@ -463,7 +559,14 @@ getRequerimiento  =async (id) => {
                  customBodyRender: (value, {rowData}, updateValue) => {
                     if(toUpper(value)==="POR ASIGNAR"){
                         return (
-                            <button className="btn-secondary">Asignar</button>
+                            <button className="btn-secondary" onClick={async() =>{
+                                const usuarios= await this.getUsuario(rowData);
+                                await this.selectModalAsignar({
+                                    type: "Asignar",
+                                    data: rowData,
+                                    usuarios: usuarios,
+                                })
+                            } }>Asignar</button>
                         );
                     }
                     if(toUpper(value)==="POR HABILITAR"){
@@ -755,6 +858,12 @@ getRequerimiento  =async (id) => {
                         modalInfo={this.state.modalInfo}
                         closeModal={this.selectModal}
                         habilitar={this.habilitar}
+                    />
+                    <ModalAsignar
+                        displayModal={this.state.modalAsignar}
+                        modalInfo={this.state.modalAsignarInfo}
+                        closeModal={this.selectModalAsignar}
+                        asignar={this.asignar}
                     />
                 </React.Fragment>
         )

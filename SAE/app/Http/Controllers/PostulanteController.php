@@ -164,6 +164,16 @@ class PostulanteController extends Controller
         return response()->json('Postulante Habilitado!');
     }
 
+    /*FIXME donde guardo el evaluador padre asignado???*/
+    public function asignarAPostulante($id){
+        $current_date_time = Carbon::now()->toDateTimeString();
+        DB::table('postulantes')
+            ->where('id_postulante', $id)
+            ->update(['estado' => 'Por Evaluar'
+           , 'updated_at'=>$current_date_time]);
+        return response()->json('Postulante Asignado!');
+    }
+
     public function mostarPostulantePorAsignar(){
 
         $postulantes = DB::table('postulantes')->where('estado', 'Por Asignar')->get();

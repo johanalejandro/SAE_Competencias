@@ -24,7 +24,7 @@ const Modal = props => {
                             onClick={ closeModal }>&times;
                         </span>
                     </div>
-                    <div className="modal-body" data-spy="scroll">
+                    <div className="modal-body pre-scrollable text-justify">
                         {props.modalInfo.data!==undefined?(
                           <div>
                             {props.modalInfo.type!=="Experiencias"?(
@@ -33,10 +33,10 @@ const Modal = props => {
                               <ul>
                                 
                                 {props.modalInfo.data.map((exp)=>{
-                                  return (<div key={i}>
+                                  return (<div key={i+1}>
                                     <label className="text-success text-normal">{exp.alcance?(<span>Alcance: {exp.alcance}</span>):(<span>Requerimiento: {exp.requerimiento}</span>)}</label><br></br>
                                     <label>Empresa: {exp.nombreEmpresa}</label><br></br>
-                                    <label>Cargo: {exp.cargo}</label><br></br>
+                                    <label>Cargo: {exp.cargoEjercido}</label><br></br>
                                     <label>Descripción: {exp.descripcion}</label><br></br>
                                     <hr></hr>
                                   </div>)
@@ -49,12 +49,12 @@ const Modal = props => {
                     </div>
                     <div className="modal-footer">
                     {props.modalInfo.type!=="Experiencias"?(
-                            <React.Fragment><button type="button" className="btn btn-secondary w-20 bg-light" style={{color:'#6c757d'}} onClick={props.closeModal}>No</button>
+                            <React.Fragment><button type="button" className="btn btn-secondary w-20 bg-light" style={{color:'#6c757d'}} onClick={closeModal}>No</button>
                             <button type="button" className="btn btn-secondary w-20" onClick={()=>{
                                 props.habilitar(props.modalInfo.data,props.modalInfo.updateValue);
                                 closeModal();
                                 }}>Sí</button></React.Fragment>):
-                                (<button className="btn btn-secondary w-20" onClick={props.closeModal}>Cerrar</button>)}
+                                (<button className="btn btn-secondary w-20" onClick={closeModal}>Cerrar</button>)}
                     </div>
                 </div>
             </div>

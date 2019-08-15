@@ -77,9 +77,9 @@ Route::get('mostrarDetallesExperto/{id}','PostulanteController@mostrarDetallesEx
 
 Route::get('habilitarPostulante/{id}','PostulanteController@habilitarPostulante');
 
+/*Cambia el estado a por evaluar {{ id }} */
 
-
-
+Route::get('asignarAPostulante/{id}','PostulanteController@asignarAPostulante');
 
 //Route::get('descargarCV/{id}','PostulanteController@descargarCV');
 
