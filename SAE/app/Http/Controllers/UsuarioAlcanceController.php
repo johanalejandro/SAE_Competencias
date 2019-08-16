@@ -27,7 +27,7 @@ class UsuarioAlcanceController extends Controller
     public function obtenerUsuariosPorAlcance($id){
         $users = DB::table('usuario__alcances')
           ->join('users', 'users.id_usuario', '=', 'usuario__alcances.id_usuario')
-          ->select('users.nombre','users.apellido','users.id_usuario')
+          ->select('users.nombre','users.apellido','users.id_usuario','usuario__alcances.id_alcance')
             ->where('usuario__alcances.id_alcance',$id)
             ->get();
         return response()->json($users);

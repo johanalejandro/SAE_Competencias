@@ -233,6 +233,11 @@ h3{
   overflow: auto;
 }
 
+.modal-asignar{
+  max-width: 1240px;
+  max-height: 95%;
+}
+
 .modal-flex-sae {
   display: flex;
   height: 100%;

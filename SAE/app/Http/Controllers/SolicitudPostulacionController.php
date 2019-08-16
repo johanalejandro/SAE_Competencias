@@ -32,8 +32,8 @@ class SolicitudPostulacionController extends Controller
 
     public function crearNuevaSolicitud(Request $request){
             //actualizo estado de Postulante
-             $postulante = App\Postulante::find($request->id_postulante);
-             $postulantes->estado = 'Por Evaluar';
+             $postulante = Postulante::find($request->id_postulante);
+             $postulante->estado = 'Por Evaluar';
              $evaluacion_postulacion = new evaluacionPostulacion;
              $evaluacion_postulacion->save();
              $solicitud = solicitudPostulacion::create([

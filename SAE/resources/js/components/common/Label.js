@@ -8,7 +8,7 @@ export default class Label extends Component {
         const name = this.props.name;
         return (
 
-            <label className="w-50 text-left text-normal h-50">
+            <label className={"w-50 text-left text-normal h-50 "+this.props.className}>
                 {name}
             </label>
                 

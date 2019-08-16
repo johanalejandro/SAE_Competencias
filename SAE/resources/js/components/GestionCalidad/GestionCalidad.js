@@ -11,7 +11,8 @@ import uniqBy from "lodash/uniqBy";
 import clone from 'lodash/clone';
 import findKey from 'lodash/findKey';
 import isEmpty from 'lodash/isEmpty';
-
+import pull from 'lodash/pull';
+import Label from '../common/Label';
 
 
 export default class GestionCalidad extends Component {
@@ -34,7 +35,10 @@ export default class GestionCalidad extends Component {
         modalAsignar: false,
         modalInfo: {},
         modalAsignarInfo: {},
-
+        respuesta: {},
+        successExp: false,
+        successEv: false,
+        
     }
       
       selectModal = (info = {}) => {
@@ -195,7 +199,6 @@ export default class GestionCalidad extends Component {
                 habilitadosEvaluador.push(postulantesHabilitados);
                 
             }
-            console.log(habilitadosEvaluador)
         })
         .catch(console.error);
         await this.setState({
@@ -256,7 +259,6 @@ export default class GestionCalidad extends Component {
                 habilitadosExperto.push(postulantesHabilitados);
                 
             }
-            console.log(habilitadosExperto)
         })
         .catch(console.error);
         await this.setState({
@@ -290,16 +292,61 @@ getRequerimiento  =async (id) => {
         return alcance;
     }
 
-    asignar = async (formData)=>{
-        await axios.get("api/crearNuevaSolicitud", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then((response) => {
-           console.log(response);
-        })
-        .catch(console.error);
+    asignar = async (payload)=>{
+        let count =0;
+        console.log(payload)
+        for (let index = 0; index < payload.length; index++) {
+            const asignacion = payload[index];
+            let formData = new FormData();
+            formData.append("id_usuario",asignacion.id_usuario);
+            formData.append("id_postulante",asignacion.id_postulante);
+            await axios.post("api/crearNuevaSolicitud", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            /*dataasignarEvaluador: [],
+            dataasignarExperto: [],*/
+            .then((response) => {
+                count++;
+            console.log(response);
+            })
+            .catch(console.error);
+        }
+        if(count===payload.length){
+            this.asignado(payload[0].id_postulante);
+        }
+    }
+
+
+    asignado = async(id_postulante) => {
+        if(this.state.form==="expertos"){
+            this.setState({
+                successExp: true,
+            })
+            const { dataasignarExperto } = this.state;
+            let filterData = [];
+            filterData = dataasignarExperto;
+            const porasginarAEliminar = await filterData.find((postulante)=>{
+                return postulante.id_postulante === parseInt(id_postulante);
+            })
+            console.log("eliminar",porasginarAEliminar)
+            await pull(filterData,porasginarAEliminar);
+            await this.setState({ dataasignarExperto: filterData });
+        }else{
+            this.setState({
+                successEv: true,
+            })
+            const { dataasignarEvaluador } = this.state;
+            let filterData = [];
+            filterData = dataasignarEvaluador;
+            const porasginarAEliminar = await filterData.find((postulante)=>{
+                return postulante.id_postulante === parseInt(id_postulante);
+            })
+            console.log("eliminar",porasginarAEliminar)
+            await pull(filterData,porasginarAEliminar);
+            await this.setState({ dataasignarEvaluador: filterData });
+        }
     }
 
     habilitar =async(rowData,updateValue) => {
@@ -325,49 +372,48 @@ getRequerimiento  =async (id) => {
                 const  habilitado = await remove(dataporhabilitarExperto,(postulante)=>{
                     return postulante.id_postulante === rowData[0];
                 });
+                console.log(habilitado);
                 const {habilitadosExperto} = await this.state;
                 await habilitadosExperto.push(habilitado)
-                await this.setState({ dataporhabilitarEvaluador,habilitadosExperto });
-                await this.setState({ dataporhabilitarExperto });
+                await this.setState({ dataporhabilitarExperto,habilitadosExperto });
             }
         })
         .catch(console.error);
     }
 
     getUsuario = async(rowData)=>{
-        console.log("aqui")
-        let id_Usuarios = [];
+        let usuarios = [];
         if(rowData[3]==="Experto"){
             await axios.get('/api/mostrarDetallesExperto/'+rowData[0])
-        .then(async({data}) => {
-            const experiencias = data.map((postulante)=>{
-                let experiencia = {};
-                experiencia['id_alcance'] = postulante.id_sector_requerimiento;
-                return experiencia;
-            })
-            const experienciasUniq = uniqBy(experiencias,'id_alcance');
-            if(isEmpty(experienciasUniq)){
-                return id_Usuarios;
-            }
-            for (let index = 0; index < experienciasUniq.length; index++) {
-                const id_alcance = experienciasUniq[index].id_alcance;
-
-                 axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
-                .then(({data}) => {
-
-
-                        console.log("experto",data);
-                }).catch(error => {
-                    console.log("===ERROR: ",error);
-                });
-            }
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
-
+            .then(async({data}) => {
+                const experiencias = data.map((postulante)=>{
+                    let experiencia = {};
+                    experiencia['id_alcance'] = postulante.id_alcance;
+                    return experiencia;
+                })
+                const experienciasUniq =uniqBy (experiencias,'id_alcance');
+                if(isEmpty(experienciasUniq)){
+                    this.setState({
+                        respuesta: {exp: experienciasUniq,usuarios: usuarios}
+                    })
+                    return;
+                }
+                for (let index = 0; index < experienciasUniq.length; index++) {
+                    const id_alcance = experienciasUniq[index].id_alcance;
+                    axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
+                    .then(({data}) => {
+                        usuarios.push(data[0]);
+                    }).catch(error => {
+                        console.log("===ERROR: ",error);
+                    });
+                }
+                this.setState({
+                    respuesta: {exp: experienciasUniq,usuarios: uniqBy (usuarios,'id_usuario')}
+                })
+            }).catch(error => {
+                console.log("===ERROR: ",error);
+            });
         }
-       
-
         if(rowData[3]==="Evaluador"){
             await axios.get('/api/mostrarDetallesEvaluador/'+rowData[0])
         .then(async({data}) => {
@@ -377,22 +423,25 @@ getRequerimiento  =async (id) => {
                 return experiencia;
             })
             const experienciasUniq = uniqBy(experiencias,'id_sector_requerimiento');
+            if(isEmpty(experienciasUniq)){
+                this.setState({
+                    respuesta: {exp: experienciasUniq,usuarios: usuarios}
+                })
+                return;
+            }
             for (let index = 0; index < experienciasUniq.length; index++) {
                 const id_sector_requerimiento = experienciasUniq[index].id_sector_requerimiento;
-                 axios.get('/api/sector/'+id_sector_requerimiento)
-                .then(async({data}) => {
-                const id_sector = data.id_sector;
-                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector)
+                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector_requerimiento)
         .then(({data}) => {
 
-            console.log(data);
+            usuarios.push(data[0]);
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
-            }).catch(error => {
-                console.log("===ERROR: ",error);
-            });
             }
+            this.setState({
+                respuesta: {exp: experienciasUniq,usuarios: uniqBy(usuarios,'id_usuario')}
+            })
         }).catch(error => {
             console.log("===ERROR: ",error);
         });
@@ -560,11 +609,10 @@ getRequerimiento  =async (id) => {
                     if(toUpper(value)==="POR ASIGNAR"){
                         return (
                             <button className="btn-secondary" onClick={async() =>{
-                                const usuarios= await this.getUsuario(rowData);
-                                await this.selectModalAsignar({
+                                await this.getUsuario(rowData);
+                                await this.selectModalAsignar ({
                                     type: "Asignar",
                                     data: rowData,
-                                    usuarios: usuarios,
                                 })
                             } }>Asignar</button>
                         );
@@ -785,12 +833,21 @@ getRequerimiento  =async (id) => {
                                 
                             <div className="cardSAE-body">
                             {this.state.form === "expertos" && this.state.tipo==="porasignarExp" &&(
+                                <React.Fragment>
                                     <MUIDataTable className="data-table"
                                         title={"Postulantes Expertos por Asignar Experto Padre"}
                                         data={this.state.dataasignarExperto}
                                         columns={columns}
                                         options={options}
                                     />
+                                    <div>
+                                        {this.state.successExp && (
+                                        <div className="d-flex flex-row justify-content-center align-items-center w-100 py-2 bg-success">
+                                          <Label name={"Postulante Asignado"} className="w-100"/>
+                                        </div>
+                                    )}
+                                    </div>
+                                    </React.Fragment>
                                 )}
                                 {this.state.form === "expertos" && this.state.tipo==="porhabilitarExp"&&(
                                     <React.Fragment>
@@ -810,20 +867,31 @@ getRequerimiento  =async (id) => {
                                     </React.Fragment>
                                 )}
                                 {this.state.form === "expertos" && this.state.tipo==="habilitadosExp"&&(
+                                    
                                     <MUIDataTable className="data-table"
                                         title={"Matriz de Expertos habilitados"}
                                         data={this.state.habilitadosExperto}
                                         columns={columns}
                                         options={options}
                                     />
+                                    
                                 )}
                                 {this.state.form === "evaluadores" && this.state.tipo==="porasignarEv"&&(
+                                    <React.Fragment>
                                     <MUIDataTable className="data-table"
                                         title={"Postulantes a Evaluadores por Asignar Evaluador Padre"}
                                         data={this.state.dataasignarEvaluador}
                                         columns={columns}
                                         options={options}
                                     />
+                                    <div>
+                                        {this.state.successEv && (
+                                        <div className="d-flex flex-row justify-content-center align-items-center w-100 py-2 bg-success">
+                                          <Label name={"Postulante Asignado"} className="w-100"/>
+                                        </div>
+                                    )}
+                                    </div>
+                                    </React.Fragment>
                                 )}
                                 {this.state.form === "evaluadores" && this.state.tipo==="porhabilitarEv"&&(
                                     <React.Fragment>
@@ -859,12 +927,16 @@ getRequerimiento  =async (id) => {
                         closeModal={this.selectModal}
                         habilitar={this.habilitar}
                     />
+                    {this.state.modalAsignar && !isEmpty(this.state.respuesta)&&(
                     <ModalAsignar
-                        displayModal={this.state.modalAsignar}
                         modalInfo={this.state.modalAsignarInfo}
                         closeModal={this.selectModalAsignar}
                         asignar={this.asignar}
-                    />
+                        respuesta={this.state.respuesta}
+                        getAlcance={this.getAlcance}
+                        getRequerimiento={this.getRequerimiento}
+                        success={this.state.sccess}
+                    />)}
                 </React.Fragment>
         )
     }
