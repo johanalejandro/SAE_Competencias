@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Header from "../common/Header";
 import Prerrequisitos from "./Prerrequisitos";
+import Terminos from "./Terminos";
 import DatosPersonales from "./DatosPersonales";
 import EducacionFormal from "./EducacionFormal";
 import ExperienciaLaboral from "./ExperienciaLaboral";
 import capitalize from "lodash/capitalize";
 import clone from "lodash/clone";
+import isEmpty from "lodash/isEmpty";
 import pull from "lodash/pull";
 import axios from "axios";
 import EducacionCursos from "./EducacionCursos";
@@ -50,6 +52,7 @@ export default class HojaDeVida extends Component {
         ambitosArray: [],
         sectoresArray: [],
         alcancesArray: [],
+        requerimientosArray:[],
         prerrequisitos: "",
         form: "",
         prerrequisitosArray : [],
@@ -177,6 +180,64 @@ export default class HojaDeVida extends Component {
         }
     }
 
+    handleContinuar = () =>{
+        this.setState({
+            continuar: true,
+            prerrequisitos: "",
+        })
+    }
+
+    handleValidar = () => {
+        const validarDatos = (this.state.nombres=== ""||
+        this.state.apellidos=== ""||
+        this.state.identificacion=== ""||
+        this.state.correo=== ""||
+        this.state.estadoCivil=== "selec"||
+        this.state.telefono=== ""||
+        this.state.ciudad===""||
+        this.state.provincia=== ""||
+        this.state.direccion=== ""||
+        this.state.disponibilidad=== "selec"||
+        this.state.genero === 'selec');
+
+        let validarCursos = false;
+        
+        const validarEducacion = (
+            this.state.nombreInstitucion=== ""||
+            this.state.tituloObtenido===""||
+            this.state.tipoFormacion==="selec"||
+            this.state.archivoAnexo===""
+        )
+        let validarExperiencia = true;
+            if(this.state.tipo==="evaluador"){
+                validarExperiencia = (
+                    this.state.experiencias.length !== this.state.requerimientosArray.length
+                );
+            }else{
+                console.log("VALIDAR",this.state.experiencias.length, this.state.alcancesArray.length)
+                validarExperiencia = (
+                    this.state.experiencias.length !== this.state.alcancesArray.length
+                );
+            }
+
+        if(this.state.tipo==="evaluador"){
+            validarCursos=(
+                this.state.cursos.length !== this.state.requerimientosArray.length
+            );
+            if(validarDatos && validarEducacion && validarCursos && validarExperiencia){
+                $('#camposVacíos').modal();
+            }else{
+                $('#verificarDatos').modal();
+            }
+        }else{
+            if(validarDatos && validarEducacion && validarExperiencia){
+                $('#camposVacíos').modal();
+            }else{
+                $('#verificarDatos').modal();
+            }
+        }
+    }
+
      handleCheckBoxChange = ({target}) => {
         const item = target.name;
         const isChecked =target.checked;
@@ -202,6 +263,9 @@ export default class HojaDeVida extends Component {
         experiencia['id_alcance'] = this.state.alcanceActual;
         experiencia['alcance'] = this.state.alcanceItem;
         experiencia['esTrabajoActual'] = this.state.esTrabajoActual;
+        if(this.state.nombreEmpresa===""||this.state.cargoEjercido===""||this.state.descripcion===""||this.state.alcanceActual==="selec"||this.state.alcanceItem===""){
+            return
+        }
         const { experiencias } = this.state;
         const filterData = experiencias;
         filterData.push(experiencia);
@@ -217,6 +281,9 @@ export default class HojaDeVida extends Component {
         curso['requerimiento'] = this.state.reqItem;
         curso['numeroHoras'] = this.state.numeroHoras;
         curso['archivoAnexoCurso'] = this.state.archivoAnexoCurso;
+        if(this.state.nombreInstitucionCurso===""||this.state.archivoAnexoCurso===""||this.state.numeroHoras===0||this.state.reqActual==="selec"||this.state.reqItem===""){
+            return
+        }
         const { cursos } = this.state;
         const filterData = cursos;
         filterData.push(curso);
@@ -235,6 +302,9 @@ export default class HojaDeVida extends Component {
         experiencia['id_sector_requerimiento'] = this.state.requerimientoActual;
         experiencia['requerimiento'] = this.state.requerimientoItem;
         experiencia['esTrabajoActual'] = this.state.esTrabajoActual;
+        if(this.state.nombreEmpresa===""||this.state.cargoEjercido===""||this.state.descripcion===""||this.state.requerimientoActual==="selec"||this.state.requerimientoItem===""){
+            return
+        }
         const { experiencias } = this.state;
         const filterData = experiencias;
         filterData.push(experiencia);
@@ -255,6 +325,7 @@ export default class HojaDeVida extends Component {
             prerrequisitosArray: clone(requerimientos),
             reqs: clone(requerimientos),
             requerimientos: clone(requerimientos),
+            requerimientosArray: clone(requerimientos),
         })
     } 
 
@@ -598,14 +669,16 @@ export default class HojaDeVida extends Component {
 
     render() {
         return (
-            this.state.prerrequisitos==="si" ? (
+            <React.Fragment>
+            {this.state.prerrequisitos==="si" &&(
                  <Prerrequisitos 
                     sectores={this.state.sectoresArray}
                     tipo={this.state.tipo}
                     updatePrerrequisitos={this.updatePrerrequisitos}
                     handleHojaDeVida={this.handleHojaDeVida}
                  />
-              ): (
+              )}
+              {this.state.prerrequisitos==="no" &&(
                 <React.Fragment>
                     <Header title="Hoja de Vida"/>
                     <div className="d-flex flex-row h-85" >
@@ -762,6 +835,7 @@ export default class HojaDeVida extends Component {
                                     agregar={this.agregar}
                                     handleExp={this.handleExp}
                                     handlePostulante={this.handlePostulante}
+                                    handleValidar={this.handleValidar}
                                     />
                                 )}
                                 {this.state.form === "experiencia" && this.state.tipo==="evaluador"&&(
@@ -787,6 +861,7 @@ export default class HojaDeVida extends Component {
                                     handleExpEv={this.handleExpEv}
                                     handleCursos={this.handleCursos}
                                     handlePostulante={this.handlePostulante}
+                                    handleValidar={this.handleValidar}
                                     />
                                 )}
                             </div>
@@ -794,8 +869,56 @@ export default class HojaDeVida extends Component {
                     </div>
                 
                 </React.Fragment>
-               )
-            
+               )}
+               {this.state.continuar &&
+                    <Terminos
+                    handlePostulante={this.handlePostulante}
+                    handleExp={this.handleExp}
+                    handleExpEv={this.handleExp}
+                    handleChangeTipo={this.handleChangeTipo}
+                    handleContinuar={this.handleContinuar}
+                    tipo={this.state.tipo}
+                    />
+               }
+               
+               <div className="modal fade" id="camposVacíos" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+               <div className="modal-dialog modal-dialog-centered" role="document">
+                 <div className="modal-content">
+                   <div className="modal-header text-center bg-danger">
+                     <h5 className="modal-title text-white" id="exampleModalLongTitle">ATENCIÓN</h5>
+                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                     </button>
+                   </div>
+                   <div className="modal-body">
+                           <label className="w-90 text-normal text-danger text-justify">Revise que todos los campos estén llenos, hay campos vacíos</label>
+                   </div>
+                   <div className="modal-footer">
+                           <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal">Ok</button>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <div className="modal fade" id="verificarDatos" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+             <div className="modal-dialog modal-dialog-centered" role="document">
+               <div className="modal-content">
+                 <div className="modal-header text-center">
+                   <h5 className="modal-title" id="exampleModalLongTitle">ATENCIÓN</h5>
+                   <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                   </button>
+                 </div>
+                 <div className="modal-body">
+                         <label className="w-90 text-normal text-danger text-justify">Verifique que los datos proporcionadodos son correctos para continuar sin inconvenientes</label>
+                 </div>
+                 <div className="modal-footer">
+                         <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal">Ok, revisaré</button>
+                         <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal" onClick={this.handleContinuar}>No, continuar</button>
+                 </div>
+               </div>
+             </div>
+           </div>
+           </React.Fragment>
         );
     }
 }

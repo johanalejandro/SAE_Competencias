@@ -74,7 +74,7 @@ export default class SeleccionarSector extends Component {
             <div className="d-flex flex-row justify-content-end align-items-center my-4">
                 {this.props.tipoPostulacion ==="?tipo=experto"?(
                     <React.Fragment>
-                    <button name="ambitos" className="btn-primary-sae w-20" 
+                    <button name="ambitos" className="btn-primary-sae bg-light w-20 mr-2" style={{color:'#6c757d'}}
                     onClick={(evt)=>{
                         this.props.handleChangeTipo(evt);
                         }}
@@ -87,7 +87,7 @@ export default class SeleccionarSector extends Component {
                     </React.Fragment>
                 ):(
                     <React.Fragment>
-                    <button name="ambitos" className="btn-primary-sae w-20" 
+                    <button name="ambitos" className="btn-primary-sae bg-light w-20 mr-2" style={{color:'#6c757d'}} 
                     onClick={(evt)=>{
                         this.props.handleChangeTipo(evt);
                         }}

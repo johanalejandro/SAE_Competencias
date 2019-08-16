@@ -27,17 +27,10 @@ export default class DatosPersonales extends Component {
                         <div className="w-100 mb-2">
                             <h3>Documento</h3>
                                 <div className="d-flex flex-row justify-content-between w-65">
-                                    <div className="d-flex flex-column w-50 mr-4">
-                                        <Label name="Tipo"/>
-                                        <select className="h-50" name="tipoId" defaultValue={this.props.tipoId} onChange={this.props.handleChange}>
-                                            <option disabled value="selec">Seleccione</option>
-                                            <option value="cedula">Cédula</option>
-                                            <option value="pasaporte">Pasaporte</option>
-                                        </select>
-                                    </div>
+                                    
                                     <div className="d-flex flex-column w-50">
                                         <Label name="Identificación"/>
-                                        <input type="text" className="h-50" name="identificacion" defaultValue={this.props.identificacion} onChange={this.props.handleChange}></input>
+                                        <input type="text" maxLength="10" className="h-50" name="identificacion" defaultValue={this.props.identificacion} onChange={this.props.handleChange}></input>
                                     </div>
                                 </div>
                         </div>
@@ -72,7 +65,7 @@ export default class DatosPersonales extends Component {
                                     </div>
                                     <div className="d-flex flex-column w-30 mr-2">
                                         <Label name="Teléfono"/>
-                                        <input type="tel" name="telefono" className="h-50" defaultValue={this.props.telefono} onChange={this.props.handleChange}></input>
+                                        <input type="tel" name="telefono"  maxLength="15" className="h-50" defaultValue={this.props.telefono} onChange={this.props.handleChange}></input>
 
                                     </div>
                                     <div className="d-flex flex-column w-30">
@@ -105,10 +98,6 @@ export default class DatosPersonales extends Component {
                         </div>
 
             </div>
-            {this.props.agregado &&(
-            <div className="d-flex flex-row justify-content-end align-items-center bg-success">
-                <label className="text-center text-white text-normal">Postulante agregado con éxito</label>
-            </div>)}
             <div className="d-flex flex-row justify-content-end align-items-center py-4 px-3">
                 <button name="educacion" className="btn-primary-sae w-20" 
                     onClick={(evt)=>{

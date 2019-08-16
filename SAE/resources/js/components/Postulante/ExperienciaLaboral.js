@@ -20,27 +20,7 @@ export default class ExperienciaLaboral extends Component {
           loading: false,
       }
 
-    handleSubmit = async (e) => {
-        //preventDefault prevents page reload   
-        e.preventDefault();
-        /*A call back to the onAdd props. The current
-         *state is passed as a param
-         */
-        this.setState({
-            loading: true,
-        })
-
-        await this.props.handlePostulante();
-        await this.props.handleExp();
-
-        this.setLoading();
-      }
-
-      setLoading = () =>{
-          this.setState({
-              loading: false,
-          })
-      }
+    
 
     render() {
 
@@ -250,7 +230,7 @@ export default class ExperienciaLaboral extends Component {
                     />
                 </div>
                 <div className="d-flex flex-row justify-content-end align-items-center w-100 py-2">
-                    <button name={"educacion"} className="btn-primary-sae bg-white text-gray w-20" 
+                    <button name={"educacion"} className= "btn-primary-sae bg-light w-20 mr-2" style={{color:'#6c757d'}}
                         onClick={(evt)=>{
                             this.props.handleChangeTipo(evt);
                             }}
@@ -261,8 +241,8 @@ export default class ExperienciaLaboral extends Component {
                             <div className="text-primary text-center">Enviando Postulación</div>
                         </div>):(
                         <button name="referencia" className="btn-primary-sae w-20" 
-                        onClick={(evt)=>{
-                            this.handleSubmit(evt);
+                        onClick={()=>{
+                            this.props.handleValidar();
                             }}
                     >Siguiente</button>)}
                     

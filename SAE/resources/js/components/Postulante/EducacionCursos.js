@@ -239,7 +239,7 @@ export default class EducacionCursos extends Component {
                     />
                 </div>
                 <div className="d-flex flex-row justify-content-end align-items-center w-100 py-2">
-                    <button name={"educacion"} className="btn-secondary w-20" 
+                    <button name={"educacion"} className="btn-primary-sae bg-light w-20 mr-2" style={{color:'#6c757d'}} 
                         onClick={(evt)=>{
                             this.props.handleChangeTipo(evt);
                             }}

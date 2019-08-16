@@ -38,6 +38,11 @@ Route::get('/postulacion-formulario', function () {
 });
 
 
+Route::get('/postulacion-enviada', function () {
+    return view('pages/postulacionEnviada');
+});
+
+
 
 Route::get('/solicitud-postulacion', function () {
     return view('pages/solicitud_postulacion_datos_personales');
