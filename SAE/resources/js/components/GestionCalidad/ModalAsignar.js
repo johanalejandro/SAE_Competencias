@@ -232,7 +232,7 @@ export default class ModalAsignar extends Component {
           },
         }
    };
-    
+    console.log(this.state.respuesta.usuarios);
       return (
           <div 
           className="modal-sae"

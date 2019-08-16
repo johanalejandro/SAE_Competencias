@@ -308,8 +308,14 @@ getRequerimiento  =async (id) => {
             /*dataasignarEvaluador: [],
             dataasignarExperto: [],*/
             .then((response) => {
-                count++;
-            console.log(response);
+                
+                axios.get("api/asignarAPostulante/"+asignacion.id_postulante)
+                .then((response) => {
+                    count++;
+                    console.log(response);
+                })
+                .catch(console.error);
+                console.log(response);
             })
             .catch(console.error);
         }
@@ -400,9 +406,10 @@ getRequerimiento  =async (id) => {
                 }
                 for (let index = 0; index < experienciasUniq.length; index++) {
                     const id_alcance = experienciasUniq[index].id_alcance;
-                    axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
+                    await axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
                     .then(({data}) => {
                         usuarios.push(data[0]);
+                        console.log("RECIBO",data)
                     }).catch(error => {
                         console.log("===ERROR: ",error);
                     });
@@ -432,13 +439,14 @@ getRequerimiento  =async (id) => {
             for (let index = 0; index < experienciasUniq.length; index++) {
                 const id_sector_requerimiento = experienciasUniq[index].id_sector_requerimiento;
                 await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector_requerimiento)
-        .then(({data}) => {
+                    .then(({data}) => {
 
-            usuarios.push(data[0]);
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+                        usuarios.push(data[0]);
+                    }).catch(error => {
+                        console.log("===ERROR: ",error);
+                    });
             }
+            
             this.setState({
                 respuesta: {exp: experienciasUniq,usuarios: uniqBy(usuarios,'id_usuario')}
             })

@@ -78,7 +78,7 @@ export default class EducacionFormal extends Component {
                     onClick={(evt)=>{
                         this.props.handleChangeTipo(evt);
                         }}
-                >Regresar</button>
+                >Atrás</button>
                 <button name={this.props.tipo==="experto"?"experiencia":"educacionEvaluador"} className="btn-primary-sae w-20" 
                     onClick={(evt)=>{
                         this.props.handleChangeTipo(evt);
