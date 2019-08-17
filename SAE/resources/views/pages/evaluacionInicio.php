@@ -90,7 +90,7 @@
             @endif
         </div>
             <div class="top-right links">
-                <a  href="{{ url('logout') }}">logout</a>
+                <a  href="logout">logout</a>
             </div>
             <div class="bg-light h-100">
 
