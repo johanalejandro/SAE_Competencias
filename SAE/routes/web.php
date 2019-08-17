@@ -20,7 +20,23 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('/visualizador', function () {
     return view('pages/visualizadorInicio');
-	});
+    });
+
+    Route::get('/evaluacion', function () {
+        return view('pages/evaluacionInicio');
+        });
+
+
+     /* Para ver las solicitudes de postulantes a evaluadores que evaluar */
+
+     Route::get('/verSolicitudPorUsuarioEvaluador','SolicitudPostulacionController@verSolicitudesPorUsuarioEvaluador');
+
+     /* Para ver las solicitudes de postulantes a expertos que evaluar */
+
+     Route::get('/verSolicitudPorUsuarioExperto','SolicitudPostulacionController@verSolicitudesPorUsuarioExperto');
+
+     //other authenticated Routes goes inside this block
+  
     
 });
 

@@ -15,19 +15,9 @@ import findKey from 'lodash/findKey';
 export default class Evaluacion extends Component {
 
     state = {
-        postulante: [],
-        porhabilitar: [],
-        porasignar: [],
-        habilitadosExperto: [],
-        habilitadosEvaluador: [],
+        expertosPorEvaluar: [],
+        evaluadoresPorEvaluar: [],
         form: "",
-        tipo: "",
-        habilitarEv: false,
-        habilitarEx: false,
-        dataasignarEvaluador: [],
-        dataasignarExperto: [],
-        dataporhabilitarExperto:[],
-        dataporhabilitarEvaluador: [],
         modal: false,
         modalInfo: {},
     }
@@ -42,92 +32,10 @@ export default class Evaluacion extends Component {
     componentWillMount= async()=>{
         this.setState({
             form: "expertos",
-            tipo: "porasignarExp",
         });
 
-        let postulantes = [];
-        let porasignar = [];
-        let porhabilitar = [];
-        let habilitadosExperto = [];
-        let habilitadosEvaluador = [];
-        await axios.get("api/postulantes")
-        .then(({data} )=> {
-            data.map((postulante)=>{
-                let post ={};
-                post['id_postulante'] = postulante.id_postulante;
-                post['nombres'] = postulante.nombres;
-                post['apellidos'] = postulante.apellidos;
-                post['estado']= postulante.estado;
-                post['email'] = postulante.email;
-                post['tipoPostulacion'] = postulante.tipoPostulacion;
-                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                post['cedula'] = postulante.cedula;
-                postulantes.push(post);
-            })
-        })
-        .catch(console.error);
-        await this.setState({
-            postulante: postulantes,
-        })
-        await axios.get("api/postulanteAsignar")
-        .then(({data} ) => {
-            data.map((postulante)=>{
-                let post ={};
-                post['id_postulante'] = postulante.id_postulante;
-                post['nombres'] = postulante.nombres;
-                post['apellidos'] = postulante.apellidos;
-                post['estado']= postulante.estado;
-                post['email'] = postulante.email;
-                post['tipoPostulacion'] = postulante.tipoPostulacion;
-                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                post['cedula'] = postulante.cedula;
-                porasignar.push(post);
-            })
-        })
-        .catch(console.error);
-        let dataasignar = porasignar;
-        let dataasignarExperto = dataasignar.filter((postulante)=>{
-            return postulante.tipoPostulacion==="Experto"
-        });
-        let dataasignarEvaluador = dataasignar.filter((postulante)=>{
-            return postulante.tipoPostulacion==="Evaluador"
-        });
-        await this.setState({
-            porasignar: dataasignar,
-            dataasignarExperto: dataasignarExperto,
-            dataasignarEvaluador: dataasignarEvaluador,
-        });
-        await axios.get("api/postulantePorHabilitar")
-        .then(({data} ) => {
-            data.map((postulante)=>{
-                let post ={};
-                post['id_postulante'] = postulante.id_postulante;
-                post['nombres'] = postulante.nombres;
-                post['apellidos'] = postulante.apellidos;
-                post['estado']= postulante.estado;
-                post['email'] = postulante.email;
-                post['tipoPostulacion'] = postulante.tipoPostulacion;
-                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                post['cedula'] = postulante.cedula;
-                porhabilitar.push(post);
-            })
-        })
-        .catch(console.error);
-        let dataporhabilitar = porhabilitar;
-           let dataporhabilitarExperto = dataporhabilitar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Experto"
-            });
-            let dataporhabilitarEvaluador = dataporhabilitar.filter((postulante)=>{
-                return postulante.tipoPostulacion==="Evaluador"
-            });
-        await this.setState({
-            porhabilitar: porhabilitar,
-            dataporhabilitarExperto: dataporhabilitarExperto,
-            dataporhabilitarEvaluador: dataporhabilitarEvaluador,
-        })
+        let evaluadoresPorEvaluar = [];
+        /*
         await axios.get("api/mostrarEvaluadoresHabilitado")
         .then(async({data} ) => {
             const postulantes = data.map((postulante)=>{
@@ -188,9 +96,11 @@ export default class Evaluacion extends Component {
         .catch(console.error);
         await this.setState({
             habilitadosEvaluador: habilitadosEvaluador,
-        })
-        await axios.get("api/mostrarExpertosHabilitado")
-        .then(async({data} ) => {
+        })*/
+        let expertosPorEvaluar = [];
+        await axios.get("/verSolicitudPorUsuarioExperto/")
+        .then(({data} ) => {
+            console.log(data);
             const postulantes = data.map((postulante)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
@@ -202,6 +112,10 @@ export default class Evaluacion extends Component {
                 post['fechaHabilitacion'] = postulante.fechaHabilitacion;
                 post['disponibilidadViajar'] = postulante.disponibilidadViajar;
                 post['cedula'] = postulante.cedula;
+                post['archivoAnexo'] =postulante.archivoAnexo;
+                post['nombreInstitucion'] =postulante.nombreInstitucion;
+                post['tituloObtenido']=postulante.tituloObtenido;
+                post['tipoFormacion']=postulante.tipoFormacion;
                 return post;
             })
             const postulantesUnico = uniqBy(postulantes,'id_postulante');
@@ -214,42 +128,49 @@ export default class Evaluacion extends Component {
                 experiencia['id_alcance'] = postulante.id_alcance;
                 return experiencia;
             })
-
-            let postulantesHabilitados = {};
+            let expertoPorEvaluar = {};
             for (let i = 0; i < postulantesUnico.length; i++) {
-                const postulante = postulantesUnico[i];
-                postulantesHabilitados['id_postulante'] = postulante.id_postulante;
-                        postulantesHabilitados['nombres'] = postulante.nombres;
-                        postulantesHabilitados['apellidos'] = postulante.apellidos;
-                        postulantesHabilitados['estado']= postulante.estado;
-                        postulantesHabilitados['email'] = postulante.email;
-                        postulantesHabilitados['tipoPostulacion'] = postulante.tipoPostulacion;
-                        postulantesHabilitados['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                        postulantesHabilitados['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                        postulantesHabilitados['cedula'] = postulante.cedula;
-                        postulantesHabilitados['experiencias']=[];
+                const postul = postulantesUnico[i];
+                expertoPorEvaluar['id_postulante'] = postul.id_postulante;
+                expertoPorEvaluar['nombres'] = postul.nombres;
+                expertoPorEvaluar['apellidos'] = postul.apellidos;
+                        expertoPorEvaluar['estado']= postul.estado;
+                        expertoPorEvaluar['email'] = postul.email;
+                        expertoPorEvaluar['tipoPostulacion'] = postul.tipoPostulacion;
+                        expertoPorEvaluar['fechaHabilitacion'] = postul.fechaHabilitacion;
+                        expertoPorEvaluar['disponibilidadViajar'] = postul.disponibilidadViajar;
+                        expertoPorEvaluar['cedula'] = postul.cedula;
+                        expertoPorEvaluar['educacion']={
+                            archivoAnexo : postul.archivoAnexo,
+                            nombreInstitucion : postul.nombreInstitucion,
+                            tituloObtenido : postul.tituloObtenido,
+                            tipoFormacion :postul.tipoFormacion,
+                        }
+                        expertoPorEvaluar['experiencias']=[];
                 for (let index = 0; index < experiencias.length; index++) {
                     const experiencia = experiencias[index];
                     let exp = {};
-                    if (postulante.id_postulante===experiencia.id_postulante) {
+                    if (postul.id_postulante===experiencia.id_postulante) {
+                        
                         exp['nombreEmpresa'] = experiencia.nombreEmpresa;
                         exp['cargoEjercido'] = experiencia.cargoEjercido;
                         exp['descripcion'] = experiencia.descripcion;
-                        exp['alcance'] = await this.getAlcance(experiencia.id_alcance);
-                        exp['tipoPostulacion'] = postulante.tipoPostulacion;
+                        exp['alcance'] = this.getAlcance(experiencia.id_alcance);
+                        exp['tipoPostulacion'] = postul.tipoPostulacion;
+                        expertoPorEvaluar['experiencias'].push(exp);
+                        
                     }
                     
-                    postulantesHabilitados['experiencias'].push(exp)
                 }
-                habilitadosExperto.push(postulantesHabilitados);
-                
+                console.log(expertoPorEvaluar.id_postulante,expertoPorEvaluar);
+                this.setState({
+                    expertoPorEvaluar: this.state.expertosPorEvaluar.push(expertoPorEvaluar),
+                })
             }
-            console.log(habilitadosExperto)
+             console.log(expertosPorEvaluar)
         })
         .catch(console.error);
-        await this.setState({
-            habilitadosExperto: habilitadosExperto,
-        })
+        
 }
 
 getRequerimiento  =async (id) => {
@@ -314,26 +235,11 @@ getRequerimiento  =async (id) => {
         if(target.name){
             this.setState({
                 form: target.name,
-                tipo: target.name==="expertos"?"porasignarExp":"porasignarEv",
             })
         }
         if(target.id){
             this.setState({
                 form: target.id,
-                tipo: target.id==="expertos"?"porasignarExp":"porasignarEv",
-            })
-        }
-    }
-
-    handleChangeTipoPost = ({target}) => {
-        if(target.name){
-            this.setState({
-                tipo: target.name,
-            })
-        }
-        if(target.id){
-            this.setState({
-                tipo: target.id,
             })
         }
     }
@@ -353,11 +259,6 @@ getRequerimiento  =async (id) => {
                     sort: false;
                     searcheable: false;
                  },
-                 customBodyRender: (value) => {
-                    return (
-                        <span hidden className="w-0">{value}</span>
-                    );
-                  },
                 } 
             },
             {
@@ -407,36 +308,11 @@ getRequerimiento  =async (id) => {
                  filter: true,
                  sort: true,
                  customBodyRender: (value) => {
-                    if(toUpper(value)==="POR ASIGNAR"){
-                        return (
-                            <span className="text-warning-dark">
+                    return <span className="text-danger">
                               {value}
-                            </span>
-                        );
-                    }
-                    if(toUpper(value)==="POR HABILITAR"){
-                        return (
-                            <span className="text-success">
-                              {value}
-                            </span>
-                        );
-                    }
-                    if(toUpper(value)==="HABILITADO"){
-                        return (
-                            <span className="text-normal">
-                              {value}
-                            </span>
-                        );
-                    }
+                        </span>
+                    
                   },
-                },
-               },
-               {
-                name: "fechaHabilitacion",
-                label: "Fecha de Habilitación",
-                options: {
-                 filter: true,
-                 sort: true,
                 },
                },
                {
@@ -460,7 +336,6 @@ getRequerimiento  =async (id) => {
                 options: {
                  filter: true,
                  sort: false,
-                 display: this.state.tipo==="habilitadosExp" || this.state.tipo === "habilitadosEv"?false:true,
                  customHeadRender: (value) => {
                     display: false;
                     filter: false;
@@ -468,40 +343,15 @@ getRequerimiento  =async (id) => {
                     searcheable: false;
                  },
                  customBodyRender: (value, {rowData}, updateValue) => {
-                    if(toUpper(value)==="POR ASIGNAR"){
-                        return (
-                            <button className="btn-secondary">Asignar</button>
-                        );
-                    }
-                    if(toUpper(value)==="POR HABILITAR"){
+                    
                         return (
                             <button className="btn-secondary" onClick={() => this.selectModal({
-                                type:'Habilitar',
+                                type:'Evaluar',
                                 data: rowData,
                                 updateValue: updateValue,
                             })
-                            }>Habilitar</button>
-                        );
-                    }
-                  },
-                },
-               },
-               {
-                name:"experiencias",
-                label: "Experiencias",
-                options: {
-                 filter: false,
-                 sort: false,
-                 display: this.state.tipo==="habilitadosExp" || this.state.tipo === "habilitadosEv"?true:false,
-                 customBodyRender: (value, {rowData}, updateValue) => {
-                        return (
-                            <button className="btn-secondary" onClick={() => this.selectModal({
-                                type: "Experiencias",
-                                data: value,
-                                updateValue: updateValue,
-                            })
-                            }>Experiencias</button>
-                        );
+                            }>Evaluar</button>)
+                    
                   },
                 },
                },
@@ -554,202 +404,55 @@ getRequerimiento  =async (id) => {
                     <Header title="Gestión de Calidad"/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
-                        {this.state.form === "expertos" && this.state.tipo==="porasignarExp" && (
+                        {this.state.form === "expertos" && (
                                         <React.Fragment>
                                             <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Expertos
                                             </div>
                                             <div className="d-flex flex-column w-100 align-items-end">
                                                 
-                                                <div id="porasignarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" onClick={this.handleChangeTipoPost}>
-                                                    Por Asignar
-                                                </div>
-                                                <div id="porhabilitarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                    Por Habilitar
-                                                </div>
-                                                <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4"} onClick={this.handleChangeTipoPost}>
-                                                    Habilitados
-                                                </div>    
+                                                <div id="porasignarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current">
+                                                    Por Evaluar
+                                                </div> 
                                             </div>   
                                             <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Evaluadores
                                             </div>                                     
                                         </React.Fragment>)}
-                                    {this.state.form === "expertos"&& this.state.tipo==="porhabilitarExp" && (
+
+                                        {this.state.form === "evaluadores"&& (
                                         <React.Fragment>
                                             <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Expertos
                                             </div>
-                                            <div className="d-flex flex-column w-100 align-items-end">
-                                                
-                                                <div id="porasignarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                    Por Asignar
-                                                </div>
-                                                <div id="porhabilitarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" onClick={this.handleChangeTipoPost}>
-                                                    Por Habilitar
-                                                </div>
-                                                <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4"} onClick={this.handleChangeTipoPost}>
-                                                    Habilitados
-                                                </div>    
-                                            </div>   
+                                              
                                             <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
                                                 Evaluadores
                                             </div> 
-                                        </React.Fragment>)}
-                                        {this.state.form === "expertos"&& this.state.tipo==="habilitadosExp" && (
-                                        <React.Fragment>
-                                            <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                Expertos
-                                            </div>
                                             <div className="d-flex flex-column w-100 align-items-end">
                                                 
-                                                <div id="porasignarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                    Por Asignar
-                                                </div>
-                                                <div id="porhabilitarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                    Por Habilitar
-                                                </div>
-                                                <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 bg-current"} onClick={this.handleChangeTipoPost}>
-                                                    Habilitados
-                                                </div>    
-                                            </div>   
-                                            <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                Evaluadores
+                                                <div id="porasignarExp" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" >
+                                                    Por Evaluar
+                                                </div>  
                                             </div> 
                                         </React.Fragment>)}
-                                    {this.state.form === "evaluadores"&& this.state.tipo==="porasignarEv" && (
-                                            <React.Fragment>
-                                                <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Expertos
-                                                </div>
-                                              
-                                                <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Evaluadores
-                                                </div> 
-                                                <div className="d-flex flex-column w-100 align-items-end">
-                                                    
-                                                    <div id="porasignarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" onClick={this.handleChangeTipoPost}>
-                                                        Por Asignar
-                                                    </div>
-                                                    <div id="porhabilitarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4" onClick={this.handleChangeTipoPost}>
-                                                        Por Habilitar
-                                                    </div>
-                                                    <div id="habilitadosEv" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 "} onClick={this.handleChangeTipoPost}>
-                                                        Habilitados
-                                                    </div>    
-                                                </div> 
-                                            </React.Fragment>)}
-                                            {this.state.form === "evaluadores"&& this.state.tipo==="porhabilitarEv" && (
-                                            <React.Fragment>
-                                                <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Expertos
-                                                </div>
-                                              
-                                                <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Evaluadores
-                                                </div> 
-                                                <div className="d-flex flex-column w-100 align-items-end">
-                                                    
-                                                    <div id="porasignarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 " onClick={this.handleChangeTipoPost}>
-                                                        Por Asignar
-                                                    </div>
-                                                    <div id="porhabilitarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 bg-current" onClick={this.handleChangeTipoPost}>
-                                                        Por Habilitar
-                                                    </div>
-                                                    <div id="habilitadosEv" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 "} onClick={this.handleChangeTipoPost}>
-                                                        Habilitados
-                                                    </div>    
-                                                </div> 
-                                            </React.Fragment>)}
-                                            {this.state.form === "evaluadores"&& this.state.tipo==="habilitadosEv" && (
-                                            <React.Fragment>
-                                                <div id="expertos" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Expertos
-                                                </div>
-                                              
-                                                <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
-                                                    Evaluadores
-                                                </div> 
-                                                <div className="d-flex flex-column w-100 align-items-end">
-                                                    
-                                                    <div id="porasignarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 " onClick={this.handleChangeTipoPost}>
-                                                        Por Asignar
-                                                    </div>
-                                                    <div id="porhabilitarEv" className=" d-flex card-list cardSAE-body text-normal text-left align-items-center w-75 h-4 " onClick={this.handleChangeTipoPost}>
-                                                        Por Habilitar
-                                                    </div>
-                                                    <div id="habilitadosEv" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4 bg-current"} onClick={this.handleChangeTipoPost}>
-                                                        Habilitados
-                                                    </div>    
-                                                </div> 
-                                            </React.Fragment>)}
                         </div>
                             
                         <div className="cardSAE containersae w-80">
                                 
                             <div className="cardSAE-body">
-                            {this.state.form === "expertos" && this.state.tipo==="porasignarExp" &&(
+                            {this.state.form === "expertos" && (
                                     <MUIDataTable className="data-table"
-                                        title={"Postulantes Expertos por Asignar Experto Padre"}
-                                        data={this.state.dataasignarExperto}
+                                        title={"Postulantes Expertos por Evaluar"}
+                                        data={this.state.expertosPorEvaluar}
                                         columns={columns}
                                         options={options}
                                     />
                                 )}
-                                {this.state.form === "expertos" && this.state.tipo==="porhabilitarExp"&&(
-                                    <React.Fragment>
-                                        <MUIDataTable className="data-table"
-                                            title={"Postulantes a Expertos aprobados por habilitar"}
-                                            data={this.state.dataporhabilitarExperto}
-                                            columns={columns}
-                                            options={options}
-                                        />
-                                        <div>
-                                            {this.state.habilitarExp && (
-                                                <div className="bg-success my-2 text-white">
-                                                    Postulante habilitado
-                                                </div>
-                                            )}
-                                        </div>
-                                    </React.Fragment>
-                                )}
-                                {this.state.form === "expertos" && this.state.tipo==="habilitadosExp"&&(
+                                {this.state.form === "evaluadores" &&(
                                     <MUIDataTable className="data-table"
-                                        title={"Matriz de Expertos habilitados"}
-                                        data={this.state.habilitadosExperto}
-                                        columns={columns}
-                                        options={options}
-                                    />
-                                )}
-                                {this.state.form === "evaluadores" && this.state.tipo==="porasignarEv"&&(
-                                    <MUIDataTable className="data-table"
-                                        title={"Postulantes a Evaluadores por Asignar Evaluador Padre"}
-                                        data={this.state.dataasignarEvaluador}
-                                        columns={columns}
-                                        options={options}
-                                    />
-                                )}
-                                {this.state.form === "evaluadores" && this.state.tipo==="porhabilitarEv"&&(
-                                    <React.Fragment>
-                                        <MUIDataTable className="data-table"
-                                            title={"Postulantes a Evaluadores aprobados por habilitar"}
-                                            data={this.state.dataporhabilitarEvaluador}
-                                            columns={columns}
-                                            options={options}
-                                        />
-                                        <div>
-                                            {this.state.habilitarEv && (
-                                                <div className="bg-success my-2 text-white">
-                                                    Postulante habilitado
-                                                </div>
-                                            )}
-                                        </div>
-                                    </React.Fragment>
-                                )}
-                                {this.state.form === "evaluadores" && this.state.tipo==="habilitadosEv"&&(
-                                    <MUIDataTable className="data-table"
-                                        title={"Matriz de Evaluadores habilitados"}
-                                        data={this.state.habilitadosEvaluador}
+                                        title={"Postulantes a Evaluadores por Evaluar"}
+                                        data={this.state.evaluadoresPorEvaluar}
                                         columns={columns}
                                         options={options}
                                     />

@@ -7,8 +7,9 @@ use App\evaluacionPostulacion;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use App\Postulante;
+use App\Cursos_Evaluador;
 
 
 class SolicitudPostulacionController extends Controller
@@ -49,12 +50,18 @@ class SolicitudPostulacionController extends Controller
     }
 
 
-    public function verSolicitudesPorUsuario(){
+    public function verSolicitudesPorUsuarioEvaluador(){
           $userId = Auth::id();
           $solicitudes = DB::table('solicitud_postulacions')
+          ->join('experiencia_evaludors', 'experiencia_evaludors.id_postulante', '=', 'solicitud_postulacions.id_postulante')
+          ->join('cursos__ evaluadors', 'cursos__ evaluadors.id_postulante' ,'=', 'solicitud_postulacions.id_postulante')
+          ->join('educacion_formals', 'educacion_formals.id_postulante', '=', 'solicitud_postulacions.id_postulante')
           ->join('postulantes', 'postulantes.id_postulante', '=', 'solicitud_postulacions.id_postulante')
-            ->select('postulantes.*','solicitud_postulacions.*')
-            ->where('postulantes.id_postulante',$userId)
+            ->select('postulantes.*','solicitud_postulacions.*','experiencia_evaludors.*','educacion_formals.*','cursos__ evaluadors.*')
+            ->where([
+                ['solicitud_postulacions.id_usuario',$userId],
+                ['postulantes.tipoPostulacion', "Evaluador"],
+            ])
             ->get();
           
           return response()->json($solicitudes);
@@ -62,6 +69,25 @@ class SolicitudPostulacionController extends Controller
 
 
     }
+
+    public function verSolicitudesPorUsuarioExperto(){
+        $userId = Auth::id();
+        $solicitudes = DB::table('solicitud_postulacions')
+        ->join('experiencia_expertos', 'experiencia_expertos.id_postulante', '=', 'solicitud_postulacions.id_postulante')
+        ->join('educacion_formals', 'educacion_formals.id_postulante', '=', 'solicitud_postulacions.id_postulante')
+        ->join('postulantes', 'postulantes.id_postulante', '=', 'solicitud_postulacions.id_postulante')
+          ->select('postulantes.*','solicitud_postulacions.*','experiencia_expertos.*','educacion_formals.*')
+          ->where([
+              ['solicitud_postulacions.id_usuario',$userId],
+              ['postulantes.tipoPostulacion','Experto'],
+          ])
+          ->get();
+        
+        return response()->json($solicitudes);
+
+
+
+  }
 
     public function finalizarEvaluacionPostulante(Request $request){
             //fecha actual

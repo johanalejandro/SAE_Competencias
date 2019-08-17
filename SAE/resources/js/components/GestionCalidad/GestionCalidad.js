@@ -192,11 +192,12 @@ export default class GestionCalidad extends Component {
                         exp['descripcion'] = experiencia.descripcion;
                         exp['requerimiento'] = await this.getRequerimiento(experiencia.id_sector_requerimiento);
                         exp['tipoPostulacion'] = postulante.tipoPostulacion;
+                        postulantesHabilitados['experiencias'].push(exp)
                     }
                     
-                    postulantesHabilitados['experiencias'].push(exp)
+                    
                 }
-                habilitadosEvaluador.push(postulantesHabilitados);
+                await habilitadosEvaluador.push(postulantesHabilitados);
                 
             }
         })
@@ -252,11 +253,12 @@ export default class GestionCalidad extends Component {
                         exp['descripcion'] = experiencia.descripcion;
                         exp['alcance'] = await this.getAlcance(experiencia.id_alcance);
                         exp['tipoPostulacion'] = postulante.tipoPostulacion;
+                        postulantesHabilitados['experiencias'].push(exp)
                     }
                     
-                    postulantesHabilitados['experiencias'].push(exp)
+                   
                 }
-                habilitadosExperto.push(postulantesHabilitados);
+                await habilitadosExperto.push(postulantesHabilitados);
                 
             }
         })

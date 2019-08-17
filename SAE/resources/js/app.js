@@ -17,3 +17,4 @@ require('./components/Postulante/FormularioPostulacion');
 require('./components/GestionCalidad/GestionCalidad');
 require('./components/Visualizador/Visualizador');
 require('./components/Postulante/PostulacionEnviada');
+require('./components/Evaluacion/Evaluacion');

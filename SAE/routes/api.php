@@ -128,9 +128,9 @@ Route::post('/crearNuevaSolicitud', 'SolicitudPostulacionController@crearNuevaSo
 
 /*------------------------------------------------------------------------------------------------------*/
 
-/* Para ver las solicitudes de postulantes que evaluar */
 
-Route::get('/verSolicitudPorUsuario','SolicitudPostulacionController@verSolicitudesPorUsuario');
+
+
 
 /* Para finalizar evaluacion y guardar resultado de evaluacion debes pasar *id_solicitud* te lo mande en el api anterior, *detalleEvaluacion*, *resultadoEvaluacion*(debe ser aprobado), *tipoEvaluacion*/
 
@@ -143,3 +143,11 @@ Route::post('/finalizarEvaluacionPostulante', 'SolicitudPostulacionController@fi
 Route::post('/guardarEvaluacionPostulante', 'SolicitudPostulacionController@guardarEvaluacionPostulante');
 
 
+
+/*Route::group(['prefix' => 'admin', 'middleware' => 'Authenticate'], function() {
+    /* Para ver las solicitudes de postulantes que evaluar 
+
+    Route::get('/verSolicitudPorUsuario','SolicitudPostulacionController@verSolicitudesPorUsuario');
+
+    //other authenticated Routes goes inside this block
+});*/
