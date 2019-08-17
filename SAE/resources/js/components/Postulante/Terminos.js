@@ -20,12 +20,11 @@ export default class Terminos extends Component {
         })
 
         await this.props.handlePostulante();
-        this.props.tipo==="evaluador"?
-        await this.props.handleExpEv(): await this.props.handleExp()
-
+        this.props.tipo==="evaluador"?await this.props.handleExpEv(): await this.props.handleExp()
+        this.props.tipo==="evaluador"&&await this.props.handleCursos()
         await this.setLoading();
 
-        window.location.href = "/postulacion-enviada";
+        //window.location.href = "/postulacion-enviada";
       }
 
       setLoading = () =>{

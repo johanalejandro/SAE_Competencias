@@ -13,8 +13,7 @@ class CreateCursosEvaluadorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cursos__
-        evaluadors', function (Blueprint $table) {
+        Schema::create('cursos__evaluadors', function (Blueprint $table) {
             $table->bigIncrements('id_curso_evaluador');
             $table->unsignedBigInteger('id_postulante');
             $table->unsignedBigInteger('id_sector_requerimiento');
@@ -24,13 +23,11 @@ class CreateCursosEvaluadorsTable extends Migration
             $table->timestamps();
         });
 
-         Schema::table('cursos__
-        evaluadors', function($table) {
+         Schema::table('cursos__evaluadors', function($table) {
             $table->foreign('id_postulante')->references('id_postulante')->on('postulantes');
         });
 
-          Schema::table('cursos__
-        evaluadors', function($table) {
+          Schema::table('cursos__evaluadors', function($table) {
             $table->foreign('id_sector_requerimiento')->references('id_sector_requerimiento')->on('sector_requerimientos');
         });
     }

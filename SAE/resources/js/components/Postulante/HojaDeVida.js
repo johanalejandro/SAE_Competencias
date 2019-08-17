@@ -874,7 +874,8 @@ export default class HojaDeVida extends Component {
                     <Terminos
                     handlePostulante={this.handlePostulante}
                     handleExp={this.handleExp}
-                    handleExpEv={this.handleExp}
+                    handleExpEv={this.handleExpEv}
+                    handleCursos={this.handleCursos}
                     handleChangeTipo={this.handleChangeTipo}
                     handleContinuar={this.handleContinuar}
                     tipo={this.state.tipo}

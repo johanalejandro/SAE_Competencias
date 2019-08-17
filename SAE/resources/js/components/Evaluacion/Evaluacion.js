@@ -99,7 +99,7 @@ export default class Evaluacion extends Component {
         })*/
         let expertosPorEvaluar = [];
         await axios.get("/verSolicitudPorUsuarioExperto/")
-        .then(({data} ) => {
+        .then(async({data} ) => {
             console.log(data);
             const postulantes = data.map((postulante)=>{
                 let post ={};
@@ -155,7 +155,7 @@ export default class Evaluacion extends Component {
                         exp['nombreEmpresa'] = experiencia.nombreEmpresa;
                         exp['cargoEjercido'] = experiencia.cargoEjercido;
                         exp['descripcion'] = experiencia.descripcion;
-                        exp['alcance'] = this.getAlcance(experiencia.id_alcance);
+                        exp['alcance'] = await this.getAlcance(experiencia.id_alcance);
                         exp['tipoPostulacion'] = postul.tipoPostulacion;
                         expertoPorEvaluar['experiencias'].push(exp);
                         
@@ -163,11 +163,12 @@ export default class Evaluacion extends Component {
                     
                 }
                 console.log(expertoPorEvaluar.id_postulante,expertoPorEvaluar);
-                this.setState({
-                    expertoPorEvaluar: this.state.expertosPorEvaluar.push(expertoPorEvaluar),
-                })
+                expertosPorEvaluar.push(expertoPorEvaluar);
             }
              console.log(expertosPorEvaluar)
+             await this.setState({
+                expertosPorEvaluar: expertosPorEvaluar,
+            })
         })
         .catch(console.error);
         

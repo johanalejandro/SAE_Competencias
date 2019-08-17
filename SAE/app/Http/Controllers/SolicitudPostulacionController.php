@@ -54,10 +54,10 @@ class SolicitudPostulacionController extends Controller
           $userId = Auth::id();
           $solicitudes = DB::table('solicitud_postulacions')
           ->join('experiencia_evaludors', 'experiencia_evaludors.id_postulante', '=', 'solicitud_postulacions.id_postulante')
-          ->join('cursos__ evaluadors', 'cursos__ evaluadors.id_postulante' ,'=', 'solicitud_postulacions.id_postulante')
+          ->join('cursos__evaluadors', 'cursos__evaluadors.id_postulante' ,'=', 'solicitud_postulacions.id_postulante')
           ->join('educacion_formals', 'educacion_formals.id_postulante', '=', 'solicitud_postulacions.id_postulante')
           ->join('postulantes', 'postulantes.id_postulante', '=', 'solicitud_postulacions.id_postulante')
-            ->select('postulantes.*','solicitud_postulacions.*','experiencia_evaludors.*','educacion_formals.*','cursos__ evaluadors.*')
+            ->select('postulantes.*','solicitud_postulacions.*','experiencia_evaludors.*','educacion_formals.*','cursos__evaluadors.*')
             ->where([
                 ['solicitud_postulacions.id_usuario',$userId],
                 ['postulantes.tipoPostulacion', "Evaluador"],

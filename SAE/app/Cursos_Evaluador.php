@@ -8,8 +8,7 @@ class Cursos_Evaluador extends Model
 {
     //
      protected $primaryKey = 'id_curso_evaluador';
-     public $table = "cursos__
-        evaluadors";
+     public $table = "cursos__evaluadors";
 
 
      public function sectorRequerimiento()
