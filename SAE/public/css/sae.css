@@ -238,6 +238,11 @@ h3{
   max-height: 95%;
 }
 
+.modal-evaluar{
+  max-height: 100%;
+  max-width: 900px;
+}
+
 .modal-flex-sae {
   display: flex;
   height: 100%;

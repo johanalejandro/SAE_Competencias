@@ -144,6 +144,10 @@ Route::post('/guardarEvaluacionPostulante', 'SolicitudPostulacionController@guar
 
 
 
+Route::get('/verSolicitudEvaluacion/{id}', 'SolicitudPostulacionController@verSolicitudEvaluacion');
+
+
+
 /*Route::group(['prefix' => 'admin', 'middleware' => 'Authenticate'], function() {
     /* Para ver las solicitudes de postulantes que evaluar 
 

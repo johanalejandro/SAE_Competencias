@@ -35,7 +35,6 @@ export default class GestionCalidad extends Component {
         modalAsignar: false,
         modalInfo: {},
         modalAsignarInfo: {},
-        respuesta: {},
         successExp: false,
         successEv: false,
         
@@ -294,7 +293,7 @@ getRequerimiento  =async (id) => {
         return alcance;
     }
 
-    asignar = async (payload)=>{
+    asignar = async (payload,data)=>{
         let count =0;
         console.log(payload)
         for (let index = 0; index < payload.length; index++) {
@@ -322,12 +321,12 @@ getRequerimiento  =async (id) => {
             .catch(console.error);
         }
         if(count===payload.length){
-            this.asignado(payload[0].id_postulante);
+            this.asignado(data);
         }
     }
 
 
-    asignado = async(id_postulante) => {
+    asignado = async(data) => {
         if(this.state.form==="expertos"){
             this.setState({
                 successExp: true,
@@ -335,11 +334,8 @@ getRequerimiento  =async (id) => {
             const { dataasignarExperto } = this.state;
             let filterData = [];
             filterData = dataasignarExperto;
-            const porasginarAEliminar = await filterData.find((postulante)=>{
-                return postulante.id_postulante === parseInt(id_postulante);
-            })
-            console.log("eliminar",porasginarAEliminar)
-            await pull(filterData,porasginarAEliminar);
+            console.log("eliminar",data)
+            await pull(filterData,data);
             await this.setState({ dataasignarExperto: filterData });
         }else{
             this.setState({
@@ -383,79 +379,11 @@ getRequerimiento  =async (id) => {
                 console.log(habilitado);
                 const {habilitadosExperto} = await this.state;
                 await habilitadosExperto.push(habilitado)
+                console.log(habilitadosExperto);
                 await this.setState({ dataporhabilitarExperto,habilitadosExperto });
             }
         })
         .catch(console.error);
-    }
-
-    getUsuario = async(rowData)=>{
-        let usuarios = [];
-        if(rowData[3]==="Experto"){
-            await axios.get('/api/mostrarDetallesExperto/'+rowData[0])
-            .then(async({data}) => {
-                const experiencias = data.map((postulante)=>{
-                    let experiencia = {};
-                    experiencia['id_alcance'] = postulante.id_alcance;
-                    return experiencia;
-                })
-                const experienciasUniq =uniqBy (experiencias,'id_alcance');
-                if(isEmpty(experienciasUniq)){
-                    this.setState({
-                        respuesta: {exp: experienciasUniq,usuarios: usuarios}
-                    })
-                    return;
-                }
-                for (let index = 0; index < experienciasUniq.length; index++) {
-                    const id_alcance = experienciasUniq[index].id_alcance;
-                    await axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
-                    .then(({data}) => {
-                        usuarios.push(data[0]);
-                        console.log("RECIBO",data)
-                    }).catch(error => {
-                        console.log("===ERROR: ",error);
-                    });
-                }
-                this.setState({
-                    respuesta: {exp: experienciasUniq,usuarios: uniqBy (usuarios,'id_usuario')}
-                })
-            }).catch(error => {
-                console.log("===ERROR: ",error);
-            });
-        }
-        if(rowData[3]==="Evaluador"){
-            await axios.get('/api/mostrarDetallesEvaluador/'+rowData[0])
-        .then(async({data}) => {
-            const experiencias = data.map((postulante)=>{
-                let experiencia = {};
-                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
-                return experiencia;
-            })
-            const experienciasUniq = uniqBy(experiencias,'id_sector_requerimiento');
-            if(isEmpty(experienciasUniq)){
-                this.setState({
-                    respuesta: {exp: experienciasUniq,usuarios: usuarios}
-                })
-                return;
-            }
-            for (let index = 0; index < experienciasUniq.length; index++) {
-                const id_sector_requerimiento = experienciasUniq[index].id_sector_requerimiento;
-                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector_requerimiento)
-                    .then(({data}) => {
-
-                        usuarios.push(data[0]);
-                    }).catch(error => {
-                        console.log("===ERROR: ",error);
-                    });
-            }
-            
-            this.setState({
-                respuesta: {exp: experienciasUniq,usuarios: uniqBy(usuarios,'id_usuario')}
-            })
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
-        }
     }
 
     handleChangeTipo = ({target}) => {
@@ -618,9 +546,8 @@ getRequerimiento  =async (id) => {
                  customBodyRender: (value, {rowData}, updateValue) => {
                     if(toUpper(value)==="POR ASIGNAR"){
                         return (
-                            <button className="btn-secondary" onClick={async() =>{
-                                await this.getUsuario(rowData);
-                                await this.selectModalAsignar ({
+                            <button className="btn-secondary" onClick={() =>{
+                                this.selectModalAsignar ({
                                     type: "Asignar",
                                     data: rowData,
                                 })
@@ -937,12 +864,11 @@ getRequerimiento  =async (id) => {
                         closeModal={this.selectModal}
                         habilitar={this.habilitar}
                     />
-                    {this.state.modalAsignar && !isEmpty(this.state.respuesta)&&(
+                    {this.state.modalAsignar &&(
                     <ModalAsignar
                         modalInfo={this.state.modalAsignarInfo}
                         closeModal={this.selectModalAsignar}
                         asignar={this.asignar}
-                        respuesta={this.state.respuesta}
                         getAlcance={this.getAlcance}
                         getRequerimiento={this.getRequerimiento}
                         success={this.state.sccess}

@@ -98,12 +98,14 @@ export default class Evaluacion extends Component {
             habilitadosEvaluador: habilitadosEvaluador,
         })*/
         let expertosPorEvaluar = [];
+        let expertoPorEvaluar = {};
         await axios.get("/verSolicitudPorUsuarioExperto/")
         .then(async({data} ) => {
             console.log(data);
-            const postulantes = data.map((postulante)=>{
+            const postulantes = await data.map((postulante)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
+                post['id_solicitud'] = postulante.id_solicitud;
                 post['nombres'] = postulante.nombres;
                 post['apellidos'] = postulante.apellidos;
                 post['estado']= postulante.estado;
@@ -118,8 +120,8 @@ export default class Evaluacion extends Component {
                 post['tipoFormacion']=postulante.tipoFormacion;
                 return post;
             })
-            const postulantesUnico = uniqBy(postulantes,'id_postulante');
-            const experiencias = data.map((postulante)=>{
+            const postulantesUnico = uniqBy(postulantes,'id_solicitud');
+            const experiencias = await data.map((postulante)=>{
                 let experiencia = {};
                 experiencia['id_postulante'] = postulante.id_postulante;
                 experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
@@ -128,10 +130,11 @@ export default class Evaluacion extends Component {
                 experiencia['id_alcance'] = postulante.id_alcance;
                 return experiencia;
             })
-            let expertoPorEvaluar = {};
+            const experiencies = uniqBy(experiencias,'id_alcance')
             for (let i = 0; i < postulantesUnico.length; i++) {
                 const postul = postulantesUnico[i];
                 expertoPorEvaluar['id_postulante'] = postul.id_postulante;
+                expertoPorEvaluar['id_solicitud'] = postul.id_solicitud;
                 expertoPorEvaluar['nombres'] = postul.nombres;
                 expertoPorEvaluar['apellidos'] = postul.apellidos;
                         expertoPorEvaluar['estado']= postul.estado;
@@ -147,11 +150,11 @@ export default class Evaluacion extends Component {
                             tipoFormacion :postul.tipoFormacion,
                         }
                         expertoPorEvaluar['experiencias']=[];
-                for (let index = 0; index < experiencias.length; index++) {
-                    const experiencia = experiencias[index];
+                for (let index = 0; index < experiencies.length; index++) {
+                    const experiencia = experiencies[index];
                     let exp = {};
                     if (postul.id_postulante===experiencia.id_postulante) {
-                        
+                        exp['id_alcance'] = experiencia.id_alcance;
                         exp['nombreEmpresa'] = experiencia.nombreEmpresa;
                         exp['cargoEjercido'] = experiencia.cargoEjercido;
                         exp['descripcion'] = experiencia.descripcion;
@@ -163,7 +166,7 @@ export default class Evaluacion extends Component {
                     
                 }
                 console.log(expertoPorEvaluar.id_postulante,expertoPorEvaluar);
-                expertosPorEvaluar.push(expertoPorEvaluar);
+                await expertosPorEvaluar.push(expertoPorEvaluar);
             }
              console.log(expertosPorEvaluar)
              await this.setState({
@@ -200,34 +203,36 @@ getRequerimiento  =async (id) => {
         return alcance;
     }
 
-    habilitar =async(rowData,updateValue) => {
-        await axios.get("api/habilitarPostulante/"+rowData[0])
-        .then(async(response ) => {
-            if(this.state.form==="evaluadores"){
-                await this.setState({
-                    habilitarEv: true,
-                })
-                const { dataporhabilitarEvaluador } = await this.state;
-                const  habilitado = await remove(dataporhabilitarEvaluador,(postulante)=>{
-                    return postulante.id_postulante === rowData[0];
-                });
-                const {habilitadosEvaluador} = await this.state;
-                await habilitadosEvaluador.push(habilitado)
-                await this.setState({ dataporhabilitarEvaluador,habilitadosEvaluador });
-            }
-            if(this.state.form==="expertos"){
-                await this.setState({
-                    habilitarExp: true,
-                })
-                const { dataporhabilitarExperto } = await this.state;
-                const  habilitado = await remove(dataporhabilitarExperto,(postulante)=>{
-                    return postulante.id_postulante === rowData[0];
-                });
-                const {habilitadosExperto} = await this.state;
-                await habilitadosExperto.push(habilitado)
-                await this.setState({ dataporhabilitarEvaluador,habilitadosExperto });
-                await this.setState({ dataporhabilitarExperto });
-            }
+    guardarEvaluacion =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion) => {
+        let formData =  new FormData();
+        formData.append("id_solicitud",id_solicitud);
+        formData.append("detalleEvaluacion",detalleEvaluacion);
+        formData.append("tipoEvaluacion",tipoEvaluacion);
+        formData.append("resultadoEvaluacion",resultadoEvaluacion);
+        await axios.post("api/guardarEvaluacionPostulante/",formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then((response ) => {
+            console.log(response);
+        })
+        .catch(console.error);
+    }
+
+    finalizarEvaluacion =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion) => {
+         let formData =  new FormData();
+        formData.append("id_solicitud",id_solicitud);
+        formData.append("detalleEvaluacion",detalleEvaluacion);
+        formData.append("tipoEvaluacion",tipoEvaluacion);
+        formData.append("resultadoEvaluacion",resultadoEvaluacion);
+        await axios.post("api/finalizarEvaluacionPostulante/",formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then((response ) => {
+            console.log(response);
         })
         .catch(console.error);
     }
@@ -303,6 +308,30 @@ getRequerimiento  =async (id) => {
              },
             },
             {
+                name: "experiencias",
+                label: "Experiencas",
+                options: {
+                 filter: true,
+                 sort: false,
+                 display: false,
+                },
+                customBodyRender: () => {
+                    return <span>Experiencias</span>
+                },
+               },
+               {
+                name: "educacion",
+                label: "Educación",
+                options: {
+                 filter: true,
+                 sort: false,
+                 display: false,
+                },
+                customBodyRender: () => {
+                    return <span>Educación</span>
+                },
+               },
+            {
                 name: "estado",
                 label: "Estado",
                 options: {
@@ -332,7 +361,7 @@ getRequerimiento  =async (id) => {
                 },
                },
                {
-                name:"estado",
+                name:"tipoPostulacion",
                 label: "Acciones",
                 options: {
                  filter: true,
@@ -344,17 +373,33 @@ getRequerimiento  =async (id) => {
                     searcheable: false;
                  },
                  customBodyRender: (value, {rowData}, updateValue) => {
-                    
-                        return (
-                            <button className="btn-secondary" onClick={() => this.selectModal({
-                                type:'Evaluar',
-                                data: rowData,
-                                updateValue: updateValue,
-                            })
-                            }>Evaluar</button>)
-                    
+                            return (
+                                <button className="btn-secondary" onClick={async() =>{ 
+                                    //await funcion para setear detalles de evaluacion de existir
+                                    this.selectModal({
+                                        type: value,
+                                        data: rowData,
+                                        updateValue: updateValue,
+                                    })
+                                }
+                                }>Evaluar</button>)
                   },
                 },
+               },
+               {
+                   name: "id_solicitud",
+                   label: "id_solicitud",
+                   options: {
+                    filter: true,
+                    sort: true,
+                    display: false,
+                    customHeadRender: (value) => {
+                       display: false;
+                       filter: false;
+                       sort: false;
+                       searcheable: false;
+                    },
+                   } 
                },
            ];
             
@@ -402,7 +447,7 @@ getRequerimiento  =async (id) => {
         return (
 
             <React.Fragment>
-                    <Header title="Gestión de Calidad"/>
+                    <Header title="Evaluación"/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
                         {this.state.form === "expertos" && (
@@ -461,12 +506,14 @@ getRequerimiento  =async (id) => {
                             </div>
                         </div>
                     </div>
+                    {this.state.modal&&(
                     <Modal
-                        displayModal={this.state.modal}
                         modalInfo={this.state.modalInfo}
                         closeModal={this.selectModal}
-                        habilitar={this.habilitar}
-                    />
+                        guardarEvaluacion={this.guardarEvaluacion}
+                        finalizarEvaluacion={this.finalizarEvaluacion}
+                    />)
+                    }
                 </React.Fragment>
         )
     }

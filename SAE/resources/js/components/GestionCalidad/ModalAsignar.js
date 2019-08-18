@@ -5,6 +5,7 @@ import Label from '../common/Label';
 import isEmpty from 'lodash/isEmpty';
 import pull from 'lodash/pull'
 import compact from 'lodash/compact'
+import uniqBy from "lodash/uniqBy";
 
 export default class ModalAsignar extends Component {
 
@@ -26,13 +27,76 @@ export default class ModalAsignar extends Component {
       }
 
       componentWillMount=async()=>{
-        this.setState({
-          respuesta: this.props.respuesta,
-        })
+        let usuarios = [];
+        if(this.props.modalInfo.data[3]==="Experto"){
+            await axios.get('/api/mostrarDetallesExperto/'+this.props.modalInfo.data[0])
+            .then(async({data}) => {
+                const experiencias = data.map((postulante)=>{
+                    let experiencia = {};
+                    experiencia['id_alcance'] = postulante.id_alcance;
+                    return experiencia;
+                })
+                const experienciasUniq =uniqBy (experiencias,'id_alcance');
+                if(isEmpty(experienciasUniq)){
+                    this.setState({
+                        respuesta: {exp: experienciasUniq,usuarios: usuarios}
+                    })
+                    return;
+                }
+                for (let index = 0; index < experienciasUniq.length; index++) {
+                    const id_alcance = experienciasUniq[index].id_alcance;
+                    await axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
+                    .then(({data}) => {
+                        usuarios.push(data[0]);
+                        console.log("RECIBO",data)
+                    }).catch(error => {
+                        console.log("===ERROR: ",error);
+                    });
+                }
+                this.setState({
+                    respuesta: {exp: experienciasUniq,usuarios: uniqBy (usuarios,'id_usuario')}
+                })
+            }).catch(error => {
+                console.log("===ERROR: ",error);
+            });
+        }
+        if(this.props.modalInfo.data[3]==="Evaluador"){
+            await axios.get('/api/mostrarDetallesEvaluador/'+this.props.modalInfo.data[0])
+        .then(async({data}) => {
+            const experiencias = data.map((postulante)=>{
+                let experiencia = {};
+                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                return experiencia;
+            })
+            const experienciasUniq = uniqBy(experiencias,'id_sector_requerimiento');
+            if(isEmpty(experienciasUniq)){
+                this.setState({
+                    respuesta: {exp: experienciasUniq,usuarios: usuarios}
+                })
+                return;
+            }
+            for (let index = 0; index < experienciasUniq.length; index++) {
+                const id_sector_requerimiento = experienciasUniq[index].id_sector_requerimiento;
+                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector_requerimiento)
+                    .then(({data}) => {
+
+                        usuarios.push(data[0]);
+                    }).catch(error => {
+                        console.log("===ERROR: ",error);
+                    });
+            }
+            
+            this.setState({
+                respuesta: {exp: experienciasUniq,usuarios: uniqBy(usuarios,'id_usuario')}
+            })
+        }).catch(error => {
+            console.log("===ERROR: ",error);
+        });
+        }
         let alcances =[];
 
         if(this.props.modalInfo.data[3]==="Experto"){
-          const id_alcances= this.props.respuesta.exp;
+          const id_alcances= this.state.respuesta.exp;
           for (let index = 0; index < id_alcances.length; index++) {
             const id_alcance = id_alcances[index].id_alcance;
             const alcance = await this.props.getAlcance(id_alcance);
@@ -47,7 +111,7 @@ export default class ModalAsignar extends Component {
         let sectores=[];
         
         if(this.props.modalInfo.data[3]==="Evaluador"){
-          const id_sectores= this.props.respuesta.exp;
+          const id_sectores= this.state.respuesta.exp;
           for (let index = 0; index < id_sectores.length; index++) {
             const id_sector_requerimiento = id_sectores[index].id_sector_requerimiento;
             const sector = await this.props.getRequerimiento(id_sector_requerimiento);
@@ -242,7 +306,7 @@ export default class ModalAsignar extends Component {
               onClick={ e => e.stopPropagation() }>
                   <div className="modal-flex-sae">
                     <div className="modal-header text-center">
-                        <h5 className="modal-title" id="exampleModalLongTitle">Asignar {data[3]} padre</h5>
+                        <h5 className="modal-title text-info" id="exampleModalLongTitle">Asignar {data[3]} padre</h5>
                         <span 
                             className="close-sae"
                             onClick={ this.closeModal }>&times;
@@ -280,7 +344,7 @@ export default class ModalAsignar extends Component {
                                             <option disabled value="selec">Seleccione</option>
                                             {!isEmpty(compact(this.state.respuesta.usuarios))?(
                                               //console.log(compact(this.state.respuesta.usuarios))
-                                              this.state.respuesta.usuarios.map((usuario)=>{
+                                              compact(this.state.respuesta.usuarios).map((usuario)=>{
                                                 console.log(usuario)
                                                   return <option key={usuario.id_usuario} value={usuario.id_usuario}>{usuario.nombre+" "+usuario.apellido}</option>
                                             })):null}
@@ -315,7 +379,7 @@ export default class ModalAsignar extends Component {
                             <React.Fragment><button type="button" className="btn btn-secondary w-20 bg-light" style={{color:'#6c757d'}} onClick={this.closeModal}>Cancelar</button>
                             {!isEmpty(this.state.asignaciones)? (
                             <button type="button" className="btn btn-secondary w-20" onClick={async(evt)=>{
-                                await this.props.asignar(this.state.asignaciones);
+                                await this.props.asignar(this.state.asignaciones,data);
                                 await this.closeModal(evt,true);
                             }}>Asignar</button>):(
                               <button type="button" className="btn btn-secondary w-20" disabled>Asignar</button>

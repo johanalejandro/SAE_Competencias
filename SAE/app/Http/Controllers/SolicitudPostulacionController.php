@@ -61,6 +61,7 @@ class SolicitudPostulacionController extends Controller
             ->where([
                 ['solicitud_postulacions.id_usuario',$userId],
                 ['postulantes.tipoPostulacion', "Evaluador"],
+                ['postulantes.estado','Por Evaluar'],
             ])
             ->get();
           
@@ -80,29 +81,37 @@ class SolicitudPostulacionController extends Controller
           ->where([
               ['solicitud_postulacions.id_usuario',$userId],
               ['postulantes.tipoPostulacion','Experto'],
+              ['postulantes.estado','Por Evaluar'],
           ])
           ->get();
         
         return response()->json($solicitudes);
-
-
+            
 
   }
+
+  public function verSolicitudEvaluacion($id){
+    $solicitud = DB::table('solicitud_postulacions')->where('id_solicitud',$id)->first();
+    $evaluacion = DB::table('evaluacion_postulacions')->where('id_evaluacion',$solicitud->id_evaluacion)->first();
+        return response()->json($evaluacion);
+
+}
 
     public function finalizarEvaluacionPostulante(Request $request){
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
             //obtengo id de la solicitud de evaluacion
-            $solicitud =  DB::table('solicitud_postulacions')->where('id_solicitud','=',$request->id_solicitud);
+            $solicitud =  DB::table('solicitud_postulacions')->where('id_solicitud',$request->id_solicitud)->first();
             //actulizo campos en postulante
-            $postulante = App\Postulante::find($solicitud->id_postulante);
+            $postulante = Postulante::find($solicitud->id_postulante);
             $postulante->estado = 'Por Habilitar';
             $postulante->fechaHabilitacion = $current_date_time;
             //actualizo campos en evaluacionpostulante
-            $evaluacion = App\evaluacionPostulacion::find($solicitud->id_evaluacion);
+            $evaluacion = evaluacionPostulacion::find($solicitud->id_evaluacion);
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
             $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
+            $evaluacion->save();
 
         return response()->json('Evaluacion Finalizada!');
 
@@ -113,12 +122,14 @@ class SolicitudPostulacionController extends Controller
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
             //obtengo id de la solicitud de evaluacion
-            $solicitud =  DB::table('solicitud_postulacions')->where('id_solicitud','=',$request->id_solicitud);
+            $solicitud =  DB::table('solicitud_postulacions')->select('id_evaluacion')->where('id_solicitud',$request->id_solicitud)->first();
             //actualizo campos en evaluacionpostulante
-            $evaluacion = App\evaluacionPostulacion::find($solicitud->id_evaluacion);
+            $evaluacion = evaluacionPostulacion::find($solicitud->id_evaluacion);
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
             $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
+            $evaluacion->updated_at = $current_date_time;
+            $evaluacion->save();
 
         return response()->json('Campos guardados!');
 
@@ -148,7 +159,8 @@ class SolicitudPostulacionController extends Controller
      */
     public function show(solicitudPostulacion $solicitudPostulacion)
     {
-        //
+        $solicitud = solicitudPostulacion::findOrFail($id);
+        return response()->json($solicitud);
     }
 
     /**

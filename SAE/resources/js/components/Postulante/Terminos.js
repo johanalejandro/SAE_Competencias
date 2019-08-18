@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../common/Header'
 import { ClipLoader } from "react-spinners";
+import PostulacionEnviada from "./PostulacionEnviada";
 
 export default class Terminos extends Component {
 
     state={
         loading: false,
+        enviado: false,
     }
 
     handleSubmit = async (e) => {
@@ -24,7 +26,9 @@ export default class Terminos extends Component {
         this.props.tipo==="evaluador"&&await this.props.handleCursos()
         await this.setLoading();
 
-        //window.location.href = "/postulacion-enviada";
+        await this.setState({
+            enviado: true,
+        })
       }
 
       setLoading = () =>{
@@ -40,6 +44,7 @@ export default class Terminos extends Component {
             
                 <React.Fragment>
                     {this.props.tipo === "evaluador"?(
+                        !this.state.enviado?(
                         <React.Fragment>
                             <Header title="Aplicación para certificarse como Evaluador"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
@@ -51,15 +56,13 @@ export default class Terminos extends Component {
                                         <div className="flex-row justify-content-between">
 
                                             <div className="card-body">
-                                                
-                                                    <ul className="mb-0 flex flex-row row">
-                                                        <li>Acepto cumplir con el código de Ética de la institución.	</li>
-                                                        <li>Declaro mantener confidencialidad de la información institucional que manejo.</li>
-                                                        <li>Declaro no tener ningún conflicto de interés que pueda afectar a la imparcialidad en independencia en las actividades dentro de la institución.	</li>
-                                                        <li>Declaro no tener ninguna vinculación con organismos que puedan comprometer mi independencia e imparcialidad en mis actividades institucionales.	</li>
-                                                        <li>Declaro que la información que he registrado es verdadera y tengo conocimiento de que la calificación correspondiente se basará estrictamente sobre la información registrada en la presente ficha.</li>
-                                                    </ul>
-                                                
+                                                     <ul className="mb-0 flex flex-row row">
+                                                     <li>Acepto cumplir con el código de Ética de la institución.</li><br></br>
+                                                     <li>Declaro mantener confidencialidad de la información institucional que manejo.</li><br></br>
+                                                     <li>Declaro no tener ningún conflicto de interés que pueda afectar a la imparcialidad en independencia en las actividades dentro de la institución.	</li><br></br>
+                                                     <li>Declaro no tener ninguna vinculación con organismos que puedan comprometer mi independencia e imparcialidad en mis actividades institucionales.	</li><br></br>
+                                                     <li>Declaro que la información que he registrado es verdadera y tengo conocimiento de que la calificación correspondiente se basará estrictamente sobre la información registrada en la presente ficha.</li>
+                                                 </ul>
                                                 
                                             </div>
                                         </div>
@@ -78,6 +81,9 @@ export default class Terminos extends Component {
                                 </div>
                             </div>
                         </React.Fragment>
+                        ):(
+                            <PostulacionEnviada/>
+                            )
                     ):(
                         <React.Fragment>
                             <Header title="Aplicación para certificarse como experto técnico"/>
