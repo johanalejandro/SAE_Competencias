@@ -106,6 +106,7 @@ class SolicitudPostulacionController extends Controller
             $postulante = Postulante::find($solicitud->id_postulante);
             $postulante->estado = 'Por Habilitar';
             $postulante->fechaHabilitacion = $current_date_time;
+            $postulante->save();
             //actualizo campos en evaluacionpostulante
             $evaluacion = evaluacionPostulacion::find($solicitud->id_evaluacion);
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;

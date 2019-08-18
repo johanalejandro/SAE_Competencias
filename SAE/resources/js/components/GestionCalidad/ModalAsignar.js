@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import pull from 'lodash/pull'
 import compact from 'lodash/compact'
 import uniqBy from "lodash/uniqBy";
+import clone from "lodash/clone";
 
 export default class ModalAsignar extends Component {
 
@@ -19,7 +20,9 @@ export default class ModalAsignar extends Component {
         respuesta: {},
         payload: {},
         alcances: [],
+        alcancesValidar: [],
         sectores: [],
+        sectoresValidar: [],
         tabla: [],
         tablaEv: [],
         asignaciones: [],
@@ -104,7 +107,8 @@ export default class ModalAsignar extends Component {
           }
           console.log(alcances);
           await this.setState({
-            alcances: alcances,
+            alcances: clone(alcances),
+            alcancesValidar: clone(alcances),
           })
         }
 
@@ -119,7 +123,8 @@ export default class ModalAsignar extends Component {
           }
           console.log(sectores);
           await this.setState({
-            sectores: sectores,
+            sectores: clone(sectores),
+            sectoresValidar: clone(sectores),
           })
         }
 
@@ -161,7 +166,7 @@ export default class ModalAsignar extends Component {
           asignaciones: filterData,
         })
     }
-    
+
        closeModal = (e,prevent = false) => {
         prevent?e.persist():e.stopPropagation()
         this.props.closeModal()
@@ -354,11 +359,11 @@ export default class ModalAsignar extends Component {
                                 </div>
                                 <div className="d-flex flex-row justify-content-end w-100">
                                   {val?(
-                                        isEmpty(this.state.sectores)?
+                                        this.state.sector==="selec"||this.state.usuario==="selec"?
                                         <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
                                         <button name="referencia" className="btn-secondary w-20" onClick={this.agregarEv}>Agregar</button>
                                         ):(
-                                        isEmpty(this.state.alcances)?
+                                        this.state.alcance==="selec"||this.state.usuario==="selec"?
                                         <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
                                         <button name="referencia" className="btn-secondary w-20" onClick={this.agregar}>Agregar</button>
                                         )
@@ -378,8 +383,10 @@ export default class ModalAsignar extends Component {
                     <div className="modal-footer">
                             <React.Fragment><button type="button" className="btn btn-secondary w-20 bg-light" style={{color:'#6c757d'}} onClick={this.closeModal}>Cancelar</button>
                             {!isEmpty(this.state.asignaciones)? (
-                            <button type="button" className="btn btn-secondary w-20" onClick={async(evt)=>{
-                                await this.props.asignar(this.state.asignaciones,data);
+                            <button type="button" className="btn btn-secondary w-20"
+                            disabled={val?(this.state.sectoresValidar.length!==this.state.asignaciones.length):(this.state.alcancesValidar.length!==this.state.asignaciones.length)}
+                            onClick={async(evt)=>{
+                                await this.props.asignar(this.state.asignaciones);
                                 await this.closeModal(evt,true);
                             }}>Asignar</button>):(
                               <button type="button" className="btn btn-secondary w-20" disabled>Asignar</button>

@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             SectorTableSeeder::class,
             AlcanceTableSeeder::class,
             SectorRequerimientoTableSeeder::class,
-            PostulantesTableSeeder::class,
+            //PostulantesTableSeeder::class,
         ]);
     }
 }
