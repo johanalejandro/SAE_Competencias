@@ -137,10 +137,18 @@ Route::post('/crearNuevaSolicitud', 'SolicitudPostulacionController@crearNuevaSo
 
 Route::post('/finalizarEvaluacionPostulante', 'SolicitudPostulacionController@finalizarEvaluacionPostulante');
 
+Route::post('/finalizarEvaluacionEvaluador', 'SolicitudPostulacionController@finalizarEvaluacionEvaluador');
+
+Route::post('/finalizarEvaluacionExperto', 'SolicitudPostulacionController@finalizarEvaluacionExperto');
+
 /* Para GUARDAR  (no finalizar)  estado evaluacion y guardar resultado de evaluacion debes pasar *id_solicitud* te lo mande en el api anterior, *detalleEvaluacion*, *resultadoEvaluacion*(debe ser aprobado), *tipoEvaluacion*/
 
 
 Route::post('/guardarEvaluacionPostulante', 'SolicitudPostulacionController@guardarEvaluacionPostulante');
+
+Route::post('/guardarEvaluacionEvaluador', 'SolicitudPostulacionController@guardarEvaluacionEvaluador');
+
+Route::post('/guardarEvaluacionExperto', 'SolicitudPostulacionController@guardarEvaluacionExperto');
 
 
 

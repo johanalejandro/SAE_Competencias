@@ -23,6 +23,7 @@ class Cursos_Evaluador extends Model
         'id_sector_requerimiento', 
         'nombreInstitucion',
         'numeroHoras',
-        'archivoAnexo'
+        'archivoAnexo',
+        'estado'
     ];
 }

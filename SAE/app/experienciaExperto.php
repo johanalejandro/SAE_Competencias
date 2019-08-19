@@ -31,6 +31,7 @@ class experienciaExperto extends Model
         'nombreEmpresa',
         'fecha_inicio',
         'fecha_fin',
+        'estado',
         'esTrabajoActual'
     ];
 
