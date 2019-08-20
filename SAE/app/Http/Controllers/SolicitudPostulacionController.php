@@ -91,13 +91,14 @@ class SolicitudPostulacionController extends Controller
 
   }
 
-  public function verSolicitudEvaluacion($id){
-    $solicitud = DB::table('solicitud_postulacions')->where('id_solicitud',$id)->first();
-    $evaluacion = DB::table('evaluacion_postulacions')->where('id_evaluacion',$solicitud->id_evaluacion)->first();
-        return response()->json($evaluacion);
+    public function verSolicitudEvaluacion($id){
+      $solicitud = DB::table('solicitud_postulacions')->where('id_solicitud',$id)->first();
+      $evaluacion = DB::table('evaluacion_postulacions')->where('id_evaluacion',$solicitud->id_evaluacion)->first();
+          return response()->json($evaluacion);
 
-}
+  }
 
+/*
     public function finalizarEvaluacionPostulante(Request $request){
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
@@ -116,9 +117,10 @@ class SolicitudPostulacionController extends Controller
             $evaluacion->save();
 
         return response()->json('Evaluacion Finalizada!');
+}
 
-
-    }
+*/
+  /* Finalizar evaluacion Evaluador y Experto */
     public function finalizarEvaluacionEvaluador(Request $request){
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
@@ -132,12 +134,13 @@ class SolicitudPostulacionController extends Controller
             
             //actualizo estados en cursos_evaluador
 
-            foreach($request->estados as $estado){
-                $curso = DB::table('cursos__evaluadors')->where('id_postulante',$solicitud->id_postulante)
-                                                                ->where('id_sector_requerimiento', $estado['id_sector_requerimiento'])
-                                                                ->get();
-                $curso ->estado = $estado['estado'];
-                $curso->save();
+            foreach(json_decode($request->estados) as $estado){
+                $curso = DB::table('cursos__evaluadors')->select('id_curso_evaluador')
+                                                        ->where('id_postulante',$solicitud->id_postulante)
+                                                        ->where('id_sector_requerimiento', $estado->id_sector_requerimiento)
+                                                        ->first();
+                $cursoActualizado = Cursos_Evaluador::find($curso->id_curso_evaluador);
+                $cursoActualizado->save();
              
             }
             //actualizo campos en evaluacionpostulante
@@ -158,7 +161,7 @@ class SolicitudPostulacionController extends Controller
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
             //obtengo id de la solicitud de evaluacion
-            $solicitud =  DB::table('solicitud_postulacions')->where('id_solicitud',$request->id_solicitud)->first();
+            $solicitud =  DB::table('solicitud_postulacions')->select('*')->where('id_solicitud',$request->id_solicitud)->first();
             //actulizo campos en postulante
             $postulante = Postulante::find($solicitud->id_postulante);
             $postulante->estado = 'Por Habilitar';
@@ -166,12 +169,13 @@ class SolicitudPostulacionController extends Controller
             $postulante->save();
             //actualizo estados en experiencia_experto
 
-            foreach($request->estados as $estado){
-                $experiencia = DB::table('experiencia_expertos')->where('id_postulante',$solicitud->id_postulante)
-                                                                ->where('id_alcance', $estado['id_alcance'])
-                                                                ->get();
-                $experiencia->estado = $estado['estado'];
-                $experiencia->save();
+            foreach(json_decode($request->estados) as $estado){
+                $experiencia = DB::table('experiencia_expertos')->select('id_experiencia')->where('id_postulante',$solicitud->id_postulante)
+                                                                ->where('id_alcance', $estado->id_alcance)
+                                                                ->first();
+                $exp = experienciaExperto::find($experiencia->id_experiencia);                                              
+                $exp ->estado = $estado->estado;
+                $exp->save();
              
             }
             //actualizo campos en evaluacionpostulante
@@ -186,7 +190,7 @@ class SolicitudPostulacionController extends Controller
 
     }
 
-
+    /*
     public function guardarEvaluacionPostulante(Request $request){
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
@@ -204,32 +208,37 @@ class SolicitudPostulacionController extends Controller
 
 
     }
-     public function guardarEvaluacionEvaluador(Request $request){
-            //fecha actual
-            $current_date_time = Carbon::now()->toDateTimeString();
-            //obtengo id de la solicitud de evaluacion
-            $solicitud =  DB::table('solicitud_postulacions')->select('id_evaluacion')->where('id_solicitud',$request->id_solicitud)->first();
-
-           foreach($request->estados as $estado){
-                $curso = DB::table('cursos__evaluadors')->where('id_postulante',$solicitud->id_postulante)
-                                                                ->where('id_sector_requerimiento', $estado['id_sector_requerimiento'])
-                                                                ->get();
-                $curso->estado = $estado['estado'];
-                $curso->save();
-             
-            }
-            //actualizo campos en evaluacionpostulante
-            $evaluacion = evaluacionPostulacion::find($solicitud->id_evaluacion);
-            $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
-            $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
-            $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
-            $evaluacion->updated_at = $current_date_time;
-            $evaluacion->save();
-
-        return response()->json('Campos guardados!');
+    */
 
 
-    }
+  /* Guardar evaluaciones de expertos y postulantes */
+   public function guardarEvaluacionEvaluador(Request $request){
+          //fecha actual
+          $current_date_time = Carbon::now()->toDateTimeString();
+          //obtengo id de la solicitud de evaluacion
+         $solicitud =  DB::table('solicitud_postulacions')->select('*')->where('id_solicitud',$request->id_solicitud)->first();
+
+         foreach(json_decode($request->estados) as $estado){
+              $curso = DB::table('cursos__evaluadors')->select('id_curso_evaluador')
+                                                      ->where('id_postulante',$solicitud->id_postulante)
+                                                      ->where('id_sector_requerimiento', $estado->id_sector_requerimiento)
+                                                      ->first();
+              $cursoActualizado = Cursos_Evaluador::find($curso->id_curso_evaluador);
+              $cursoActualizado->save();
+           
+          }
+          //actualizo campos en evaluacionpostulante
+          $evaluacion = evaluacionPostulacion::find($solicitud->id_evaluacion);
+          $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
+          $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
+          $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
+          $evaluacion->updated_at = $current_date_time;
+          $evaluacion->save();
+
+      return response()->json('Campos guardados!');
+
+
+  }
     public function guardarEvaluacionExperto(Request $request){
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
