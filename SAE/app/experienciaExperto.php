@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class experienciaExperto extends Model
 {
     //
-    protected $primaryKey = 'id_experiencia_experto';
+    protected $primaryKey = 'id_experiencia';
     public $timestamps = true;
 
     public function postulante()

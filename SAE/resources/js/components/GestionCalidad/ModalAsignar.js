@@ -131,80 +131,10 @@ export default class ModalAsignar extends Component {
       
       }
 
-      agregar = async() => {
-        let asignacion = {}
-        asignacion['alcance'] = this.state.nombreAlcance;
-        asignacion['usuario'] = this.state.nombreUsuario;
-        const { tabla } = this.state;
-        const filterData = tabla;
-        filterData.push(asignacion);
-        await this.setState({ tabla: filterData });
-        await this.updateAsignacion();
-        await this.clean(this.state.alcance);
-    }
-
-    agregarEv = async() => {
-      let asignacion = {}
-      asignacion['sector'] = this.state.tipoSector;
-      asignacion['usuario'] = this.state.nombreUsuario;
-      const { tabla } = this.state;
-      const filterData = tabla;
-      filterData.push(asignacion);
-      await this.setState({ tabla: filterData });
-      await this.updateAsignacion();
-      await this.cleanEv(this.state.sector);
-  }
-
-    updateAsignacion = () => {
-      let asignacion = {};
-      asignacion['id_postulante'] = this.props.modalInfo.data[0];
-      asignacion['id_usuario'] = this.state.usuario;
-      const { asignaciones } = this.state;
-        const filterData = asignaciones;
-        filterData.push(asignacion);
-        this.setState({
-          asignaciones: filterData,
-        })
-    }
-
        closeModal = (e,prevent = false) => {
         prevent?e.persist():e.stopPropagation()
         this.props.closeModal()
       }
-
-      clean = async (alcanceActual) => {
-        console.log(alcanceActual);
-        const { alcances } = this.state;
-        let filterData = [];
-        filterData = alcances;
-        const alcanceAEliminar = await filterData.find((alcance)=>{
-            return alcance.id_alcance === parseInt(alcanceActual);
-        })
-        console.log("eliminar",alcanceAEliminar)
-        await pull(filterData,alcanceAEliminar);
-        await this.setState({
-          alcance: "selec",
-          usuario: "selec",
-      });
-        await this.setState({ alcances: filterData });
-    }
-
-    cleanEv = async (sectorActual) => {
-      console.log(sectorActual);
-      const { sectores } = this.state;
-      let filterData = [];
-      filterData = sectores;
-      const sectorAEliminar = await filterData.find((sector)=>{
-          return sector.id_sector_requerimiento === parseInt(sectorActual);
-      })
-      console.log("eliminar",sectorAEliminar)
-      await pull(filterData,sectorAEliminar);
-      await this.setState({
-        sector: "selec",
-        usuario: "selec",
-    });
-      await this.setState({ sectores: filterData });
-  }
 
       handleChange = (evt) =>{
         console.log(evt.target)
@@ -214,93 +144,14 @@ export default class ModalAsignar extends Component {
         let text = evt.nativeEvent.target[index].text;
         this.setState({
             [name]: parseInt(value),
-        })
-        if(name==="alcance"){
-          this.setState({
-            nombreAlcance: text,
-          })
-        }
-        if(name==="sector"){
-          this.setState({
-            tipoSector: text,
-          })
-        }
-        if(name==="usuario"){
-          this.setState({
-            nombreUsuario: text,
-          })
-        }
+        });
       }
 
       render () {
       const data = this.props.modalInfo.data!==undefined?this.props.modalInfo.data:{};
       const val= data[3]==="Evaluador";
       let i =0;
-
-      const columns = [
-        {
-            name: val?"sector":"alcance",
-            label: val?"Curso/Norma":"Alcance",
-            options: {
-             filter: false,
-             sort: false,
-            },
-        },
-      {
-       name: "usuario",
-       label: "Usuario a asignar la evaluación",
-       options: {
-        filter: false,
-        sort: false,
-       }
-      },
-    ];
-
-    const options = {
-      selectableRowsOnClick: false,
-      selectableRows: 'none',
-      rowsPerPage: 3,
-      rowsPerPageOptions: [3,5,10],
-      search: false,
-      filter: false,
-      print: false,
-      download: false,
-      viewColumns: false,
-      filterType: 'checkbox',
-      textLabels: {
-          body: {
-            noMatch: "Aun no hay datos que mostrar",
-            toolTip: "Ordenar",
-          },
-          pagination: {
-            next: "Siguiente",
-            previous: "Anterior",
-            rowsPerPage: "Filas por página:",
-            displayRows: "de",
-          },
-          toolbar: {
-            search: "Buscar",
-            downloadCsv: "Descargar CSV",
-            print: "Impimir",
-            viewColumns: "Ver columnas",
-            filterTable: "Filtrar Tabla",
-          },
-          filter: {
-            all: "Todos",
-            title: "FILTROS",
-            reset: "RESET",
-          },
-          viewColumns: {
-            title: "Mostrar columnas",
-            titleAria: "Mostrar/Ocultar Columnas",
-          },
-          selectedRows: {
-            text: "fila(s) seleccionadas",
-            delete: "Borrar",
-            deleteAria: "Borrar Filas Seleccionadas",
-          },
-        }
-   };
+      
     console.log(this.state.respuesta.usuarios);
       return (
           <div 
@@ -324,24 +175,19 @@ export default class ModalAsignar extends Component {
                     </div>
                     <div className="d-flex flex-row justify-content-between mb-1">
                                     <div className="d-flex flex-column w-50 mr-2">
-                                        <Label name={val?"Sectores Postulados":"Alcances Postulados"} className="w-100"/>
-                                        <select className="h-50" name={val?"sector":"alcance"} value={val?this.state.sector:this.state.alcance} onChange={this.handleChange}>
-                                            <option disabled value="selec">Seleccione</option>
+                                        <h6>{val?"Sectores Postulados":"Alcances Postulados"}</h6>
                                             {!isEmpty(this.state.alcances)?(
                                               //console.log(this.state.alcances)
                                               this.state.alcances.map((alcance)=>{
                                                 //console.log(alcance)
-                                              return <option key={alcance.id_alcance} value={alcance.id_alcance}>{alcance.nombreAlcance}</option>
+                                              return <Label key={alcance.id_alcance} name={alcance.nombreAlcance}></Label>
                                             })):null}
                                             {!isEmpty(this.state.sectores)?(
                                               //console.log(this.state.sectores)
                                               this.state.sectores.map((sector)=>{
                                                 //console.log(sector)
-                                              return <option key={sector.id_sector_requerimiento} value={sector.id_sector_requerimiento}>{sector.tipoSector}</option>
+                                              return <Label key={sector.id_sector_requerimiento} name={sector.tipoSector}></Label>
                                             })):null}
-                                            
-                                        </select>
-
                                     </div>
                                     <div className="d-flex flex-column w-50">
                                         <Label name={data[3]+" a asignar"}/>
@@ -357,40 +203,20 @@ export default class ModalAsignar extends Component {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="d-flex flex-row justify-content-end w-100">
-                                  {val?(
-                                        this.state.sector==="selec"||this.state.usuario==="selec"?
-                                        <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
-                                        <button name="referencia" className="btn-secondary w-20" onClick={this.agregarEv}>Agregar</button>
-                                        ):(
-                                        this.state.alcance==="selec"||this.state.usuario==="selec"?
-                                        <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
-                                        <button name="referencia" className="btn-secondary w-20" onClick={this.agregar}>Agregar</button>
-                                        )
-                                      }
-                                    </div>
-                                    <div className="d-flex flex-row justify-content-center align-items-center w-100 py-2">
-                                      <MUIDataTable className="data-table w-100"
-                                          data={this.state.tabla}
-                                          columns={columns}
-                                          options={options}
-                                      />
-                                  </div>
-                                  
-                                  
                     </div>
                 
                     <div className="modal-footer">
-                            <React.Fragment><button type="button" className="btn btn-secondary w-20 bg-light" style={{color:'#6c757d'}} onClick={this.closeModal}>Cancelar</button>
-                            {!isEmpty(this.state.asignaciones)? (
+                            <React.Fragment>
+                              <button type="button" className="btn btn-secondary w-20 bg-light" style={{color:'#6c757d'}} onClick={this.closeModal}>Cancelar</button>
+                            {this.state.usuario!=="selec"? (
                             <button type="button" className="btn btn-secondary w-20"
-                            disabled={val?(this.state.sectoresValidar.length!==this.state.asignaciones.length):(this.state.alcancesValidar.length!==this.state.asignaciones.length)}
                             onClick={async(evt)=>{
-                                await this.props.asignar(this.state.asignaciones);
+                                await this.props.asignar(data[0],this.state.usuario,data);
                                 await this.closeModal(evt,true);
                             }}>Asignar</button>):(
                               <button type="button" className="btn btn-secondary w-20" disabled>Asignar</button>
-                            )}</React.Fragment>
+                            )}
+                            </React.Fragment>
                     </div>
                 </div>
             </div>

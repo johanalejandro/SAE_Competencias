@@ -175,7 +175,7 @@ export default class FormularioPostulacion extends Component {
                  />
               ): (
                 <React.Fragment>
-                    <Header title="Opciones de Postulación"/>
+                    <Header title={"Opciones de Postulación"+window.location.search ==="?tipo=evaluador"?"EVALUADOR":"EXPERTO"}/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
                                     {this.state.tipo === "ambitos"?(
@@ -285,7 +285,7 @@ export default class FormularioPostulacion extends Component {
                     </div>
                     <div className="modal-footer">
                             <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal">Ok, revisaré</button>
-                            <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal" onClick={this.handlePostulacion}>No, continuar</button>
+                            <button type="button" className="btn btn-primary-sae w-25 bg-danger" data-dismiss="modal" onClick={this.handlePostulacion}>Continuar</button>
                     </div>
                   </div>
                 </div>

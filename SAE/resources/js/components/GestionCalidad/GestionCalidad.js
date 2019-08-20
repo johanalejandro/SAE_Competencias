@@ -196,7 +196,8 @@ export default class GestionCalidad extends Component {
                     
                     
                 }
-                await habilitadosEvaluador.push(postulantesHabilitados);
+                console.log(postulantesHabilitados);
+                habilitadosEvaluador[i] = postulantesHabilitados;
                 
             }
         })
@@ -257,7 +258,8 @@ export default class GestionCalidad extends Component {
                     
                    
                 }
-                await habilitadosExperto.push(postulantesHabilitados);
+                console.log(postulantesHabilitados);
+                habilitadosExperto[i]=postulantesHabilitados;
                 
             }
         })
@@ -293,14 +295,11 @@ getRequerimiento  =async (id) => {
         return alcance;
     }
 
-    asignar = async (payload,data)=>{
+    asignar = async (id_postulante,id_usuario,data)=>{
         let count =0;
-        console.log(payload)
-        for (let index = 0; index < payload.length; index++) {
-            const asignacion = payload[index];
             let formData = new FormData();
-            formData.append("id_usuario",asignacion.id_usuario);
-            formData.append("id_postulante",asignacion.id_postulante);
+            formData.append("id_usuario",id_usuario);
+            formData.append("id_postulante",id_postulante);
             await axios.post("api/crearNuevaSolicitud", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -310,19 +309,14 @@ getRequerimiento  =async (id) => {
             dataasignarExperto: [],*/
             .then((response) => {
                 
-                axios.get("api/asignarAPostulante/"+asignacion.id_postulante)
+                axios.get("api/asignarAPostulante/"+id_postulante)
                 .then((response) => {
-                    count++;
-                    console.log(response);
+                    this.asignado(data);
                 })
                 .catch(console.error);
                 console.log(response);
             })
             .catch(console.error);
-        }
-        if(count===payload.length){
-            this.asignado(data);
-        }
     }
 
 

@@ -9,7 +9,7 @@ import Label from '../common/Label';
 export default class EducacionFormal extends Component {
 
     render() {
-        //console.log("ambitos escogidos: ",this.state.ambitosArray);
+        console.log("archivo anexo: ",this.props.archivoAnexo);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center justify-content-between w-100">
@@ -47,9 +47,9 @@ export default class EducacionFormal extends Component {
                                                       <div className="text-primary text-center">Cargando anexo</div>
                                                   </div>
                                               ) : (
-                                                  isEmpty(this.props.archivoAnexo)? (
+                                                  !this.props.archivoAnexo? (
                                                     <React.Fragment>
-                                                    <div className="d-flex justify-content-center text-blue align-items-center btn btn-secondary h-100">
+                                                    <div className="d-flex justify-content-center align-items-center btn btn-secondary text-info bg-light h-100">
                                                         <span className="text-center">Cargar archivo</span>
                                                     </div>
                                                     <input
@@ -61,8 +61,9 @@ export default class EducacionFormal extends Component {
                                                     />
                                                 </React.Fragment>
                                                   ):(
-                                                    <div className="d-flex flex-column justify-content-start w-100 align-items-center">
-                                                      <div className="text-primary text-center">Archivo Cargado</div>
+                                                    <div className="d-flex flex-row justify-content-start mr-2  w-100 align-items-center">
+                                                      <div className="text-primary text-left">Archivo Cargado</div>
+                                                      <button className="btn btn-secondary text-info bg-light h-100" name="archivoAnexo" onClick={this.props.volverCargar}>Volver a cargar</button>
                                                   </div>
                                                   )
                                               )}

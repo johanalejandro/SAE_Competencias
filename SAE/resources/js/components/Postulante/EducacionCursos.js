@@ -20,6 +20,7 @@ export default class EducacionCursos extends Component {
           loading: false,
       }
 
+
     handleSubmit = async (e) => {
         //preventDefault prevents page reload   
         e.preventDefault();
@@ -32,7 +33,7 @@ export default class EducacionCursos extends Component {
 
         await this.props.handleCursos();
 
-        this.setLoading();
+        await this.setLoading();
       }
 
       setLoading = () =>{
@@ -190,39 +191,48 @@ export default class EducacionCursos extends Component {
                                          <div className="d-flex flex-column w-60 mr-4">
                                             <Label name="Anexo"/>
                                             <label id="anexo-label" className="w-50 d-flex justify-content-start text-left text-normal h-50">
-                                                {this.props.loadingFileCurso ? (
+                                                {this.state.loading? (
                                                     <div className="d-flex flex-column justify-content-center w-100 align-items-center">
-                                                        <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
-                                                        <div className="text-primary text-center">Cargando anexo</div>
-                                                    </div>
-                                                ) : (
-                                                    isEmpty(this.props.archivoAnexoCurso)? (
-                                                        <React.Fragment>
-                                                        <div className="d-flex justify-content-center text-blue align-items-center btn btn-secondary h-100">
-                                                            <span className="text-center">Cargar archivo</span>
-                                                        </div>
-                                                        <input
-                                                            type="file"
-                                                            name="archivoAnexoCurso"
-                                                            className="d-none"
-                                                            onChange={this.props.handleChangeFileCurso}
-                                                            id="archivoAnexoCurso"
-                                                        />
-                                                    </React.Fragment>
-                                                    ):(
-                                                        <div className="d-flex flex-column justify-content-start w-100 align-items-center">
-                                                        <div className="text-primary text-center">Archivo Cargado</div>
-                                                    </div>
-                                                    )
-                                                )}
+                                                    <ClipLoader sizeUnit={"px"} size={30} color={"#9561e2"} className="block" />
+                                                    <div className="text-primary text-center">Cargando anexo</div>
+                                                </div>
+                                            ) : (
+                                                !this.props.archivoAnexoCurso? (
+                                                <div className="d-flex flex-row justify-content-start w-100 mr-2 align-items-center">
+                                                       <div className="text-primary text-left">Cargar pdf</div>
+                                                  <div className="d-flex justify-content-center align-items-center btn btn-secondary text-info bg-light h-100">
+                                                 
+                                                      <span className="text-center">Cargar archivo</span>
+                                                  </div>
+                                                  {this.props.aviso&&(<span className="text-danger">El archivo no es pdf</span>)}
+                                                  <input
+                                                      type="file"
+                                                      name="archivoAnexoCurso"
+                                                      className="d-none"
+                                                      onChange={this.props.handleChangeFileCurso}
+                                                      id="archivoAnexoCurso"
+                                                  />
+                                              </div>
+                                                ):(
+                                                  <div className="d-flex flex-row justify-content-start w-100 mr-2 align-items-center">
+                                                    <div className="text-primary text-left">Archivo Cargado</div>
+                                                    <button className="btn btn-secondary text-info bg-light h-100" name="archivoAnexoCurso" onClick={this.props.volverCargar}>Volver a cargar</button>
+                                                </div>
+                                                )
+                                            )}
                                                 <div id="fileDisplayArea" className="mt--6 ml--10 inset-0 h-0" />
                                             </label>
 
                                         </div>
                                     </div>
-                                    <div className="d-flex flex-row justify-content-end w-100">
-                                        {isEmpty(this.props.reqs)?
-                                        <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
+                                    <div className="d-flex flex-row justify-content-end align-items-center w-100">
+                                        {isEmpty(this.props.reqs)||this.props.archivoAnexoCurso===""||this.props.numeroHoras<500||this.props.reqActual==="selec"||this.props.nombreInstitucionCurso===""?
+                                        (
+                                            <React.Fragment>
+                                            <label className="text-danger text-left mr-2 ">Revise que los datos del curso estén completos y que el número de horas sea mayor a 500</label>
+                                            <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>
+                                        </React.Fragment>
+                                        ):
                                         <button name="referencia" className="btn-secondary w-20" onClick={this.props.agregarCurso}>Agregar</button>
                                         }
                                     </div>

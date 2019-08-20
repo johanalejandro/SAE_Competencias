@@ -92,7 +92,7 @@ export default class Prerrequisitos extends Component {
             <React.Fragment>
             {this.state.show?(
                 <React.Fragment>
-                    <Header title="Postulación"/>
+                    <Header title="Postulación EVALUADOR"/>
                     <div className="containersae d-flex flex-row justify-content-center h-85">
                         <div className="d-flex flex-column align-items-center w-100 mx-2">
                             <h2>Requisitos mínimos</h2>
@@ -115,7 +115,7 @@ export default class Prerrequisitos extends Component {
                 <React.Fragment>
                     {this.props.tipo === "evaluador"?(
                         <React.Fragment>
-                            <Header title="Postulación"/>
+                            <Header title="Postulación EVALUADOR"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
                                 <div className="d-flex flex-column align-items-center mx-2">
                                     <h2>Requisitos mínimos</h2>
@@ -159,7 +159,7 @@ export default class Prerrequisitos extends Component {
                         </React.Fragment>
                     ):(
                         <React.Fragment>
-                            <Header title="Postulación"/>
+                            <Header title="Postulación EXPERTO"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
                                 <div className="d-flex flex-column align-items-center mx-2">
                                     <h2>Requisitos mínimos</h2>

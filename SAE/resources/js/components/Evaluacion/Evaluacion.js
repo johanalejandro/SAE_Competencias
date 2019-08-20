@@ -128,6 +128,7 @@ export default class Evaluacion extends Component {
                 experiencia['cargoEjercido'] = postulante.cargoEjercido;
                 experiencia['descripcion'] = postulante.descripcion;
                 experiencia['id_alcance'] = postulante.id_alcance;
+                experiencia['estado'] = postulante.estado;
                 return experiencia;
             })
             const experiencies = uniqBy(experiencias,'id_alcance')
@@ -158,6 +159,7 @@ export default class Evaluacion extends Component {
                         exp['nombreEmpresa'] = experiencia.nombreEmpresa;
                         exp['cargoEjercido'] = experiencia.cargoEjercido;
                         exp['descripcion'] = experiencia.descripcion;
+                        exp['estado'] = experiencia.estado;
                         exp['alcance'] = await this.getAlcance(experiencia.id_alcance);
                         exp['tipoPostulacion'] = postul.tipoPostulacion;
                         expertoPorEvaluar['experiencias'].push(exp);
@@ -166,7 +168,7 @@ export default class Evaluacion extends Component {
                     
                 }
                 console.log(expertoPorEvaluar.id_postulante,expertoPorEvaluar);
-                await expertosPorEvaluar.push(expertoPorEvaluar);
+                expertosPorEvaluar[i] = await expertoPorEvaluar;
             }
              console.log(expertosPorEvaluar)
              await this.setState({
@@ -203,19 +205,21 @@ getRequerimiento  =async (id) => {
         return alcance;
     }
 
-    guardarEvaluacion =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion) => {
+    guardarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
         let formData =  new FormData();
         formData.append("id_solicitud",id_solicitud);
         formData.append("detalleEvaluacion",detalleEvaluacion);
         formData.append("tipoEvaluacion",tipoEvaluacion);
         formData.append("resultadoEvaluacion",resultadoEvaluacion);
-        await axios.post("api/guardarEvaluacionPostulante/",formData,{
+        formData.append("estados",JSON.stringify(estados));
+        await axios.post("api/guardarEvaluacionExperto/",formData,{
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
-        .then((response ) => {
-            console.log(response);
+        .then(async(response ) => {
+            await console.log(response);
+            await location.reload();
         })
         .catch(console.error);
     }
@@ -339,7 +343,7 @@ getRequerimiento  =async (id) => {
                  sort: true,
                  customBodyRender: (value) => {
                     return <span className="text-danger">
-                              {value}
+                              Por Evaluar
                         </span>
                     
                   },
@@ -510,7 +514,7 @@ getRequerimiento  =async (id) => {
                     <Modal
                         modalInfo={this.state.modalInfo}
                         closeModal={this.selectModal}
-                        guardarEvaluacion={this.guardarEvaluacion}
+                        guardarEvaluacionExperto={this.guardarEvaluacionExperto}
                         finalizarEvaluacion={this.finalizarEvaluacion}
                     />)
                     }

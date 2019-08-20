@@ -22,8 +22,8 @@ export default class Terminos extends Component {
         })
 
         await this.props.handlePostulante();
-        this.props.tipo==="evaluador"?await this.props.handleExpEv(): await this.props.handleExp()
-        this.props.tipo==="evaluador"&&await this.props.handleCursos()
+        await this.props.tipo==="evaluador"?await this.props.handleExpEv(): await this.props.handleExp()
+        await this.props.tipo==="evaluador"&&await this.props.handleCursos()
         await this.setLoading();
 
         await this.setState({
@@ -85,6 +85,7 @@ export default class Terminos extends Component {
                             <PostulacionEnviada/>
                             )
                     ):(
+                        !this.state.enviado?(
                         <React.Fragment>
                             <Header title="Aplicación para certificarse como experto técnico"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
@@ -121,7 +122,10 @@ export default class Terminos extends Component {
                                     )}
                                 </div>
                             </div>
-                        </React.Fragment>
+                        </React.Fragment>):
+                        (
+                            <PostulacionEnviada/>
+                        )
                     )}
                 </React.Fragment>
             </React.Fragment>    

@@ -14,11 +14,12 @@ import axios from "axios";
 import EducacionCursos from "./EducacionCursos";
 import ExperienciaLaboralEv from "./ExperienciaLaboralEv";
 
+const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-const getCurrentMonth = () => {
+const getYearsAgo = (years) => {
     var date = new Date();
     const month = date.getMonth();
-    const year = date.getFullYear();
+    const year = date.getFullYear()-years;
     return new Date(year, month, 1);
 };
 
@@ -63,7 +64,7 @@ export default class HojaDeVida extends Component {
         apellidos: "",
         tipoId: "selec",
         identificacion: "",
-        fechaNacimiento: new Date(),
+        fechaNacimiento: getYearsAgo(22),
         correo: "",
         estadoCivil: "selec",
         telefono: "",
@@ -87,12 +88,13 @@ export default class HojaDeVida extends Component {
         reqActual:"selec",
         reqItem:"",
         reqs:[],
+        fileCursoError: false,
 
         //Experiencia Laboral
         experiencias : [],
         experienciaLaboral: [],
         alcances: [],
-        fechaInicio: getCurrentMonth(),
+        fechaInicio: getYearsAgo(4),
         fechaFin: getCurrentDate(),
         esTrabajoActual: 0,
         descripcion: "",
@@ -104,6 +106,9 @@ export default class HojaDeVida extends Component {
         requerimientoItem: "",
         alcanceItem: "",
         checkedItems: new Map(),
+        actividad: "selec",
+        fechaValidationEv: false,
+        fechaValidationExp: false,
         
     }
 
@@ -122,8 +127,8 @@ export default class HojaDeVida extends Component {
 
         await this.setState({
             ambitosArray: this.props.ambitos,
-            sectoresArray: this.props.sectores,
-            alcancesArray: this.props.alcances,
+            sectoresArray: clone(this.props.sectores),
+            alcancesArray: clone(this.props.alcances),
             alcances: this.props.alcances,
             form: "datos",
             prerrequisitos: "si",
@@ -134,21 +139,69 @@ export default class HojaDeVida extends Component {
         const { fechaFin } = this.state;
         const startDateTmp = new Date(date);
         const endDateTmp = new Date(fechaFin);
+        if (this.state.tipo==="evaluador"){
+            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
+            if(this.dateDiffInDays(endDateTmp,startDateTmp)<1461) {
+                await this.setState({fechaValidationEv: true,});
+            }else{
+                await this.setState({
+                    fechaValidationEv: false,
+                    fechaValidationExp: false,
+                })
+            }
+            
+        }
+        if (this.state.tipo==="experto"){
+            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
+            if(this.dateDiffInDays(endDateTmp,startDateTmp)<730){
+                 await this.setState({fechaValidationExp: true,});
+                }
+                else{
+                    await this.setState({
+                        fechaValidationEv: false,
+                        fechaValidationExp: false,
+                    })
+                }
+        }
         if (startDateTmp >= endDateTmp) {
             await this.setState({
                 fechaInicio: date,
                 fechaFin: date,
             });
-        } else {
+        }else{
             await this.setState({
                 fechaInicio: date,
             });
         }
     };
+
+    dateDiffInDays=(a, b)=>  {
+        // Discard the time and time-zone information.
+        const utc1 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+        const utc2 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+      
+        return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+      }
+
     handleChangeEnd = async (date) => {
         const { fechaInicio } = this.state;
         const startDateTmp = new Date(fechaInicio);
         const endDateTmp = new Date(date);
+        if (this.state.tipo==="evaluador"){
+            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
+            if(this.dateDiffInDays(endDateTmp,startDateTmp)<1461) {
+                this.setState({fechaValidationEv: true,}); 
+                return;
+            }
+            
+        }
+        if (this.state.tipo==="experto"){
+            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
+            if(this.dateDiffInDays(endDateTmp,startDateTmp)<730){
+                 this.setState({fechaValidationExp: true,});
+                  return
+                }
+        }
         if (endDateTmp >= startDateTmp) {
             await this.setState({
                 fechaFin: date,
@@ -192,13 +245,11 @@ export default class HojaDeVida extends Component {
         this.state.apellidos=== ""||
         this.state.identificacion=== ""||
         this.state.correo=== ""||
-        this.state.estadoCivil=== "selec"||
         this.state.telefono=== ""||
         this.state.ciudad===""||
         this.state.provincia=== ""||
         this.state.direccion=== ""||
-        this.state.disponibilidad=== "selec"||
-        this.state.genero === 'selec');
+        this.state.disponibilidad=== "selec");
 
         let validarCursos = false;
         
@@ -211,12 +262,12 @@ export default class HojaDeVida extends Component {
         let validarExperiencia = true;
             if(this.state.tipo==="evaluador"){
                 validarExperiencia = (
-                    this.state.experiencias.length !== this.state.requerimientosArray.length
+                    this.state.experiencias.length <1
                 );
             }else{
                 console.log("VALIDAR",this.state.experiencias.length, this.state.alcancesArray.length)
                 validarExperiencia = (
-                    this.state.experiencias.length !== this.state.alcancesArray.length
+                    this.state.experiencias.length <1
                 );
             }
 
@@ -224,13 +275,13 @@ export default class HojaDeVida extends Component {
             validarCursos=(
                 this.state.cursos.length !== this.state.requerimientosArray.length
             );
-            if(validarDatos && validarEducacion && validarCursos && validarExperiencia){
+            if(validarDatos || validarEducacion || validarCursos || validarExperiencia){
                 $('#camposVacíos').modal();
             }else{
                 $('#verificarDatos').modal();
             }
         }else{
-            if(validarDatos && validarEducacion && validarExperiencia){
+            if(validarDatos || validarEducacion || validarExperiencia){
                 $('#camposVacíos').modal();
             }else{
                 $('#verificarDatos').modal();
@@ -280,7 +331,7 @@ export default class HojaDeVida extends Component {
         curso['id_sector_requerimiento'] = this.state.reqActual;
         curso['requerimiento'] = this.state.reqItem;
         curso['numeroHoras'] = this.state.numeroHoras;
-        curso['archivoAnexoCurso'] = this.state.archivoAnexoCurso;
+        curso['archivoAnexoCurso'] = this.state.archivoAnexoCurso.name;
         if(this.state.nombreInstitucionCurso===""||this.state.archivoAnexoCurso===""||this.state.numeroHoras===0||this.state.reqActual==="selec"||this.state.reqItem===""){
             return
         }
@@ -368,11 +419,17 @@ export default class HojaDeVida extends Component {
     }
 
     handleChangeFile = async (e) => {
+        this.setState({
+            loadingFile: true,
+        })
         const name = e.target.name;
         const { files } = e.target;
         const file = files[0];
         await this.setState({
             [name] : file,
+        })
+        this.setState({
+            loadingFile: false,
         })
     }
 
@@ -380,8 +437,32 @@ export default class HojaDeVida extends Component {
         const name = e.target.name;
         const { files } = e.target;
         const file = files[0];
-        await this.setState({
-            [name] : file,
+        if(file.type!=="application/pdf"){
+            await this.setState({
+                fileCursoError: true,
+            });
+            return
+        }else{
+            await this.setState({
+                fileCursoError: false,
+                [name] : file,
+            })
+        }
+    }
+
+    handleChangeActividad=(e)=>{
+        const value = e.target.value;
+        this.setState({
+            actividad: value,
+            descripcion: this.state.descripcion+". Relacionado con actividades en "+value,
+        });
+
+    }
+
+    volverCargar = (e)=>{
+        const name = e.target.name;
+        this.setState({
+            [name]:"",
         })
     }
 
@@ -489,7 +570,7 @@ export default class HojaDeVida extends Component {
         await pull(filterData,alcanceAEliminar);
         await this.setState({ alcances: filterData });
         await this.setState({
-            fechaInicio: getCurrentMonth(),
+            fechaInicio: getYearsAgo(2),
             fechaFin: getCurrentDate(),
             esTrabajoActual: 0,
             descripcion: "",
@@ -497,6 +578,7 @@ export default class HojaDeVida extends Component {
             nombreEmpresa: "",
             alcanceActual: "selec",
             checkedItems: new Map(),
+            actividad: "selec",
         });
     }
 
@@ -531,7 +613,7 @@ export default class HojaDeVida extends Component {
         await pull(filterData,requerimientoAEliminar);
         await this.setState({ requerimientos: filterData });
         await this.setState({
-            fechaInicio: getCurrentMonth(),
+            fechaInicio: getYearsAgo(4),
             fechaFin: getCurrentDate(),
             esTrabajoActual: 0,
             descripcion: "",
@@ -539,6 +621,7 @@ export default class HojaDeVida extends Component {
             nombreEmpresa: "",
             requerimientoActual: "selec",
             checkedItems: new Map(),
+            actividad: "selec",
         });
     }
 
@@ -562,11 +645,6 @@ export default class HojaDeVida extends Component {
         formData.append("tipoPostulacion", postulante.tipoPostulacion);
         formData.append("disponibilidad", postulante.disponibilidad);
 
-        console.log("PAYLOAD DE POSTULANTE");
-        for(let pair of formData.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]); 
-         }
-
         axios
             .post("api/postulantes", formData, {
                 headers: {
@@ -588,12 +666,6 @@ export default class HojaDeVida extends Component {
         formData.append("id_sector_requerimiento", curso.id_sector_requerimiento);
         formData.append("numeroHoras", curso.numeroHoras);
         formData.append("archivoAnexo", curso.archivoAnexoCurso);
-
-        console.log("PAYLOAD DE CURSO");
-
-        for(let pair of formData.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]); 
-         }
 
 
         axios
@@ -619,12 +691,6 @@ export default class HojaDeVida extends Component {
         formData.append("fechaInicio", formatDate(experiencia.fechaInicio));
         formData.append("fechaFin", formatDate(experiencia.fechaFin));
 
-        console.log("PAYLOAD DE EXPERIENCIA");
-
-        for(let pair of formData.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]); 
-         }
-
 
         axios
             .post("api/experiencias", formData, {
@@ -648,12 +714,6 @@ export default class HojaDeVida extends Component {
         formData.append("esTrabajoActual", experiencia.esTrabajoActual);
         formData.append("fechaInicio", formatDate(experiencia.fechaInicio));
         formData.append("fechaFin", formatDate(experiencia.fechaFin));
-
-        console.log("PAYLOAD DE EXPERIENCIA");
-
-        for(let pair of formData.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]); 
-         }
 
         axios
             .post("api/experienciasEvaluador", formData, {
@@ -790,6 +850,7 @@ export default class HojaDeVida extends Component {
                                         handleChangeFile={this.handleChangeFile}
                                         handlePostulante={this.handlePostulante}
                                         tipo={this.state.tipo}
+                                        volverCargar={this.volverCargar}
                                     />
                                 )}
                                 {this.state.form === "educacionEvaluador" && (
@@ -798,6 +859,7 @@ export default class HojaDeVida extends Component {
                                         handleChange={this.handleChange}
                                         handleChangeFileCurso={this.handleChangeFileCurso}
                                         handleChangeReq={this.handleChangeReq}
+                                        volverCargar={this.volverCargar}
                                         /*handleChangeStart={this.handleChangeStart}
                                 handleChangeEnd={this.handleChangeEnd}
                                         checkedItems={this.state.checkedItems}*/
@@ -811,6 +873,7 @@ export default class HojaDeVida extends Component {
                                         reqActual={this.state.reqActual}
                                         reqs={this.state.reqs}
                                         agregarCurso={this.agregarCurso}
+                                        aviso={this.state.fileCursoError}
                                     />
                                 )}
                                 {this.state.form === "experiencia" && this.state.tipo==="experto"&&(
@@ -836,6 +899,7 @@ export default class HojaDeVida extends Component {
                                     handleExp={this.handleExp}
                                     handlePostulante={this.handlePostulante}
                                     handleValidar={this.handleValidar}
+                                    fechaValidation={this.state.fechaValidationExp}
                                     />
                                 )}
                                 {this.state.form === "experiencia" && this.state.tipo==="evaluador"&&(
@@ -862,6 +926,9 @@ export default class HojaDeVida extends Component {
                                     handleCursos={this.handleCursos}
                                     handlePostulante={this.handlePostulante}
                                     handleValidar={this.handleValidar}
+                                    actividad={this.state.actividad}
+                                    handleChangeActividad={this.handleChangeActividad}
+                                    fechaValidation={this.state.fechaValidationEv}
                                     />
                                 )}
                             </div>
@@ -914,7 +981,7 @@ export default class HojaDeVida extends Component {
                  </div>
                  <div className="modal-footer">
                          <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal">Ok, revisaré</button>
-                         <button type="button" className="btn btn-primary-sae w-25" data-dismiss="modal" onClick={this.handleContinuar}>No, continuar</button>
+                         <button type="button" className="btn btn-primary-sae w-25 bg-danger" data-dismiss="modal" onClick={this.handleContinuar}>Continuar</button>
                  </div>
                </div>
              </div>

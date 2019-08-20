@@ -10,6 +10,7 @@ export default class Modal extends Component {
         detalleEvaluacion: "",
         resultadoEvaluacion: "selec",
         tipoEvaluacion: "selec",
+        estadoAlcancesArray:[],
       }
 
       componentDidMount=async()=>{
@@ -43,11 +44,29 @@ export default class Modal extends Component {
         });
       }
 
+      handleChangeAlcance= (evt)=>{
+        const name= evt.target.name;
+        const value = evt.target.value;
+        const {estadoAlcancesArray} = this.state;
+        let estados = [];
+        estados = estadoAlcancesArray;
+        estados.push(
+            {
+              id_alcance:name,
+              estado: value,
+            }
+          );
+        this.setState({
+          estadoAlcancesArray: estados,
+        })
+      }
+
       render () {
-        let i = 0;
+        console.log(this.state.estadoAlcancesArray);
         const data = this.props.modalInfo.data!== undefined?this.props.modalInfo.data:[];
         const type = this.props.modalInfo.type;
         const finalizar = this.state.resultadoEvaluacion!=="selec" && this.state.resultadoEvaluacion!=="Pendiente";
+        this.props.modalInfo.data!== undefined?console.log(this.props.modalInfo.data):null;
         
       return (<div 
         className="modal-sae"
@@ -97,27 +116,51 @@ export default class Modal extends Component {
                       {type==="Experto"?(
                         data[6].map((experiencia)=>{
                           return <div key={experiencia.id_alcance} className="d-flex flex-column align-items-between  mb-1">
-                            <Label name={"Alcance Relacionado: "+experiencia.alcance} className="w-100"/>
-                            <Label name={"Empresa: "+experiencia.nombreEmpresa} className="w-100"/>
+                            <Label   name={"Alcance Relacionado: "+experiencia.alcance} className="w-100"/>
+                            <Label  name={"Empresa: "+experiencia.nombreEmpresa} className="w-100"/>
                             <Label name={"Cargo: "+experiencia.cargoEjercido} className="w-100"/>
-                            <Label name={"Descripción: "+experiencia.descripcion} className="w-100"/>
+                            <Label  name={"Descripción: "+experiencia.descripcion} className="w-100"/>
                           </div>
                         })
                       ):null
                       }
                       </div>
                       <div className="d-flex flex-column align-items-between w-50 mb-1">
-                        <h6>Educación Formal</h6>
-                        {!isEmpty(data)?(
-                            <div className="d-flex flex-column align-items-between">
-                              <Label name={"Institución: "+data[7].nombreInstitucion} className="w-100"/>
-                              <Label name={"Nivel de Instrucción: "+data[7].tipoFormacion} className="w-100"/>
-                              <Label name={"Título: "+data[7].tituloObtenido} className="w-100"/>
+                        <div className="d-flex flex-column align-items-between mb-1">
+                          <h6>Educación Formal</h6>
+                          {!isEmpty(data)?(
+                              <div className="d-flex flex-column align-items-between">
+                                <Label name={"Institución: "+data[7].nombreInstitucion} className="w-100"/>
+                                <Label name={"Nivel de Instrucción: "+data[7].tipoFormacion} className="w-100"/>
+                                <Label name={"Título: "+data[7].tituloObtenido} className="w-100"/>
+                              </div>
+                              ):null
+                            }
+                        </div>
+                        {type==="Experto"?(
+                          <React.Fragment>
+                            <h6>Estado de Alcances</h6>
+                            <div>
+                              {data[6].map((experiencia)=>{
+                              return(
+                                <React.Fragment key={experiencia.id_alcance}>
+                                  <div className="d-flex flex-column align-items-between  mb-1">
+                                      <Label  name={"Alcance Relacionado: "+experiencia.alcance} className="w-100"/>
+                                      <select  name={experiencia.id_alcance} className="h-25" defaultValue={experiencia.estado} onChange={this.handleChangeAlcance}> 
+                                        <option disabled value="selec">Seleccione</option>
+                                        <option value="Arobado">Aprueba</option>
+                                        <option value="No aprobado">No aprueba</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                      </select>
+                                  </div>
+                                </React.Fragment>
+                            )})}
                             </div>
-                            ):null
-                          }
-                        </div>
-                        </div>
+                          </React.Fragment>
+                      ):null
+                      }
+                      </div>
+                    </div>
                       <hr></hr>
                       <h6>Evaluación</h6>
                       <div className="d-flex flex-row justify-content-between align-items-start mb-1">
@@ -142,7 +185,7 @@ export default class Modal extends Component {
                     {type==="Experto"?(
                         <React.Fragment>
                               <button type="button" className="btn btn-secondary w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                    await this.props.guardarEvaluacion(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion)
+                                    await this.props.guardarEvaluacionExperto(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoAlcancesArray)
                                     await this.closeModal(e,true);
                                 }}>Guardar</button>
                                 {finalizar && (

@@ -234,14 +234,15 @@ class SolicitudPostulacionController extends Controller
             //fecha actual
             $current_date_time = Carbon::now()->toDateTimeString();
             //obtengo id de la solicitud de evaluacion
-            $solicitud =  DB::table('solicitud_postulacions')->select('id_evaluacion')->where('id_solicitud',$request->id_solicitud)->first();
+            $solicitud =  DB::table('solicitud_postulacions')->select('*')->where('id_solicitud',$request->id_solicitud)->first();
 
-            foreach($request->estados as $estado){
-                $experiencia = DB::table('experiencia_expertos')->where('id_postulante',$solicitud->id_postulante)
-                                                                ->where('id_alcance', $estado['id_alcance'])
-                                                                ->get();
-                $experiencia ->estado = $estado['estado'];
-                $experiencia->save();
+            foreach(json_decode($request->estados) as $estado){
+                $experiencia = DB::table('experiencia_expertos')->select('id_experiencia')->where('id_postulante',$solicitud->id_postulante)
+                                                                ->where('id_alcance', $estado->id_alcance)
+                                                                ->first();
+                $exp = experienciaExperto::find($experiencia->id_experiencia);                                              
+                $exp ->estado = $estado->estado;
+                $exp->save();
              
             }
             //actualizo campos en evaluacionpostulante

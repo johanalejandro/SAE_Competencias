@@ -212,8 +212,12 @@ export default class ExperienciaLaboral extends Component {
                                             <Label name="Trabajo Actual"/>
                                             <Checkbox name="esTrabajoActual" checked={this.props.checkedItems.get("esTrabajoActual")} onChange={this.props.handleCheckBoxChange} />
                                         </div>
-                                        {isEmpty(this.props.alcances)?
-                                        <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
+                                        {isEmpty(this.props.alcances)||this.props.fechaValidation||this.props.cargoEjercido===""||this.props.descripcion===""||this.props.alcanceActual==="selec"?
+                                        (<React.Fragment>
+                                            <label className="text-danger text-left mr-2 ">Debe poseer al menos 2 años de experiencia y completar todos los datos o no puede seguir postulando
+                                            </label>
+                                            <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>
+                                        </React.Fragment>):
                                         <button name="referencia" className="btn-secondary w-20" onClick={this.props.agregar}>Agregar</button>
                                         }
                                     </div>

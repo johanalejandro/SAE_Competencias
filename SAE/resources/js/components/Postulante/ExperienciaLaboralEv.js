@@ -207,13 +207,27 @@ export default class ExperienciaLaboralEv extends Component {
                                         </div>
                                     </div>
                                     <div className="d-flex flex-row justify-content-between w-100">
+                                    <div className="d-flex flex-column w-30 mr-4">
+                                            <Label name="Relacionado con actividades " className="w-100"/>
+                                            <select className="h-50" name="actividad" value={this.props.actividad} onChange={(evt)=>{this.props.handleChangeActividad(evt)}}>
+                                                <option disabled value="selec">Seleccione</option>
+                                                <option value="gestión de la calidad">Gestión de la calidad</option>
+                                                <option value="aseguramiento de la calidad">Aseguramiento de la calidad</option>
+                                                <option value="evaluación de la conformidad">Evaluación de la conformidad</option>
+                                                }
+                                            </select>
+                                        </div>
                                         <div className="d-flex flex-row justify-content-start align-items-center w-30">
                                             <Label name="Trabajo Actual"/>
                                             <Checkbox name="esTrabajoActual" checked={this.props.checkedItems.get("esTrabajoActual")} onChange={this.props.handleCheckBoxChange} />
                                         </div>
-                                        {isEmpty(this.props.requerimientos)?
-                                        <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>:
-                                        <button name="referencia" className="btn-secondary w-20" onClick={this.props.agregarEv}>Agregar</button>
+                                        {isEmpty(this.props.requerimientos)||this.props.fechaValidation||this.props.cargoEjercido===""||this.props.descripcion===""||this.props.requerimientoActual==="selec"||this.props.actividad==="selec"?
+                                         (<div className="d-flex flex-row justify-content-start align-items-center w-30">
+                                            <label className="text-danger text-left mr-2 ">Debe poseer al menos 4 años de experiencia y completar todos los datos o no puede seguir postulando
+                                            </label>
+                                            <button name="referencia" className="btn-secondary w-20 h-50" disabled>Agregar</button>
+                                         </div>):
+                                        <button name="referencia" className="btn-secondary w-20 h-50" onClick={this.props.agregarEv}>Agregar</button>
                                         }
                                     </div>
                                 </div>
