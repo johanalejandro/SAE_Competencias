@@ -307,11 +307,12 @@ getRequerimiento  =async (id) => {
             })
             /*dataasignarEvaluador: [],
             dataasignarExperto: [],*/
-            .then((response) => {
+            .then(async(response) => {
                 
-                axios.get("api/asignarAPostulante/"+id_postulante)
-                .then((response) => {
-                    this.asignado(data);
+                await axios.get("api/asignarAPostulante/"+id_postulante)
+                .then(async(response) => {
+                    await this.asignado(data);
+                    await location.reload();
                 })
                 .catch(console.error);
                 console.log(response);

@@ -3,6 +3,7 @@ import React,{ Component } from 'react';
 import Label from '../common/Label';
 import isEmpty from 'lodash/isEmpty';
 import axios from 'axios';
+import uniqBy from 'lodash/uniqBy'
 
 export default class Modal extends Component {
 
@@ -265,7 +266,7 @@ export default class Modal extends Component {
                                 }}>Guardar</button>
                                 {finalizar && (
                               <button type="button" className="btn btn-secondary bg-danger w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                   await this.props.finalizarEvaluacion(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion);
+                                   await this.props.finalizarEvaluacionExperto(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoAlcancesArray);
                                    await this.closeModal(e,true);
                                 }}>Finalizar</button>)
                               }
@@ -278,7 +279,7 @@ export default class Modal extends Component {
                                 }}>Guardar</button>
                                 {finalizar && (
                               <button type="button" className="btn btn-secondary bg-danger w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                   await this.props.finalizarEvaluacion(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion);
+                                   await this.props.finalizarEvaluacionEvaluador(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoCursosArray);
                                    await this.closeModal(e,true);
                                 }}>Finalizar</button>)
                               }

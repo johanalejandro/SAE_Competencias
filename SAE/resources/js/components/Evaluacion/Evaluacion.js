@@ -287,23 +287,45 @@ getRequerimiento  =async (id) => {
         .catch(console.error);
     }
 
-    finalizarEvaluacion =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion) => {
+    finalizarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
          let formData =  new FormData();
         formData.append("id_solicitud",id_solicitud);
         formData.append("detalleEvaluacion",detalleEvaluacion);
         formData.append("tipoEvaluacion",tipoEvaluacion);
         formData.append("resultadoEvaluacion",resultadoEvaluacion);
-        await axios.post("api/finalizarEvaluacionPostulante/",formData,{
+        formData.append("estados",JSON.stringify(estados));
+        await axios.post("api/finalizarEvaluacionExperto/",formData,{
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
-        .then((response ) => {
-            console.log(response);
+        .then(async(response ) => {
+            await console.log(response);
+            await location.reload();
         })
         .catch(console.error);
       
     }
+
+    finalizarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
+        let formData =  new FormData();
+       formData.append("id_solicitud",id_solicitud);
+       formData.append("detalleEvaluacion",detalleEvaluacion);
+       formData.append("tipoEvaluacion",tipoEvaluacion);
+       formData.append("resultadoEvaluacion",resultadoEvaluacion);
+       formData.append("estados",JSON.stringify(estados));
+       await axios.post("api/finalizarEvaluacionEvaluador/",formData,{
+           headers: {
+               "Content-Type": "multipart/form-data",
+           },
+       })
+       .then(async(response ) => {
+        await console.log(response);
+           await location.reload();
+       })
+       .catch(console.error);
+     
+   }
 
     handleChangeTipo = ({target}) => {
         if(target.name){
@@ -592,7 +614,8 @@ getRequerimiento  =async (id) => {
                         closeModal={this.selectModal}
                         guardarEvaluacionExperto={this.guardarEvaluacionExperto}
                         guardarEvaluacionEvaluador={this.guardarEvaluacionEvaluador}
-                        finalizarEvaluacion={this.finalizarEvaluacion}
+                        finalizarEvaluacionEvaluador={this.finalizarEvaluacionEvaluador}
+                        finalizarEvaluacionExperto={this.finalizarEvaluacionExperto}
                     />)
                     }
                 </React.Fragment>
