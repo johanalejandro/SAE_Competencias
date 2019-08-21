@@ -28,10 +28,23 @@ export default class Modal extends Component {
           })
           .catch(console.error);
           }
-          
+          if(this.props.modalInfo.data!== undefined && this.props.modalInfo.type==="Evaluador"){
+            const id = this.props.modalInfo.data[11]
+            await axios.get("api/verSolicitudEvaluacion/"+id)
+          .then(({data})=>{
+            console.log(data);
+            this.setState({
+              detalleEvaluacion: data.detalleEvaluacion===null?"":data.detalleEvaluacion,
+              resultadoEvaluacion: data.resultadoEvaluacion,
+              tipoEvaluacion: data.tipoEvaluacion===null?"selec":data.tipoEvaluacion,
+            })
+          })
+          .catch(console.error);
+          }
       }
 
-      getAnexo(id_Curso){
+      getAnexo(e,id_Curso){
+        e.preventDefault();
         axios.get('/api/getAnexo/'+id_Curso)
         .then((response)=>{
           console.log(response);
@@ -39,7 +52,8 @@ export default class Modal extends Component {
         .catch(console.error);
       }
 
-      getCV(id_Educacion){
+      getCV(e,id_Educacion){
+        e.preventDefault();
         axios.get('/api/getCV/'+id_Educacion)
         .then((response)=>{
           console.log(response);
@@ -136,7 +150,7 @@ export default class Modal extends Component {
                                 <Label name={"Alcance Relacionado: "+curso.sector} className="w-100"/>
                                 <Label name={"Institución: "+curso.nombreInstitucion} className="w-100"/>
                                 <Label name={"N° Horas: "+curso.numeroHoras} className="w-100"/>
-                                <button onClick={this.getAnexo(curso.id_curso_evaluador)}>Descargar Anexo</button>
+                                <button onClick={(e)=>this.getAnexo(e,curso.id_curso_evaluador)}>Descargar Anexo</button>
                               </div>
                             })}
                           </React.Fragment>
@@ -175,7 +189,7 @@ export default class Modal extends Component {
                                 <Label name={"Institución: "+data[7].nombreInstitucion} className="w-100"/>
                                 <Label name={"Nivel de Instrucción: "+data[7].tipoFormacion} className="w-100"/>
                                 <Label name={"Título: "+data[7].tituloObtenido} className="w-100"/>
-                                <button onClick={this.getCV(data[7].id_educacion)}>Descargar CV</button>
+                                <button onClick={(e)=>this.getCV(e,data[7].id_educacion)}>Descargar CV</button>
                               </div>
                               ):null
                             }

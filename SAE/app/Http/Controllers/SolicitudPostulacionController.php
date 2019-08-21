@@ -213,6 +213,7 @@ class SolicitudPostulacionController extends Controller
 
   /* Guardar evaluaciones de expertos y postulantes */
    public function guardarEvaluacionEvaluador(Request $request){
+
           //fecha actual
           $current_date_time = Carbon::now()->toDateTimeString();
           //obtengo id de la solicitud de evaluacion
@@ -224,6 +225,7 @@ class SolicitudPostulacionController extends Controller
                                                       ->where('id_sector_requerimiento', $estado->id_sector_requerimiento)
                                                       ->first();
               $cursoActualizado = Cursos_Evaluador::find($curso->id_curso_evaluador);
+              $cursoActualizado ->estado = $estado->estado;
               $cursoActualizado ->updated_at = $current_date_time;
               $cursoActualizado->save();
            

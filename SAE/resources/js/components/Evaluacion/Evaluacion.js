@@ -200,8 +200,8 @@ export default class Evaluacion extends Component {
                     let curs = {};
                     if (postul.id_postulante===curso.id_postulante) {
                         curs['id_sector_requerimiento'] = curso.id_sector_requerimiento;
-                        curs['nombreInsitucion'] = curso.nombreEmpresa;
-                        curs['numeroHoras'] = curso.cargoEjercido;
+                        curs['nombreInsitucion'] = curso.nombreInsitucion;
+                        curs['numeroHoras'] = curso.numeroHoras;
                         curs['estado'] = curso.estado;
                         curs['id_curso_evaluador'] = curso.id_curso_evaluador;
                         curs['sector'] = await this.getRequerimiento(curso.id_sector_requerimiento);
@@ -591,6 +591,7 @@ getRequerimiento  =async (id) => {
                         modalInfo={this.state.modalInfo}
                         closeModal={this.selectModal}
                         guardarEvaluacionExperto={this.guardarEvaluacionExperto}
+                        guardarEvaluacionEvaluador={this.guardarEvaluacionEvaluador}
                         finalizarEvaluacion={this.finalizarEvaluacion}
                     />)
                     }
