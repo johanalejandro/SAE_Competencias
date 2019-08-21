@@ -331,7 +331,8 @@ export default class HojaDeVida extends Component {
         curso['id_sector_requerimiento'] = this.state.reqActual;
         curso['requerimiento'] = this.state.reqItem;
         curso['numeroHoras'] = this.state.numeroHoras;
-        curso['archivoAnexoCurso'] = this.state.archivoAnexoCurso.name;
+        curso['archivoAnexoCurso'] = this.state.archivoAnexoCurso;
+        curso['archivoAnexoCursoNombre'] = this.state.archivoAnexoCurso.name;
         if(this.state.nombreInstitucionCurso===""||this.state.archivoAnexoCurso===""||this.state.numeroHoras===0||this.state.reqActual==="selec"||this.state.reqItem===""){
             return
         }

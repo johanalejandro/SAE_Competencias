@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+use App\educacionFormal;
+
 class educacionFormalController extends Controller
 {
     /**
@@ -43,9 +48,11 @@ class educacionFormalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showCV($id)
     {
-        //
+        $keyarchivo = educacionFormal::find($id);
+        $url = Storage::url($keyarchivo->archivoAnexo);
+        return response()->download($url);
     }
 
     /**

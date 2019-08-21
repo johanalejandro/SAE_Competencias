@@ -339,7 +339,7 @@ getRequerimiento  =async (id) => {
             let filterData = [];
             filterData = dataasignarEvaluador;
             const porasginarAEliminar = await filterData.find((postulante)=>{
-                return postulante.id_postulante === parseInt(id_postulante);
+                return postulante.id_postulante === parseInt(data[0]);
             })
             console.log("eliminar",porasginarAEliminar)
             await pull(filterData,porasginarAEliminar);

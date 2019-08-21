@@ -6,6 +6,7 @@ use App\Cursos_Evaluador;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CursosEvaluadorController extends Controller
 {
@@ -49,6 +50,14 @@ class CursosEvaluadorController extends Controller
 
         ]);
          return response()->json('Curso creado');
+    }
+
+
+    public function getAnexo($id)
+    {
+         $keyarchivo = Cursos_Evaluador::find($id);
+         $url = Storage::url($keyarchivo->archivoAnexo);
+         return response()->download($url);
     }
 
     /**

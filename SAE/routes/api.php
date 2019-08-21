@@ -128,8 +128,9 @@ Route::post('/crearNuevaSolicitud', 'SolicitudPostulacionController@crearNuevaSo
 
 /*------------------------------------------------------------------------------------------------------*/
 
+Route::get('/getAnexo/{id}','CursosEvaluadorController@getAnexo');
 
-
+Route::get('/getCV/{id}','educacionFormalController@showCV');
 
 
 /* Para finalizar evaluacion y guardar resultado de evaluacion debes pasar *id_solicitud* te lo mande en el api anterior, *detalleEvaluacion*, *resultadoEvaluacion*(debe ser aprobado), *tipoEvaluacion*/

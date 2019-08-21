@@ -34,69 +34,6 @@ export default class Evaluacion extends Component {
             form: "expertos",
         });
 
-        let evaluadoresPorEvaluar = [];
-        /*
-        await axios.get("api/mostrarEvaluadoresHabilitado")
-        .then(async({data} ) => {
-            const postulantes = data.map((postulante)=>{
-                let post ={};
-                post['id_postulante'] = postulante.id_postulante;
-                post['nombres'] = postulante.nombres;
-                post['apellidos'] = postulante.apellidos;
-                post['estado']= postulante.estado;
-                post['email'] = postulante.email;
-                post['tipoPostulacion'] = postulante.tipoPostulacion;
-                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                post['cedula'] = postulante.cedula;
-                return post;
-            })
-            const postulantesUnico = uniqBy(postulantes,'id_postulante');
-            const experiencias = data.map((postulante)=>{
-                let experiencia = {};
-                experiencia['id_postulante'] = postulante.id_postulante;
-                experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
-                experiencia['cargoEjercido'] = postulante.cargoEjercido;
-                experiencia['descripcion'] = postulante.descripcion;
-                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
-                return experiencia;
-            })
-
-            let postulantesHabilitados = {};
-            for (let i = 0; i < postulantesUnico.length; i++) {
-                const postulante = postulantesUnico[i];
-                postulantesHabilitados['id_postulante'] = postulante.id_postulante;
-                        postulantesHabilitados['nombres'] = postulante.nombres;
-                        postulantesHabilitados['apellidos'] = postulante.apellidos;
-                        postulantesHabilitados['estado']= postulante.estado;
-                        postulantesHabilitados['email'] = postulante.email;
-                        postulantesHabilitados['tipoPostulacion'] = postulante.tipoPostulacion;
-                        postulantesHabilitados['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                        postulantesHabilitados['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                        postulantesHabilitados['cedula'] = postulante.cedula;
-                        postulantesHabilitados['experiencias']=[];
-                for (let index = 0; index < experiencias.length; index++) {
-                    const experiencia = experiencias[index];
-                    let exp = {};
-                    if (postulante.id_postulante===experiencia.id_postulante) {
-                        exp['nombreEmpresa'] = experiencia.nombreEmpresa;
-                        exp['cargoEjercido'] = experiencia.cargoEjercido;
-                        exp['descripcion'] = experiencia.descripcion;
-                        exp['requerimiento'] = await this.getRequerimiento(experiencia.id_sector_requerimiento);
-                        exp['tipoPostulacion'] = postulante.tipoPostulacion;
-                    }
-                    
-                    postulantesHabilitados['experiencias'].push(exp)
-                }
-                habilitadosEvaluador.push(postulantesHabilitados);
-                
-            }
-            console.log(habilitadosEvaluador)
-        })
-        .catch(console.error);
-        await this.setState({
-            habilitadosEvaluador: habilitadosEvaluador,
-        })*/
         let expertosPorEvaluar = [];
         let expertoPorEvaluar = {};
         await axios.get("/verSolicitudPorUsuarioExperto/")
@@ -118,6 +55,7 @@ export default class Evaluacion extends Component {
                 post['nombreInstitucion'] =postulante.nombreInstitucion;
                 post['tituloObtenido']=postulante.tituloObtenido;
                 post['tipoFormacion']=postulante.tipoFormacion;
+                post['id_educacion']=postulante.id_educacion;
                 return post;
             })
             const postulantesUnico = uniqBy(postulantes,'id_solicitud');
@@ -145,7 +83,7 @@ export default class Evaluacion extends Component {
                         expertoPorEvaluar['disponibilidadViajar'] = postul.disponibilidadViajar;
                         expertoPorEvaluar['cedula'] = postul.cedula;
                         expertoPorEvaluar['educacion']={
-                            archivoAnexo : postul.archivoAnexo,
+                            id_educacion: postul.id_educacion,
                             nombreInstitucion : postul.nombreInstitucion,
                             tituloObtenido : postul.tituloObtenido,
                             tipoFormacion :postul.tipoFormacion,
@@ -173,6 +111,112 @@ export default class Evaluacion extends Component {
              console.log(expertosPorEvaluar)
              await this.setState({
                 expertosPorEvaluar: expertosPorEvaluar,
+            })
+        })
+        .catch(console.error);
+
+        let evaluadoresPorEvaluar = [];
+        let evaluadorPorEvaluar = {};
+        await axios.get("/verSolicitudPorUsuarioEvaluador/")
+        .then(async({data} ) => {
+            console.log(data);
+            const postulantes = await data.map((postulante)=>{
+                let post ={};
+                post['id_postulante'] = postulante.id_postulante;
+                post['id_solicitud'] = postulante.id_solicitud;
+                post['nombres'] = postulante.nombres;
+                post['apellidos'] = postulante.apellidos;
+                post['estado']= postulante.estado;
+                post['email'] = postulante.email;
+                post['tipoPostulacion'] = postulante.tipoPostulacion;
+                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
+                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
+                post['cedula'] = postulante.cedula;
+                post['nombreInstitucion'] =postulante.nombreInstitucion;
+                post['tituloObtenido']=postulante.tituloObtenido;
+                post['tipoFormacion']=postulante.tipoFormacion;
+                post['id_educacion']=postulante.id_educacion;
+                return post;
+            })
+            const postulantesUnico = uniqBy(postulantes,'id_solicitud');
+            const experiencias = await data.map((postulante)=>{
+                let experiencia = {};
+                experiencia['id_postulante'] = postulante.id_postulante;
+                experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
+                experiencia['cargoEjercido'] = postulante.cargoEjercido;
+                experiencia['descripcion'] = postulante.descripcion;
+                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                return experiencia;
+            });
+            const experiencies = uniqBy(experiencias,'id_sector_requerimiento');
+            const cursos = await data.map((postulante)=>{
+                let curso = {};
+                curso['id_postulante'] = postulante.id_postulante;
+                curso['nombreInstitucion'] = postulante.nombreInstitucion;
+                curso['numeroHoras'] = postulante.numeroHoras;
+                curso['estado'] = postulante.estado;
+                curso['id_curso_evaluador'] = postulante.id_curso_evaluador;
+                curso['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                return curso;
+            });
+            const courses = uniqBy(cursos,'id_sector_requerimiento');
+            for (let i = 0; i < postulantesUnico.length; i++) {
+                const postul = postulantesUnico[i];
+                evaluadorPorEvaluar['id_postulante'] = postul.id_postulante;
+                evaluadorPorEvaluar['id_solicitud'] = postul.id_solicitud;
+                evaluadorPorEvaluar['nombres'] = postul.nombres;
+                evaluadorPorEvaluar['apellidos'] = postul.apellidos;
+                evaluadorPorEvaluar['estado']= postul.estado;
+                evaluadorPorEvaluar['email'] = postul.email;
+                evaluadorPorEvaluar['tipoPostulacion'] = postul.tipoPostulacion;
+                evaluadorPorEvaluar['fechaHabilitacion'] = postul.fechaHabilitacion;
+                evaluadorPorEvaluar['disponibilidadViajar'] = postul.disponibilidadViajar;
+                evaluadorPorEvaluar['cedula'] = postul.cedula;
+                evaluadorPorEvaluar['educacion']={
+                            id_educacion: postul.id_educacion,
+                            nombreInstitucion : postul.nombreInstitucion,
+                            tituloObtenido : postul.tituloObtenido,
+                            tipoFormacion :postul.tipoFormacion,
+                        }
+                        evaluadorPorEvaluar['experiencias']=[];
+                        evaluadorPorEvaluar['cursos']=[];
+                for (let index = 0; index < experiencies.length; index++) {
+                    const experiencia = experiencies[index];
+                    let exp = {};
+                    if (postul.id_postulante===experiencia.id_postulante) {
+                        exp['id_sector_requerimiento'] = experiencia.id_sector_requerimiento;
+                        exp['nombreEmpresa'] = experiencia.nombreEmpresa;
+                        exp['cargoEjercido'] = experiencia.cargoEjercido;
+                        exp['descripcion'] = experiencia.descripcion;
+                        exp['sector'] = await this.getRequerimiento(experiencia.id_sector_requerimiento);
+                        exp['tipoPostulacion'] = postul.tipoPostulacion;
+                        evaluadorPorEvaluar['experiencias'].push(exp);
+                        
+                    }
+                    
+                }
+                for (let index = 0; index < courses.length; index++) {
+                    const curso = courses[index];
+                    let curs = {};
+                    if (postul.id_postulante===curso.id_postulante) {
+                        curs['id_sector_requerimiento'] = curso.id_sector_requerimiento;
+                        curs['nombreInsitucion'] = curso.nombreEmpresa;
+                        curs['numeroHoras'] = curso.cargoEjercido;
+                        curs['estado'] = curso.estado;
+                        curs['id_curso_evaluador'] = curso.id_curso_evaluador;
+                        curs['sector'] = await this.getRequerimiento(curso.id_sector_requerimiento);
+                        curs['tipoPostulacion'] = postul.tipoPostulacion;
+                        evaluadorPorEvaluar['cursos'].push(curs);
+                        
+                    }
+                    
+                }
+                console.log(expertoPorEvaluar.id_postulante,evaluadorPorEvaluar);
+                evaluadoresPorEvaluar[i] = await evaluadorPorEvaluar;
+            }
+             console.log(evaluadoresPorEvaluar)
+             await this.setState({
+                evaluadoresPorEvaluar: evaluadoresPorEvaluar,
             })
         })
         .catch(console.error);
@@ -224,6 +268,25 @@ getRequerimiento  =async (id) => {
         .catch(console.error);
     }
 
+    guardarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
+        let formData =  new FormData();
+        formData.append("id_solicitud",id_solicitud);
+        formData.append("detalleEvaluacion",detalleEvaluacion);
+        formData.append("tipoEvaluacion",tipoEvaluacion);
+        formData.append("resultadoEvaluacion",resultadoEvaluacion);
+        formData.append("estados",JSON.stringify(estados));
+        await axios.post("api/guardarEvaluacionEvaluador/",formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(async(response ) => {
+            await console.log(response);
+            await location.reload();
+        })
+        .catch(console.error);
+    }
+
     finalizarEvaluacion =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion) => {
          let formData =  new FormData();
         formData.append("id_solicitud",id_solicitud);
@@ -239,6 +302,7 @@ getRequerimiento  =async (id) => {
             console.log(response);
         })
         .catch(console.error);
+      
     }
 
     handleChangeTipo = ({target}) => {
@@ -404,6 +468,18 @@ getRequerimiento  =async (id) => {
                        searcheable: false;
                     },
                    } 
+               },
+               {
+                name: "cursos",
+                label: "Cursos",
+                options: {
+                 filter: true,
+                 sort: false,
+                 display: false,
+                },
+                customBodyRender: () => {
+                    return <span>Cursos</span>
+                },
                },
            ];
             

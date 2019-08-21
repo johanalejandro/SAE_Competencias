@@ -224,6 +224,7 @@ class SolicitudPostulacionController extends Controller
                                                       ->where('id_sector_requerimiento', $estado->id_sector_requerimiento)
                                                       ->first();
               $cursoActualizado = Cursos_Evaluador::find($curso->id_curso_evaluador);
+              $cursoActualizado ->updated_at = $current_date_time;
               $cursoActualizado->save();
            
           }
@@ -251,6 +252,7 @@ class SolicitudPostulacionController extends Controller
                                                                 ->first();
                 $exp = experienciaExperto::find($experiencia->id_experiencia);                                              
                 $exp ->estado = $estado->estado;
+                $exp ->updated_at = $current_date_time;
                 $exp->save();
              
             }

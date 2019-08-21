@@ -11,6 +11,7 @@ export default class Modal extends Component {
         resultadoEvaluacion: "selec",
         tipoEvaluacion: "selec",
         estadoAlcancesArray:[],
+        estadoCursosArray: [],
       }
 
       componentDidMount=async()=>{
@@ -30,6 +31,21 @@ export default class Modal extends Component {
           
       }
 
+      getAnexo(id_Curso){
+        axios.get('/api/getAnexo/'+id_Curso)
+        .then((response)=>{
+          console.log(response);
+        })
+        .catch(console.error);
+      }
+
+      getCV(id_Educacion){
+        axios.get('/api/getCV/'+id_Educacion)
+        .then((response)=>{
+          console.log(response);
+        })
+        .catch(console.error);
+      }
     
        closeModal = (e,prevent = false) => {
         prevent?e.persist():e.stopPropagation()
@@ -58,6 +74,23 @@ export default class Modal extends Component {
           );
         this.setState({
           estadoAlcancesArray: estados,
+        })
+      }
+
+      handleChangeCurso = (evt)=>{
+        const name= evt.target.name;
+        const value = evt.target.value;
+        const {estadoCursosArray} = this.state;
+        let estados = [];
+        estados = estadoCursosArray;
+        estados.push(
+            {
+              id_sector_requerimiento:name,
+              estado: value,
+            }
+          );
+        this.setState({
+          estadoCursosArray: estados,
         })
       }
 
@@ -98,12 +131,12 @@ export default class Modal extends Component {
                           <hr></hr>
                           <h6>Información de Curos</h6>
                           <React.Fragment>
-                            {data[6].map((experiencia)=>{
-                              return <div key={experiencia.id_alcance} className="d-flex flex-column align-items-between mb-1">
-                                <Label name={"Alcance Relacionado: "+experiencia.alcance} className="w-100"/>
-                                <Label name={"Empresa: "+experiencia.nombreEmpresa} className="w-100"/>
-                                <Label name={"Cargo: "+experiencia.cargoEjercido} className="w-100"/>
-                                <Label name={"Descripción: "+experiencia.descripcion} className="w-100"/>
+                            {data[12].map((curso)=>{
+                              return <div key={curso.id_sector_requerimiento} className="d-flex flex-column align-items-between mb-1">
+                                <Label name={"Alcance Relacionado: "+curso.sector} className="w-100"/>
+                                <Label name={"Institución: "+curso.nombreInstitucion} className="w-100"/>
+                                <Label name={"N° Horas: "+curso.numeroHoras} className="w-100"/>
+                                <button onClick={this.getAnexo(curso.id_curso_evaluador)}>Descargar Anexo</button>
                               </div>
                             })}
                           </React.Fragment>
@@ -122,7 +155,16 @@ export default class Modal extends Component {
                             <Label  name={"Descripción: "+experiencia.descripcion} className="w-100"/>
                           </div>
                         })
-                      ):null
+                      ):(
+                        data[6].map((experiencia)=>{
+                          return <div key={experiencia.id_sector_requerimiento} className="d-flex flex-column align-items-between  mb-1">
+                            <Label   name={"Alcance Relacionado: "+experiencia.sector} className="w-100"/>
+                            <Label  name={"Empresa: "+experiencia.nombreEmpresa} className="w-100"/>
+                            <Label name={"Cargo: "+experiencia.cargoEjercido} className="w-100"/>
+                            <Label  name={"Descripción: "+experiencia.descripcion} className="w-100"/>
+                          </div>
+                        })
+                      )
                       }
                       </div>
                       <div className="d-flex flex-column align-items-between w-50 mb-1">
@@ -133,6 +175,7 @@ export default class Modal extends Component {
                                 <Label name={"Institución: "+data[7].nombreInstitucion} className="w-100"/>
                                 <Label name={"Nivel de Instrucción: "+data[7].tipoFormacion} className="w-100"/>
                                 <Label name={"Título: "+data[7].tituloObtenido} className="w-100"/>
+                                <button onClick={this.getCV(data[7].id_educacion)}>Descargar CV</button>
                               </div>
                               ):null
                             }
@@ -157,7 +200,25 @@ export default class Modal extends Component {
                             )})}
                             </div>
                           </React.Fragment>
-                      ):null
+                      ):(<React.Fragment>
+                        <h6>Estado de Sectores</h6>
+                        <div>
+                          {data[12].map((curso)=>{
+                          return(
+                            <React.Fragment key={curso.id_sector_requerimiento}>
+                              <div className="d-flex flex-column align-items-between  mb-1">
+                                  <Label  name={"Alcance Relacionado: "+curso.sector} className="w-100"/>
+                                  <select  name={curso.id_sector_requerimiento} className="h-25" defaultValue={curso.estado} onChange={this.handleChangeCurso}> 
+                                    <option disabled value="selec">Seleccione</option>
+                                    <option value="Arobado">Aprueba</option>
+                                    <option value="No aprobado">No aprueba</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                  </select>
+                              </div>
+                            </React.Fragment>
+                        )})}
+                        </div>
+                      </React.Fragment>)
                       }
                       </div>
                     </div>
@@ -195,7 +256,20 @@ export default class Modal extends Component {
                                 }}>Finalizar</button>)
                               }
                           </React.Fragment>
-                        ):null}
+                        ):(
+                          <React.Fragment>
+                              <button type="button" className="btn btn-secondary w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
+                                    await this.props.guardarEvaluacionEvaluador(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoCursosArray)
+                                    await this.closeModal(e,true);
+                                }}>Guardar</button>
+                                {finalizar && (
+                              <button type="button" className="btn btn-secondary bg-danger w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
+                                   await this.props.finalizarEvaluacion(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion);
+                                   await this.closeModal(e,true);
+                                }}>Finalizar</button>)
+                              }
+                          </React.Fragment>
+                        )}
                   </div>
               </div>
           </div>

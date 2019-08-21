@@ -61,7 +61,7 @@ export default class EducacionCursos extends Component {
            }
           },
           {
-           name: "archivoAnexoCurso",
+           name: "archivoAnexoCursoNombre",
            label: "Anexo",
            options: {
             filter: true,
