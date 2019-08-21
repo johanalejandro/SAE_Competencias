@@ -51,8 +51,8 @@ class educacionFormalController extends Controller
     public function showCV($id)
     {
         $keyarchivo = educacionFormal::find($id);
-        $url = Storage::url($keyarchivo->archivoAnexo);
-        return response()->download($url);
+        $url = $keyarchivo->archivoAnexo;
+        return Storage::download($url);
     }
 
     /**

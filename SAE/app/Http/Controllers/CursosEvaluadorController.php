@@ -56,8 +56,9 @@ class CursosEvaluadorController extends Controller
     public function getAnexo($id)
     {
          $keyarchivo = Cursos_Evaluador::find($id);
-         $url = Storage::url($keyarchivo->archivoAnexo);
-         return response()->download($url);
+         $url = $keyarchivo->archivoAnexo;
+         return Storage::download($url);
+
     }
 
     /**

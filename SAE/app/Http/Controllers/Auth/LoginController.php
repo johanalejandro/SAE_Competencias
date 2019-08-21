@@ -54,10 +54,10 @@ class LoginController extends Controller
                    return ('/visualizador');
                 break;
             case 'Evaluador':
-                  return ('/solicitud-postulacion');
+                  return ('/evaluacion');
                 break; 
             case 'Experto':
-                    return ('/solicitud-postulacion'); 
+                    return ('/evaluacion'); 
                 break;
             case 'Calidad':
                    return ('/gestion-calidad');
