@@ -38,15 +38,15 @@ class CursosEvaluadorController extends Controller
      */
     public function store(Request $request)
     {
-         $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first(); 
+        $keypostulante = DB::table('postulantes')->select('*')->where('cedula', $request->cedula)->get(); 
 
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = Cursos_Evaluador::create([
-                'id_postulante'     =>  $keypostulante->id_postulante,
+                'id_postulante'     =>  $keypostulante,
                 'id_sector_requerimiento' =>  $request->id_sector_requerimiento,
                 'nombreInstitucion'    =>  $request->nombreInstitucion,
                 'numeroHoras'     =>  $request->numeroHoras,
-                'archivoAnexo'      =>  $request->file('archivoAnexo')->store("files"),
+                'archivoAnexo'      => $request->file('archivoAnexo')->store("files"),
 
         ]);
          return response()->json('Curso creado');

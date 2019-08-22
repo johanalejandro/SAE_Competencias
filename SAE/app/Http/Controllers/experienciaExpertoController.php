@@ -37,15 +37,15 @@ class experienciaExpertoController extends Controller
      */
     public function store(Request $request)
     {
-        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
-
+        //dd($request->cedula);
+         $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = experienciaExperto::create([
                 'id_postulante'     =>  $keypostulante->id_postulante,
-                'id_alcance' =>  $request->id_alcance,
-                'descripcion'    =>  $request->descripcion,
+                'id_alcance' =>         $request->id_alcance,
+                'descripcion'    =>     $request->descripcion,
                 'nombreEmpresa'     =>  $request->nombreEmpresa,
-                'cargoEjercido'      =>  $request->cargoEjercido,
+                'cargoEjercido'      => $request->cargoEjercido,
                 'fecha_inicio'    =>  \Carbon\Carbon::parse($request->fechaInicio),
                 'fecha_fin'     =>  \Carbon\Carbon::parse($request->fechaFin),
                 'esTrabajoActual'     =>  $request->esTrabajoActual,

@@ -39,10 +39,10 @@ class ExperienciaEvaludorController extends Controller
     public function store(Request $request)
     {
         $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
-
+        //dd($keypostulante);
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = Experiencia_evaludor::create([
-                'id_postulante'     =>  $keypostulante->id_postulante,
+                'id_postulante'     =>  $keypostulante,
                 'id_sector_requerimiento' =>  $request->id_sector_requerimiento,
                 'descripcion'    =>  $request->descripcion,
                 'nombreEmpresa'     =>  $request->nombreEmpresa,

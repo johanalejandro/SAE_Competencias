@@ -71,7 +71,7 @@ class PostulanteController extends Controller
         $campos['archivoAnexo'] = $request->archivoAnexo;
        
        
-        $postulante= Postulante::create($campos);
+        $postulante = Postulante::create($campos);
 
         //$keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first();
 
