@@ -109,6 +109,8 @@ export default class HojaDeVida extends Component {
         actividad: "selec",
         fechaValidationEv: false,
         fechaValidationExp: false,
+
+        enviado: false,
         
     }
 
@@ -535,6 +537,7 @@ export default class HojaDeVida extends Component {
 
     handleCursos = async () => {
         let cursos =this.state.cursos;
+        console.log(cursos)
         for (let index = 0; index < cursos.length; index++) {
             const element = cursos[index];
             let curso = {
@@ -652,10 +655,17 @@ export default class HojaDeVida extends Component {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then((response) => {
+            .then(async (response) => {
                 this.setState({
                     agregado: true,
                 });
+                if(this.state.tipo==="evaluador"){
+                    await this.handleExpEv();
+                    await this.handleCursos();
+                }
+                if(this.state.tipo==="experto"){
+                    await this.handleExp();
+                }
             })
             .catch(console.error);
     }
@@ -675,8 +685,11 @@ export default class HojaDeVida extends Component {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then((response) => {
-                console.log("agregado")
+            .then(async(response) => {
+                console.log("agregado");
+                await this.setState({
+                    enviado: true,
+                })
             })
             .catch(console.error);
     }
@@ -699,8 +712,11 @@ export default class HojaDeVida extends Component {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then((response) => {
-                console.log("agregado")
+            .then(async(response) => {
+                console.log("agregado");
+                await this.setState({
+                    enviado: true,
+                })
             })
             .catch(console.error);
     }
@@ -723,7 +739,8 @@ export default class HojaDeVida extends Component {
                 },
             })
             .then((response) => {
-                console.log("agregado")
+                console.log("agregado");
+                
             })
             .catch(console.error);
     }
@@ -947,6 +964,7 @@ export default class HojaDeVida extends Component {
                     handleChangeTipo={this.handleChangeTipo}
                     handleContinuar={this.handleContinuar}
                     tipo={this.state.tipo}
+                    enviado={this.state.enviado}
                     />
                }
                

@@ -38,7 +38,7 @@ class CursosEvaluadorController extends Controller
      */
     public function store(Request $request)
     {
-        $keypostulante = DB::table('postulantes')->select('*')->where('cedula', $request->cedula)->get(); 
+        $keypostulante = DB::table('postulantes')->select('id_postulante')->where('cedula', $request->cedula)->first(); 
 
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = Cursos_Evaluador::create([

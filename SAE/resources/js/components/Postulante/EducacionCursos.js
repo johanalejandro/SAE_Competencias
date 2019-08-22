@@ -20,28 +20,6 @@ export default class EducacionCursos extends Component {
           loading: false,
       }
 
-
-    handleSubmit = async (e) => {
-        //preventDefault prevents page reload   
-        e.preventDefault();
-        /*A call back to the onAdd props. The current
-         *state is passed as a param
-         */
-        this.setState({
-            loading: true,
-        })
-
-        await this.props.handleCursos();
-
-        await this.setLoading();
-      }
-
-      setLoading = () =>{
-          this.setState({
-              loading: false,
-          })
-      }
-
     render() {
         const columns = [
             {

@@ -8,7 +8,6 @@ export default class Terminos extends Component {
 
     state={
         loading: false,
-        enviado: false,
     }
 
     handleSubmit = async (e) => {
@@ -21,14 +20,14 @@ export default class Terminos extends Component {
             loading: true,
         })
 
-        await this.props.handlePostulante();
-        await this.props.tipo==="evaluador"?await this.props.handleExpEv(): await this.props.handleExp()
-        await this.props.tipo==="evaluador"&&await this.props.handleCursos()
-        await this.setLoading();
+        if(this.props.tipo==="evaluador"){
+            await this.props.handlePostulante();
+        }
+        if(this.props.tipo==="experto"){
+            await this.props.handlePostulante();
+        }
 
-        await this.setState({
-            enviado: true,
-        })
+        await this.setLoading();
       }
 
       setLoading = () =>{
@@ -44,7 +43,7 @@ export default class Terminos extends Component {
             
                 <React.Fragment>
                     {this.props.tipo === "evaluador"?(
-                        !this.state.enviado?(
+                        !this.props.enviado?(
                         <React.Fragment>
                             <Header title="Aplicación para certificarse como Evaluador"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
@@ -85,7 +84,7 @@ export default class Terminos extends Component {
                             <PostulacionEnviada/>
                             )
                     ):(
-                        !this.state.enviado?(
+                        !this.props.enviado?(
                         <React.Fragment>
                             <Header title="Aplicación para certificarse como experto técnico"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
