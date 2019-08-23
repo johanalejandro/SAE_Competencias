@@ -148,6 +148,7 @@ class SolicitudPostulacionController extends Controller
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
             $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
+            $evaluacion->archivoAnexo = $request->file('archivoAnexo')->store("files");
             $evaluacion->save();
 
         return response()->json('Evaluacion Finalizada!');

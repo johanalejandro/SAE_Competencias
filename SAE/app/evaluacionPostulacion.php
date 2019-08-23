@@ -17,6 +17,7 @@ class evaluacionPostulacion extends Model
      protected $fillable = [
         'detalleEvaluacion', 
         'tipoEvaluacion', 
-        'resultadoEvaluacion'
+        'resultadoEvaluacion',
+        'anexoEvaluacion'
     ];
 }

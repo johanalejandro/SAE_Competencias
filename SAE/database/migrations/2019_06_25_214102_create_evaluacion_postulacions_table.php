@@ -19,6 +19,7 @@ class CreateEvaluacionPostulacionsTable extends Migration
             $table->text('detalleEvaluacion')->nullable();
             $table->set('tipoEvaluacion',['Entrevista', 'Prueba'])->nullable();
             $table->set('resultadoEvaluacion',['Aprueba', 'No Aprueba','Pendiente'])->default('Pendiente');
+            $table->string('archivoAnexo')->nullable();
         });
     }
 

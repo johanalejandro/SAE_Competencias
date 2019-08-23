@@ -42,14 +42,14 @@ class ExperienciaEvaludorController extends Controller
         //dd($keypostulante);
         $current_date_time = Carbon::now()->toDateTimeString();
         $experiencia = Experiencia_evaludor::create([
-                'id_postulante'     =>  $keypostulante->id_postulante,
-                'id_sector_requerimiento' =>  $request->id_sector_requerimiento,
-                'descripcion'    =>  $request->descripcion,
-                'nombreEmpresa'     =>  $request->nombreEmpresa,
-                'cargoEjercido'      =>  $request->cargoEjercido,
-                'fecha_inicio'    =>  \Carbon\Carbon::parse($request->fechaInicio),
-                'fecha_fin'     =>  \Carbon\Carbon::parse($request->fechaFin),
-                'esTrabajoActual'     =>  $request->esTrabajoActual,
+                'id_postulante'    =>  $keypostulante->id_postulante,
+                'id_sector'        =>  $request->id_sector,
+                'descripcion'      =>  $request->descripcion,
+                'nombreEmpresa'    =>  $request->nombreEmpresa,
+                'cargoEjercido'    =>  $request->cargoEjercido,
+                'fecha_inicio'     =>  \Carbon\Carbon::parse($request->fechaInicio),
+                'fecha_fin'        =>  \Carbon\Carbon::parse($request->fechaFin),
+                'esTrabajoActual'  =>  $request->esTrabajoActual,
 
         ]);
          return response()->json('Experiencia creada');

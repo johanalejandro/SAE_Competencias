@@ -17,7 +17,7 @@ class CreateExperienciaEvaludorsTable extends Migration
             $table->bigIncrements('id_experiencia');
             $table->timestamps();
             $table->unsignedBigInteger('id_postulante');
-            $table->unsignedBigInteger('id_sector_requerimiento');
+            $table->unsignedBigInteger('id_sector');
             $table->text('descripcion');
             $table->text('cargoEjercido');
             $table->text('nombreEmpresa');
@@ -31,7 +31,7 @@ class CreateExperienciaEvaludorsTable extends Migration
         });
 
         Schema::table('experiencia_evaludors', function($table) {
-        $table->foreign('id_sector_requerimiento')->references('id_sector_requerimiento')->on('sector_requerimientos');
+        $table->foreign('id_sector')->references('id_sector')->on('sectors');
         });
     }
 

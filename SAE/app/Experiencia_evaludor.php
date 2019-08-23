@@ -16,16 +16,16 @@ class Experiencia_evaludor extends Model
          
     }
 
-    public function sectorRequerimiento()
+    public function alcance()
     {
-    	return $this->hasOne('App\sectorRequerimiento');
+        return $this->hasOne('App\Alcance');
 
          
     }
 
     protected $fillable = [
         'id_postulante', 
-        'id_sector_requerimiento', 
+        'id_sector', 
         'descripcion',
         'cargoEjercido',
         'nombreEmpresa',
