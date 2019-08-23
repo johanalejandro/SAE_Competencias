@@ -116,11 +116,9 @@ export default class Modal extends Component {
         const finalizar = this.state.resultadoEvaluacion!=="selec" && this.state.resultadoEvaluacion!=="Pendiente";
         this.props.modalInfo.data!== undefined?console.log(this.props.modalInfo.data):null;
         
-      return (<div 
-        className="modal-sae"
-        onClick={ this.closeModal }>
+      return (
   
-          <div className="modal-content-sae modal-evaluar"
+          <div className="modal-evaluar bg-white"
             onClick={ e => e.stopPropagation() }>
                 <div className="modal-flex-sae">
                   <div className="modal-header text-center">
@@ -130,7 +128,7 @@ export default class Modal extends Component {
                           onClick={ this.closeModal }>&times;
                       </span>
                   </div>
-                  <div className="modal-body pre-scrollable text-justify">
+                  <div className="modal-body text-justify modal-body-evaluar">
                     <h6>Datos Generales</h6>
                     <div className="d-flex flex-row justify-content-between mb-1">
                       <Label name={"Postulante: "+data[2]+" "+data[1]} className="w-100"/>
@@ -288,8 +286,6 @@ export default class Modal extends Component {
                   </div>
               </div>
           </div>
-  
-        </div>
         )
       }
   }
