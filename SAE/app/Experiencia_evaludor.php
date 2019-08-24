@@ -16,9 +16,9 @@ class Experiencia_evaludor extends Model
          
     }
 
-    public function alcance()
+    public function sector()
     {
-        return $this->hasOne('App\Alcance');
+        return $this->hasOne('App\Sector');
 
          
     }
