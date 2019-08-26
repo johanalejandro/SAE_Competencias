@@ -165,7 +165,7 @@ export default class GestionCalidad extends Component {
                 experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
                 experiencia['cargoEjercido'] = postulante.cargoEjercido;
                 experiencia['descripcion'] = postulante.descripcion;
-                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                experiencia['id_sector'] = postulante.id_sector;
                 return experiencia;
             })
 
@@ -189,7 +189,7 @@ export default class GestionCalidad extends Component {
                         exp['nombreEmpresa'] = experiencia.nombreEmpresa;
                         exp['cargoEjercido'] = experiencia.cargoEjercido;
                         exp['descripcion'] = experiencia.descripcion;
-                        exp['requerimiento'] = await this.getRequerimiento(experiencia.id_sector_requerimiento);
+                        exp['sector'] = await this.getSector(experiencia.id_sector);
                         exp['tipoPostulacion'] = postulante.tipoPostulacion;
                         postulantesHabilitados['experiencias'].push(exp)
                     }
@@ -269,15 +269,19 @@ export default class GestionCalidad extends Component {
         })
 }
 
-getRequerimiento  =async (id) => {
-    let requerimiento = "";
-    await axios.get('/api/sector/'+id)
+getSector  =async (id) => {
+    let sector = "";
+    await axios.get('/api/sector/')
     .then(({data} )=> {
-        requerimiento = data.requerimiento;
+        const sectoresResponse = clone(data);
+            const key = findKey(sectoresResponse,(sector)=>{
+                return sector.id_sector===id;
+            })
+            sector = sectoresResponse[key].tipoSector;
     }).catch(error => {
         console.log("===ERROR: ",error);
     });
-    return requerimiento;
+    return sector;
 }
 
     getAlcance = async (id) => {
@@ -865,7 +869,7 @@ getRequerimiento  =async (id) => {
                         closeModal={this.selectModalAsignar}
                         asignar={this.asignar}
                         getAlcance={this.getAlcance}
-                        getRequerimiento={this.getRequerimiento}
+                        getSector={this.getSector}
                         success={this.state.sccess}
                     />)}
                 </React.Fragment>

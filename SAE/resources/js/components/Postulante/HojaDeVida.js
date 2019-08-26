@@ -94,16 +94,16 @@ export default class HojaDeVida extends Component {
         experiencias : [],
         experienciaLaboral: [],
         alcances: [],
-        fechaInicio: getYearsAgo(4),
+        fechaInicio: getYearsAgo(2),
         fechaFin: getCurrentDate(),
         esTrabajoActual: 0,
         descripcion: "",
         cargoEjercido: "",
         nombreEmpresa: "",
         alcanceActual: "selec",
-        requerimientos:[],
-        requerimientoActual: "selec",
-        requerimientoItem: "",
+        sectores:[],
+        sectorActual: "selec",
+        sectorItem: "",
         alcanceItem: "",
         checkedItems: new Map(),
         actividad: "selec",
@@ -116,12 +116,12 @@ export default class HojaDeVida extends Component {
 
     componentDidMount = async () =>{
 
-        if(this.props.tipo==="?tipo=evaluador"){
+        if(this.props.tipo==="EVALUADOR"){
             this.setState({
                 tipo: "evaluador",
             });
         }
-        if(this.props.tipo==="?tipo=experto"){
+        if(this.props.tipo==="EXPERTO"){
             this.setState({
                 tipo: "experto",
             });
@@ -132,6 +132,7 @@ export default class HojaDeVida extends Component {
             sectoresArray: clone(this.props.sectores),
             alcancesArray: clone(this.props.alcances),
             alcances: this.props.alcances,
+            sectores: clone(this.props.sectores),
             form: "datos",
             prerrequisitos: "si",
         })
@@ -143,7 +144,7 @@ export default class HojaDeVida extends Component {
         const endDateTmp = new Date(fechaFin);
         if (this.state.tipo==="evaluador"){
             console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
-            if(this.dateDiffInDays(endDateTmp,startDateTmp)<1461) {
+            if(this.dateDiffInDays(endDateTmp,startDateTmp)<730) {
                 await this.setState({fechaValidationEv: true,});
             }else{
                 await this.setState({
@@ -353,10 +354,10 @@ export default class HojaDeVida extends Component {
         experiencia['descripcion'] = this.state.descripcion;
         experiencia['fechaInicio'] = this.state.fechaInicio;
         experiencia['fechaFin'] = this.state.fechaFin;
-        experiencia['id_sector_requerimiento'] = this.state.requerimientoActual;
-        experiencia['requerimiento'] = this.state.requerimientoItem;
+        experiencia['id_sector'] = this.state.sectorActual;
+        experiencia['sector'] = this.state.sectorItem;
         experiencia['esTrabajoActual'] = this.state.esTrabajoActual;
-        if(this.state.nombreEmpresa===""||this.state.cargoEjercido===""||this.state.descripcion===""||this.state.requerimientoActual==="selec"||this.state.requerimientoItem===""){
+        if(this.state.nombreEmpresa===""||this.state.cargoEjercido===""||this.state.descripcion===""||this.state.sectorActual==="selec"||this.state.sectorItem===""){
             return
         }
         const { experiencias } = this.state;
@@ -364,7 +365,7 @@ export default class HojaDeVida extends Component {
         filterData.push(experiencia);
         await this.setState({ experiencias: filterData });
         await this.updateExperienciaLaboral(this.state.experiencias);
-        await this.cleanEv(this.state.requerimientoActual);
+        await this.cleanEv(this.state.sectorActual);
     }
 
     handleHojaDeVida = () => {
@@ -411,13 +412,13 @@ export default class HojaDeVida extends Component {
         })
     }
 
-    handleChangeRequerimiento = (evt) => {
+    handleChangeSector = (evt) => {
         let index = evt.nativeEvent.target.selectedIndex;
         let text = evt.nativeEvent.target[index].text;
         const {value} = evt.target;
         this.setState({
-            requerimientoActual: parseInt(value,10),
-            requerimientoItem: text,
+            sectorActual: parseInt(value,10),
+            sectorItem: text,
         })
     }
 
@@ -525,7 +526,7 @@ export default class HojaDeVida extends Component {
                 esTrabajoActual: element.esTrabajoActual,
                 fechaFin: element.fechaFin,
                 fechaInicio: element.fechaInicio,
-                id_sector_requerimiento: element.id_sector_requerimiento,
+                id_sector: element.id_sector,
                 nombreEmpresa: element.nombreEmpresa,
             }
 
@@ -605,17 +606,17 @@ export default class HojaDeVida extends Component {
         });
     }
 
-    cleanEv = async (requerimientoActual) => {
-        console.log(requerimientoActual);
-        const { requerimientos } = this.state;
+    cleanEv = async (sectorActual) => {
+        console.log(sectorActual);
+        const { sectores } = this.state;
         let filterData = [];
-        filterData = requerimientos;
-        const requerimientoAEliminar = await filterData.find((requerimiento)=>{
-            return requerimiento.id_sector_requerimiento === requerimientoActual;
+        filterData = sectores;
+        const sectorAEliminar = await filterData.find((sector)=>{
+            return sector.id_sector === sectorActual;
         })
-        console.log("eliminar",requerimientoAEliminar)
-        await pull(filterData,requerimientoAEliminar);
-        await this.setState({ requerimientos: filterData });
+        console.log("eliminar",sectorAEliminar)
+        await pull(filterData,sectorAEliminar);
+        await this.setState({ sectores: filterData });
         await this.setState({
             fechaInicio: getYearsAgo(4),
             fechaFin: getCurrentDate(),
@@ -623,7 +624,7 @@ export default class HojaDeVida extends Component {
             descripcion: "",
             cargoEjercido: "",
             nombreEmpresa: "",
-            requerimientoActual: "selec",
+            sectorActual: "selec",
             checkedItems: new Map(),
             actividad: "selec",
         });
@@ -725,7 +726,7 @@ export default class HojaDeVida extends Component {
         const formData = new FormData();
         formData.append("cedula",this.state.identificacion);
         formData.append("nombreEmpresa", experiencia.nombreEmpresa);
-        formData.append("id_sector_requerimiento", experiencia.id_sector_requerimiento);
+        formData.append("id_sector", experiencia.id_sector);
         formData.append("cargoEjercido", experiencia.cargoEjercido);
         formData.append("descripcion", experiencia.descripcion);
         formData.append("esTrabajoActual", experiencia.esTrabajoActual);
@@ -758,7 +759,7 @@ export default class HojaDeVida extends Component {
               )}
               {this.state.prerrequisitos==="no" &&(
                 <React.Fragment>
-                    <Header title="Hoja de Vida"/>
+                    <Header title={"Hoja de Vida - Postulación "+this.props.tipo}/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
                                     {this.state.form === "datos" && (
@@ -928,10 +929,10 @@ export default class HojaDeVida extends Component {
                                     handleChangeStart={this.handleChangeStart}
                                     handleChangeEnd={this.handleChangeEnd}
                                     checkedItems={this.state.checkedItems}
-                                    handleChangeRequerimiento={this.handleChangeRequerimiento}
+                                    handleChangeSector={this.handleChangeSector}
                                     tipo={this.state.tipo}
-                                    requerimientos={this.state.requerimientos}
-                                    requerimientoActual={this.state.requerimientoActual}
+                                    sectores={this.state.sectores}
+                                    sectorActual={this.state.sectorActual}
                                     fechaInicio={this.state.fechaInicio}
                                     fechaFin={this.state.fechaFin}
                                     esTrabajoActual={this.state.esTrabajoActual}

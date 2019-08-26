@@ -67,6 +67,8 @@ export default class Evaluacion extends Component {
                 experiencia['descripcion'] = postulante.descripcion;
                 experiencia['id_alcance'] = postulante.id_alcance;
                 experiencia['estado'] = postulante.estado;
+                experiencia['fecha_inicio'] = postulante.fecha_inicio;
+                experiencia['fecha_fin'] = postulante.fecha_fin;
                 return experiencia;
             })
             const experiencies = uniqBy(experiencias,'id_alcance')
@@ -100,6 +102,8 @@ export default class Evaluacion extends Component {
                         exp['estado'] = experiencia.estado;
                         exp['alcance'] = await this.getAlcance(experiencia.id_alcance);
                         exp['tipoPostulacion'] = postul.tipoPostulacion;
+                        exp['fecha_inicio'] = experiencia.fecha_inicio;
+                        exp['fecha_fin'] = experiencia.fecha_fin;
                         expertoPorEvaluar['experiencias'].push(exp);
                         
                     }
@@ -145,10 +149,12 @@ export default class Evaluacion extends Component {
                 experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
                 experiencia['cargoEjercido'] = postulante.cargoEjercido;
                 experiencia['descripcion'] = postulante.descripcion;
-                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                experiencia['id_sector'] = postulante.id_sector;
+                experiencia['fecha_inicio'] = postulante.fecha_inicio;
+                experiencia['fecha_fin'] = postulante.fecha_fin;
                 return experiencia;
             });
-            const experiencies = uniqBy(experiencias,'id_sector_requerimiento');
+            const experiencies = uniqBy(experiencias,'id_sector');
             const cursos = await data.map((postulante)=>{
                 let curso = {};
                 curso['id_postulante'] = postulante.id_postulante;
@@ -184,12 +190,14 @@ export default class Evaluacion extends Component {
                     const experiencia = experiencies[index];
                     let exp = {};
                     if (postul.id_postulante===experiencia.id_postulante) {
-                        exp['id_sector_requerimiento'] = experiencia.id_sector_requerimiento;
+                        exp['id_sector'] = experiencia.id_sector;
                         exp['nombreEmpresa'] = experiencia.nombreEmpresa;
                         exp['cargoEjercido'] = experiencia.cargoEjercido;
                         exp['descripcion'] = experiencia.descripcion;
-                        exp['sector'] = await this.getRequerimiento(experiencia.id_sector_requerimiento);
+                        exp['sector'] = await this.getSector(experiencia.id_sector);
                         exp['tipoPostulacion'] = postul.tipoPostulacion;
+                        exp['fecha_inicio'] = experiencia.fecha_inicio;
+                        exp['fecha_fin'] = experiencia.fecha_fin;
                         evaluadorPorEvaluar['experiencias'].push(exp);
                         
                     }
@@ -223,7 +231,22 @@ export default class Evaluacion extends Component {
         
 }
 
-getRequerimiento  =async (id) => {
+getSector  =async (id) => {
+    let sector = "";
+    await axios.get('/api/sector/')
+    .then(({data} )=> {
+        const sectoresResponse = clone(data);
+            const key = findKey(sectoresResponse,(sector)=>{
+                return sector.id_sector===id;
+            })
+            sector = sectoresResponse[key].tipoSector;
+    }).catch(error => {
+        console.log("===ERROR: ",error);
+    });
+    return sector;
+}
+
+getRequerimiento =async (id) => {
     let requerimiento = "";
     await axios.get('/api/sector/'+id)
     .then(({data} )=> {

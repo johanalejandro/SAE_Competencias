@@ -68,10 +68,10 @@ export default class ModalAsignar extends Component {
         .then(async({data}) => {
             const experiencias = data.map((postulante)=>{
                 let experiencia = {};
-                experiencia['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
+                experiencia['id_sector'] = postulante.id_sector;
                 return experiencia;
             })
-            const experienciasUniq = uniqBy(experiencias,'id_sector_requerimiento');
+            const experienciasUniq = uniqBy(experiencias,'id_sector');
             if(isEmpty(experienciasUniq)){
                 this.setState({
                     respuesta: {exp: experienciasUniq,usuarios: usuarios}
@@ -79,8 +79,8 @@ export default class ModalAsignar extends Component {
                 return;
             }
             for (let index = 0; index < experienciasUniq.length; index++) {
-                const id_sector_requerimiento = experienciasUniq[index].id_sector_requerimiento;
-                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector_requerimiento)
+                const id_sector = experienciasUniq[index].id_sector;
+                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector)
                     .then(({data}) => {
 
                         usuarios.push(data[0]);
@@ -117,9 +117,9 @@ export default class ModalAsignar extends Component {
         if(this.props.modalInfo.data[3]==="Evaluador"){
           const id_sectores= this.state.respuesta.exp;
           for (let index = 0; index < id_sectores.length; index++) {
-            const id_sector_requerimiento = id_sectores[index].id_sector_requerimiento;
-            const sector = await this.props.getRequerimiento(id_sector_requerimiento);
-            sectores.push({id_sector_requerimiento: id_sector_requerimiento,tipoSector: sector});
+            const id_sector = id_sectores[index].id_sector;
+            const sector = await this.props.getSector(id_sector);
+            sectores.push({id_sector: id_sector,tipoSector: sector});
           }
           console.log(sectores);
           await this.setState({
@@ -186,7 +186,7 @@ export default class ModalAsignar extends Component {
                                               //console.log(this.state.sectores)
                                               this.state.sectores.map((sector)=>{
                                                 //console.log(sector)
-                                              return <Label key={sector.id_sector_requerimiento} name={sector.tipoSector}></Label>
+                                              return <Label key={sector.id_sector} name={sector.tipoSector}></Label>
                                             })):null}
                                     </div>
                                     <div className="d-flex flex-column w-50">

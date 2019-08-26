@@ -165,17 +165,23 @@ export default class FormularioPostulacion extends Component {
     }
 
     render() {
+        let tipo = window.location.search;
+        if (tipo === "?tipo=evaluador"){
+            tipo = "EVALUADOR";
+        }else{
+            tipo = "EXPERTO";
+        }
         return (
             this.state.hojaDeVida ? (
                  <HojaDeVida 
                     ambitos={this.state.ambitosArray}
                     sectores={this.state.sectoresArray}
                     alcances={this.state.alcancesArray}
-                    tipo={window.location.search}
+                    tipo={tipo}
                  />
               ): (
                 <React.Fragment>
-                    <Header title={"Opciones de Postulación"+window.location.search ==="?tipo=evaluador"?"EVALUADOR":"EXPERTO"}/>
+                    <Header title={"Opciones de Postulación "+tipo}/>
                     <div className="d-flex flex-row h-85" >
                         <div className="d-flex flex-column align-items-center w-20">
                                     {this.state.tipo === "ambitos"?(

@@ -25,8 +25,8 @@ export default class ExperienciaLaboralEv extends Component {
     render() {
         const columns = [
             {
-                name: "requerimiento",
-                label: "Requerimiento",
+                name: "sector",
+                label: "Sector",
                 options: {
                  filter: true,
                  sort: true,
@@ -152,11 +152,11 @@ export default class ExperienciaLaboralEv extends Component {
                                 <div className="d-flex flex-column card-body">
                                     <div className="d-flex flex-row justify-content-between w-100">
                                         <div className="d-flex flex-column w-30 mr-4">
-                                            <Label name="Requerimiento"/>
-                                            <select className="h-50" name="requerimientoActual" value={this.props.requerimientoActual} onChange={(evt)=>{this.props.handleChangeRequerimiento(evt)}}>
+                                            <Label name="Sector"/>
+                                            <select className="h-50" name="sectorActual" value={this.props.sectorActual} onChange={(evt)=>{this.props.handleChangeSector(evt)}}>
                                                 <option disabled value="selec">Seleccione</option>
-                                                {this.props.requerimientos.map((req)=>{
-                                                    return <option key={req.id_sector_requerimiento} value={req.id_sector_requerimiento}>{req.requerimiento}</option>
+                                                {this.props.sectores.map((sec)=>{
+                                                    return <option key={sec.id_sector} value={sec.id_sector}>{sec.tipoSector}</option>
                                                 })
                                                 }
                                             </select>
@@ -221,9 +221,9 @@ export default class ExperienciaLaboralEv extends Component {
                                             <Label name="Trabajo Actual"/>
                                             <Checkbox name="esTrabajoActual" checked={this.props.checkedItems.get("esTrabajoActual")} onChange={this.props.handleCheckBoxChange} />
                                         </div>
-                                        {isEmpty(this.props.requerimientos)||this.props.fechaValidation||this.props.cargoEjercido===""||this.props.descripcion===""||this.props.requerimientoActual==="selec"||this.props.actividad==="selec"?
+                                        {isEmpty(this.props.sectores)||this.props.fechaValidation||this.props.cargoEjercido===""||this.props.descripcion===""||this.props.sectorActual==="selec"||this.props.actividad==="selec"?
                                          (<div className="d-flex flex-row justify-content-start align-items-center w-30">
-                                            <label className="text-danger text-left mr-2 ">Debe poseer al menos 4 años de experiencia y completar todos los datos o no puede seguir postulando
+                                            <label className="text-danger text-left mr-2 ">Debe poseer al menos 2 años de experiencia y completar todos los datos o no puede seguir postulando
                                             </label>
                                             <button name="referencia" className="btn-secondary w-20 h-50" disabled>Agregar</button>
                                          </div>):

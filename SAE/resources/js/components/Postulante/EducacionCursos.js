@@ -204,10 +204,10 @@ export default class EducacionCursos extends Component {
                                         </div>
                                     </div>
                                     <div className="d-flex flex-row justify-content-end align-items-center w-100">
-                                        {isEmpty(this.props.reqs)||this.props.archivoAnexoCurso===""||this.props.numeroHoras<500||this.props.reqActual==="selec"||this.props.nombreInstitucionCurso===""?
+                                        {isEmpty(this.props.reqs)||this.props.archivoAnexoCurso===""||this.props.numeroHoras<=0 || this.props.reqActual==="selec"||this.props.nombreInstitucionCurso===""?
                                         (
                                             <React.Fragment>
-                                            <label className="text-danger text-left mr-2 ">Revise que los datos del curso estén completos y que el número de horas sea mayor a 500</label>
+                                            <label className="text-danger text-left mr-2 ">Revise que los datos del curso estén completos</label>
                                             <button name="referencia" className="btn-secondary w-20" disabled>Agregar</button>
                                         </React.Fragment>
                                         ):

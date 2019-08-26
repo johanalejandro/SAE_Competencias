@@ -63,6 +63,19 @@ export default class Prerrequisitos extends Component {
         }
     }
 
+    validarExperto=(pasa)=>{
+        if (pasa){
+            this.setState({
+                validador: false,
+            });
+        }else{
+            this.setState({
+                validador: true,
+            });
+        }
+        $('#expertoModal').modal();
+    }
+
 
     handleCheckBoxChange = ({target}) => {
         const reqs = this.state.requerimientos;
@@ -178,7 +191,12 @@ export default class Prerrequisitos extends Component {
                                     </div>
                                 </div>
                                 <div className="d-flex flex-row justify-content-end align-items-center w-100 my-2">
-                                    <button name="prerrequisitos" className="btn-primary-sae w-20" data-toggle="modal" data-target="#expertoModal">Sí</button>
+                                    <button name="prerrequisitos" className="btn-primary-sae bg-light w-20 mr-2" style={{color:'#6c757d'}} onClick={(evt)=>{
+                                            this.validarExperto(false);
+                                            }}>No</button>
+                                    <button name="prerrequisitos" className="btn-primary-sae w-20" onClick={(evt)=>{
+                                            this.validarExperto(true);
+                                            }}>Sí</button>
                                 </div>
                             </div>
                         </React.Fragment>
@@ -215,17 +233,25 @@ export default class Prerrequisitos extends Component {
               <div className="modal fade" id="expertoModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                   <div className="modal-content">
-                    <div className="modal-header text-center">
-                      <h5 className="modal-title" id="exampleModalLongTitle">Recuerde</h5>
+                    <div className={!this.state.validador?"modal-header text-center":"modal-header  bg-danger text-center"}>
+                      <h5 className={!this.state.validador?"modal-title":"modal-title text-white"}  id="exampleModalLongTitle">Recuerde</h5>
                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div className="modal-body">
+                        {this.state.validador?(
+                            <label className="w-90 text-normal-danger text-justify">No cuenta con la experiencia necesaria. No puede proseguir la postulación</label>
+                        ):(
                             <label className="w-90 text-normal text-justify">Más adelante deberá anexar documentos que avalen la información proporcionada previamente</label>
+                        )}
                     </div>
                     <div className="modal-footer">
+                        {this.state.validador?(
+                            <a className="w-20" href="/postulacion-formulario?tipo=experto"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
+                        ):(
                             <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
+                        )}
                     </div>
                   </div>
                 </div>

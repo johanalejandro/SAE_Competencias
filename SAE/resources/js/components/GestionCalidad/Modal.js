@@ -33,8 +33,8 @@ const Modal = props => {
                               <ul>
                                 
                                 {props.modalInfo.data.map((exp)=>{
-                                  return (<div key={i+1}>
-                                    <label className="text-success text-normal">{exp.alcance?(<span>Alcance: {exp.alcance}</span>):(<span>Requerimiento: {exp.requerimiento}</span>)}</label><br></br>
+                                  return (<div key={exp.id_sector}>
+                                    <label className="text-success text-normal">{exp.alcance?(<span>Alcance: {exp.alcance}</span>):(<span>Sector: {exp.sector}</span>)}</label><br></br>
                                     <label>Empresa: {exp.nombreEmpresa}</label><br></br>
                                     <label>Cargo: {exp.cargoEjercido}</label><br></br>
                                     <label>Descripción: {exp.descripcion}</label><br></br>

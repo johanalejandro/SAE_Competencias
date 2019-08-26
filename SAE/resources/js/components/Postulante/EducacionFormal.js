@@ -39,7 +39,7 @@ export default class EducacionFormal extends Component {
                                         </select>
                                     </div>
                                     <div className="d-flex flex-column w-50 mr-4">
-                                        <Label name="Anexo"/>
+                                        <Label name="Anexo del Título Obtenido"/>
                                         <label id="anexo-label" className="w-50 d-flex justify-content-start text-left text-normal h-50">
                                               {this.props.loadingFile ? (
                                                   <div className="d-flex flex-column justify-content-center w-100 align-items-center">
@@ -50,7 +50,7 @@ export default class EducacionFormal extends Component {
                                                   !this.props.archivoAnexo? (
                                                     <React.Fragment>
                                                     <div className="d-flex justify-content-center align-items-center btn btn-secondary text-info bg-light h-100">
-                                                        <span className="text-center">Cargar archivo</span>
+                                                        <span className="text-center">Cargar Título</span>
                                                     </div>
                                                     <input
                                                         type="file"
