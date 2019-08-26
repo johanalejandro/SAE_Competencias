@@ -31,6 +31,7 @@ class Experiencia_evaludor extends Model
         'nombreEmpresa',
         'fecha_inicio',
         'fecha_fin',
-        'esTrabajoActual'
+        'esTrabajoActual',
+        'estado'
     ];
 }

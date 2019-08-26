@@ -11,6 +11,7 @@ use Auth;
 use App\Postulante;
 use App\Cursos_Evaluador;
 use App\experienciaExperto;
+use App\Experiencia_evaludor;
 
 
 class SolicitudPostulacionController extends Controller
@@ -132,15 +133,17 @@ class SolicitudPostulacionController extends Controller
             $postulante->fechaHabilitacion = $current_date_time;
             $postulante->save();
             
-            //actualizo estados en cursos_evaluador
+            //actualizo estados en experiencia_evaluador
 
             foreach(json_decode($request->estados) as $estado){
-                $curso = DB::table('cursos__evaluadors')->select('id_curso_evaluador')
+                $experiencia = DB::table('experiencia_evaludors')->select('id_experiencia')
                                                         ->where('id_postulante',$solicitud->id_postulante)
-                                                        ->where('id_sector_requerimiento', $estado->id_sector_requerimiento)
+                                                        ->where('id_sector', $estado->id_sector)
                                                         ->first();
-                $cursoActualizado = Cursos_Evaluador::find($curso->id_curso_evaluador);
-                $cursoActualizado->save();
+                
+                $experiencia = Experiencia_evaludor::find($experiencia->id_experiencia);
+                $experiencia = $estado->estado;
+                $experiencia->save();
              
             }
             //actualizo campos en evaluacionpostulante
@@ -255,7 +258,6 @@ class SolicitudPostulacionController extends Controller
                                                                 ->first();
                 $exp = experienciaExperto::find($experiencia->id_experiencia);                                              
                 $exp ->estado = $estado->estado;
-                $exp ->updated_at = $current_date_time;
                 $exp->save();
              
             }

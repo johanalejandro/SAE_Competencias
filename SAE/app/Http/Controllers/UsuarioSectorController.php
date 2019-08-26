@@ -21,8 +21,8 @@ class UsuarioSectorController extends Controller
     public function obtenerUsuariosPorSector($id){
         $users = DB::table('usuario__sectors')
           ->join('users', 'users.id_usuario', '=', 'usuario__sectors.id_usuario')
-          ->select('users.nombre','users.apellido','users.id_usuario','usuario__sectors.id_sector_requerimiento')
-            ->where('usuario__sectors.id_sector_requerimiento',$id)
+          ->select('users.nombre','users.apellido','users.id_usuario','usuario__sectors.id_sector')
+            ->where('usuario__sectors.id_sector',$id)
             ->get();
         return response()->json($users);
 

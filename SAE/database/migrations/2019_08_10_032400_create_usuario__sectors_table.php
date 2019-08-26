@@ -16,7 +16,7 @@ class CreateUsuarioSectorsTable extends Migration
         Schema::create('usuario__sectors', function (Blueprint $table) {
             $table->bigIncrements('id_usuario_sector');
              $table->unsignedBigInteger('id_usuario');
-            $table->unsignedBigInteger('id_sector_requerimiento');
+            $table->unsignedBigInteger('id_sector');
             $table->timestamps();
         });
 
@@ -25,7 +25,7 @@ class CreateUsuarioSectorsTable extends Migration
         });
 
          Schema::table('usuario__sectors', function($table) {
-            $table->foreign('id_sector_requerimiento')->references('id_sector_requerimiento')->on('sector_requerimientos');
+            $table->foreign('id_sector')->references('id_sector')->on('sectors');
         });
     }
 

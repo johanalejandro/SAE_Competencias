@@ -19,7 +19,6 @@ class CreateCursosEvaluadorsTable extends Migration
             $table->unsignedBigInteger('id_sector_requerimiento');
             $table->text('nombreInstitucion');
             $table->integer('numeroHoras');
-            $table->set('estado',['Arobado', 'Pendiente','No aprobado'])->default('Pendiente');
             $table->string('archivoAnexo');
             $table->timestamps();
         });
