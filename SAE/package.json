@@ -30,6 +30,7 @@
         "@material-ui/icons": "^4.2.1",
         "babel-preset-env": "^1.7.0",
         "dayjs": "^1.8.15",
+        "js-file-download": "^0.4.8",
         "mui-datatables": "^2.6.4",
         "react-confirm-alert": "^2.4.1",
         "react-datepicker": "^2.8.0",

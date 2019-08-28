@@ -117,6 +117,7 @@ class PostulanteController extends Controller
             ->select('postulantes.*', 'experiencia_evaludors.*')
             ->where('postulantes.tipoPostulacion','Evaluador')
             ->where('postulantes.estado','Habilitado')
+            ->where('experiencia_evaludors.estado','Aprobado')
             ->get();
         return response()->json($evaluadores);
     }
@@ -129,6 +130,7 @@ class PostulanteController extends Controller
             ->select('postulantes.*', 'experiencia_expertos.*','alcances.nombreAlcance')
             ->where('postulantes.tipoPostulacion','Experto')
             ->where('postulantes.estado','Habilitado')
+            ->where('experiencia_expertos.estado','Aprobado')
             ->get();
         return response()->json($evaluadores);
     }

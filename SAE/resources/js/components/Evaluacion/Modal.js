@@ -1,4 +1,5 @@
 import React,{ Component } from 'react';
+import FileDownload from 'js-file-download';
 
 import Label from '../common/Label';
 import isEmpty from 'lodash/isEmpty';
@@ -61,20 +62,21 @@ export default class Modal extends Component {
 
       }
 
-      getAnexo(e,id_Curso){
+      getAnexo(e,id_Curso,sector){
         e.preventDefault();
         axios.get('/api/getAnexo/'+id_Curso)
         .then((response)=>{
-          console.log(response);
+          FileDownload(response.data, 'Anexo_'+sector+'.pdf');
         })
         .catch(console.error);
       }
 
       getCV(e,id_Educacion){
         e.preventDefault();
+
         axios.get('/api/getCV/'+id_Educacion)
-        .then((response)=>{
-          console.log(response);
+        .then((response) => {
+          FileDownload(response.data, 'Título_'+this.props.modalInfo.data[4]+'.pdf');
         })
         .catch(console.error);
       }
@@ -182,7 +184,7 @@ export default class Modal extends Component {
                                 <Label name={"Alcance Relacionado: "+curso.sector} className="w-100"/>
                                 <Label name={"Institución: "+curso.nombreInstitucionCurso} className="w-100"/>
                                 <Label name={"N° Horas: "+curso.numeroHoras} className="w-100"/>
-                                <button className="btn btn-secondary text-info bg-light h-100 w-20" onClick={(e)=>this.getAnexo(e,curso.id_curso_evaluador)}>Descargar Anexo</button>
+                                <button className="btn btn-secondary text-info bg-light h-100 w-20" onClick={(e)=>this.getAnexo(e,curso.id_curso_evaluador,curso.sector)}>Descargar Anexo</button>
                               </div>
                             })}
                           </div>
