@@ -31,7 +31,7 @@ export default class EducacionCursos extends Component {
                 },
             },
           {
-           name: "nombreInstitucion",
+           name: "nombreInstitucionCurso",
            label: "Institucion",
            options: {
             filter: true,

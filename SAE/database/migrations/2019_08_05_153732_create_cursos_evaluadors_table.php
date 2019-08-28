@@ -17,9 +17,9 @@ class CreateCursosEvaluadorsTable extends Migration
             $table->bigIncrements('id_curso_evaluador');
             $table->unsignedBigInteger('id_postulante');
             $table->unsignedBigInteger('id_sector_requerimiento');
-            $table->text('nombreInstitucion');
+            $table->text('nombreInstitucionCurso');
             $table->integer('numeroHoras');
-            $table->string('archivoAnexo');
+            $table->string('archivoAnexoCurso');
             $table->timestamps();
         });
 

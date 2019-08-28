@@ -44,9 +44,9 @@ class CursosEvaluadorController extends Controller
         $experiencia = Cursos_Evaluador::create([
                 'id_postulante'     =>  $keypostulante->id_postulante,
                 'id_sector_requerimiento' =>  $request->id_sector_requerimiento,
-                'nombreInstitucion'    =>  $request->nombreInstitucion,
+                'nombreInstitucionCurso'    =>  $request->nombreInstitucionCurso,
                 'numeroHoras'     =>  $request->numeroHoras,
-                'archivoAnexo'      => $request->file('archivoAnexo')->store("files"),
+                'archivoAnexoCurso'      => $request->file('archivoAnexoCurso')->store("files"),
 
         ]);
          return response()->json('Curso creado');
@@ -56,7 +56,7 @@ class CursosEvaluadorController extends Controller
     public function getAnexo($id)
     {
          $keyarchivo = Cursos_Evaluador::find($id);
-         $url = $keyarchivo->archivoAnexo;
+         $url = $keyarchivo->archivoAnexoCurso;
          return Storage::download($url);
 
     }

@@ -18,6 +18,6 @@ class evaluacionPostulacion extends Model
         'detalleEvaluacion', 
         'tipoEvaluacion', 
         'resultadoEvaluacion',
-        'archivoAnexo'
+        'archivoAnexoEvaluacion'
     ];
 }

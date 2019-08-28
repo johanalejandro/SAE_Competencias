@@ -26,10 +26,16 @@ export default class Modal extends Component {
               detalleEvaluacion: data.detalleEvaluacion===null?"":data.detalleEvaluacion,
               resultadoEvaluacion: data.resultadoEvaluacion,
               tipoEvaluacion: data.tipoEvaluacion===null?"selec":data.tipoEvaluacion,
-              archivoAnexo: data.archivoAnexoEvaluacion,
+              archivoAnexo: data.archivoAnexoEvaluacion===null?"":data.archivoAnexoEvaluacion,
             })
           })
           .catch(console.error);
+          const estados =this.props.modalInfo.data[6].map((experiencia)=>{
+            return {id_alcance: experiencia.id_alcance,estado: experiencia.estado}
+          })
+          this.setState({
+            estadoAlcancesArray: estados,
+          })
           }
           if(this.props.modalInfo.data!== undefined && this.props.modalInfo.type==="Evaluador"){
             const id = this.props.modalInfo.data[11]
@@ -44,7 +50,15 @@ export default class Modal extends Component {
             })
           })
           .catch(console.error);
+              const estados =this.props.modalInfo.data[6].map((experiencia)=>{
+                return {id_sector: experiencia.id_sector,estado: experiencia.estado}
+              })
+          this.setState({
+            estadoSectoresArray: estados,
+          })
           }
+
+
       }
 
       getAnexo(e,id_Curso){
@@ -86,7 +100,7 @@ export default class Modal extends Component {
         estados = estadoAlcancesArray;
         estados.push(
             {
-              id_alcance:name,
+              id_alcance: parseInt(name),
               estado: value,
             }
           );
@@ -95,7 +109,24 @@ export default class Modal extends Component {
         })
       }
 
-      handleChangeCurso = (evt)=>{
+      handleChangeFile = async (e) => {
+        console.log(e.target);
+        const name = e.target.name;
+        const { files } = e.target;
+        const file = files[0];
+        await this.setState({
+            [name] : file,
+        })
+    }
+
+      volverCargar = (e)=>{
+        const name = e.target.name;
+        this.setState({
+            [name]:"",
+        })
+    }
+
+      handleChangeSector = (evt)=>{
         const name= evt.target.name;
         const value = evt.target.value;
         const {estadoSectoresArray} = this.state;
@@ -103,7 +134,7 @@ export default class Modal extends Component {
         estados = estadoSectoresArray;
         estados.push(
             {
-              id_sector:name,
+              id_sector:parseInt(name),
               estado: value,
             }
           );
@@ -113,11 +144,10 @@ export default class Modal extends Component {
       }
 
       render () {
-        console.log(this.state.estadoAlcancesArray);
+        console.log(this.state.estadoSectoresArray);
         const data = this.props.modalInfo.data!== undefined?this.props.modalInfo.data:[];
         const type = this.props.modalInfo.type;
         const finalizar = this.state.resultadoEvaluacion!=="selec" && this.state.resultadoEvaluacion!=="Pendiente";
-        this.props.modalInfo.data!== undefined?console.log(this.props.modalInfo.data):null;
         
       return (
   
@@ -143,20 +173,20 @@ export default class Modal extends Component {
                     </div>
                     <React.Fragment>
                       {type==="Evaluador"&&(
-                        <React.Fragment>
+                        <div className="w-100 h-50">
                           <hr></hr>
-                          <h6>Información de Curos</h6>
-                          <React.Fragment>
+                          <h6>Información de Cursos</h6>
+                          <div className="row h-50">
                             {data[12].map((curso)=>{
-                              return <div key={curso.id_sector_requerimiento} className="d-flex flex-column align-items-between mb-1">
+                              return <div key={curso.id_sector_requerimiento} className="col-sm align-items-center h-50 mb-1">
                                 <Label name={"Alcance Relacionado: "+curso.sector} className="w-100"/>
-                                <Label name={"Institución: "+curso.nombreInstitucion} className="w-100"/>
+                                <Label name={"Institución: "+curso.nombreInstitucionCurso} className="w-100"/>
                                 <Label name={"N° Horas: "+curso.numeroHoras} className="w-100"/>
-                                <button onClick={(e)=>this.getAnexo(e,curso.id_curso_evaluador)}>Descargar Anexo</button>
+                                <button className="btn btn-secondary text-info bg-light h-100 w-20" onClick={(e)=>this.getAnexo(e,curso.id_curso_evaluador)}>Descargar Anexo</button>
                               </div>
                             })}
-                          </React.Fragment>
-                        </React.Fragment>
+                          </div>
+                          </div>
                         )}
                         <div className="d-flex flex-row justify-content-between">
                       <hr></hr>
@@ -176,7 +206,7 @@ export default class Modal extends Component {
                       ):(
                         data[6].map((experiencia)=>{
                           return <div key={experiencia.id_sector} className="d-flex flex-column align-items-between  mb-1">
-                            <Label   name={"Alcance Relacionado: "+experiencia.sector} className="w-100"/>
+                            <Label   name={"Sector Relacionado: "+experiencia.sector} className="w-100"/>
                             <Label  name={"Empresa: "+experiencia.nombreEmpresa} className="w-100"/>
                             <Label name={"Cargo: "+experiencia.cargoEjercido} className="w-100"/>
                             <Label  name={"Descripción: "+experiencia.descripcion} className="w-100"/>
@@ -208,10 +238,10 @@ export default class Modal extends Component {
                               return(
                                 <React.Fragment key={experiencia.id_alcance}>
                                   <div className="d-flex flex-column align-items-between  mb-1">
-                                      <Label  name={"Alcance Relacionado: "+experiencia.alcance} className="w-100"/>
+                                      <Label  name={"Alcance: "+experiencia.alcance} className="w-100"/>
                                       <select  name={experiencia.id_alcance} className="h-25 w-20" defaultValue={experiencia.estado} onChange={this.handleChangeAlcance}> 
                                         <option disabled value="selec">Seleccione</option>
-                                        <option value="Arobado">Aprueba</option>
+                                        <option value="Aprobado">Aprueba</option>
                                         <option value="No aprobado">No aprueba</option>
                                         <option value="Pendiente">Pendiente</option>
                                       </select>
@@ -227,10 +257,10 @@ export default class Modal extends Component {
                           return(
                             <React.Fragment key={experiencia.id_sector}>
                               <div className="d-flex flex-column align-items-between  mb-1">
-                                  <Label  name={"Alcance Relacionado: "+experiencia.sector} className="w-100"/>
+                                  <Label  name={"Sector: "+experiencia.sector} className="w-100"/>
                                   <select  name={experiencia.id_sector} className="h-25" defaultValue={experiencia.estado} onChange={this.handleChangeSector}> 
                                     <option disabled value="selec">Seleccione</option>
-                                    <option value="Arobado">Aprueba</option>
+                                    <option value="Aprobado">Aprueba</option>
                                     <option value="No aprobado">No aprueba</option>
                                     <option value="Pendiente">Pendiente</option>
                                   </select>
@@ -253,7 +283,7 @@ export default class Modal extends Component {
                         <textarea name="detalleEvaluacion" className="w-100 mr-2" rows="5" value={this.state.detalleEvaluacion} onChange={this.handleChange}></textarea>
                         <div className="d-flex flex-column w-100 mr-2">
                                         <label id="anexo-label" className="w-50 d-flex justify-content-start text-left text-normal h-50">
-                                              {!this.state.archivoAnexo? (
+                                              {this.state.archivoAnexo===""? (
                                                     <React.Fragment>
                                                     <div className="d-flex justify-content-center align-items-center btn btn-secondary text-info bg-light h-100">
                                                         <span className="text-center">Cargar Anexo</span>
@@ -303,12 +333,12 @@ export default class Modal extends Component {
                         ):(
                           <React.Fragment>
                               <button type="button" className="btn btn-secondary w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                    await this.props.guardarEvaluacionEvaluador(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoSectoresArray)
+                                    await this.props.guardarEvaluacionEvaluador(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.archivoAnexo,this.state.estadoSectoresArray)
                                     await this.closeModal(e,true);
                                 }}>Guardar</button>
                                 {finalizar && (
                               <button type="button" className="btn btn-secondary bg-danger w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                   await this.props.finalizarEvaluacionEvaluador(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoSectoresArray);
+                                   await this.props.finalizarEvaluacionEvaluador(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.archivoAnexo,this.state.estadoSectoresArray);
                                    await this.closeModal(e,true);
                                 }}>Finalizar</button>)
                               }

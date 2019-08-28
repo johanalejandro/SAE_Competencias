@@ -51,7 +51,6 @@ export default class Evaluacion extends Component {
                 post['fechaHabilitacion'] = postulante.fechaHabilitacion;
                 post['disponibilidadViajar'] = postulante.disponibilidadViajar;
                 post['cedula'] = postulante.cedula;
-                post['archivoAnexo'] =postulante.archivoAnexo;
                 post['nombreInstitucion'] =postulante.nombreInstitucion;
                 post['tituloObtenido']=postulante.tituloObtenido;
                 post['tipoFormacion']=postulante.tipoFormacion;
@@ -150,6 +149,7 @@ export default class Evaluacion extends Component {
                 experiencia['cargoEjercido'] = postulante.cargoEjercido;
                 experiencia['descripcion'] = postulante.descripcion;
                 experiencia['id_sector'] = postulante.id_sector;
+                experiencia['estado'] = postulante.estado;
                 experiencia['fecha_inicio'] = postulante.fecha_inicio;
                 experiencia['fecha_fin'] = postulante.fecha_fin;
                 return experiencia;
@@ -158,9 +158,8 @@ export default class Evaluacion extends Component {
             const cursos = await data.map((postulante)=>{
                 let curso = {};
                 curso['id_postulante'] = postulante.id_postulante;
-                curso['nombreInstitucion'] = postulante.nombreInstitucion;
+                curso['nombreInstitucionCurso'] = postulante.nombreInstitucionCurso;
                 curso['numeroHoras'] = postulante.numeroHoras;
-                curso['estado'] = postulante.estado;
                 curso['id_curso_evaluador'] = postulante.id_curso_evaluador;
                 curso['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
                 return curso;
@@ -196,6 +195,7 @@ export default class Evaluacion extends Component {
                         exp['descripcion'] = experiencia.descripcion;
                         exp['sector'] = await this.getSector(experiencia.id_sector);
                         exp['tipoPostulacion'] = postul.tipoPostulacion;
+                        exp['estado'] = experiencia.estado;
                         exp['fecha_inicio'] = experiencia.fecha_inicio;
                         exp['fecha_fin'] = experiencia.fecha_fin;
                         evaluadorPorEvaluar['experiencias'].push(exp);
@@ -208,9 +208,8 @@ export default class Evaluacion extends Component {
                     let curs = {};
                     if (postul.id_postulante===curso.id_postulante) {
                         curs['id_sector_requerimiento'] = curso.id_sector_requerimiento;
-                        curs['nombreInsitucion'] = curso.nombreInsitucion;
+                        curs['nombreInstitucionCurso'] = curso.nombreInstitucionCurso;
                         curs['numeroHoras'] = curso.numeroHoras;
-                        curs['estado'] = curso.estado;
                         curs['id_curso_evaluador'] = curso.id_curso_evaluador;
                         curs['sector'] = await this.getRequerimiento(curso.id_sector_requerimiento);
                         curs['tipoPostulacion'] = postul.tipoPostulacion;
@@ -272,12 +271,13 @@ getRequerimiento =async (id) => {
         return alcance;
     }
 
-    guardarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
+    guardarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
         let formData =  new FormData();
         formData.append("id_solicitud",id_solicitud);
         formData.append("detalleEvaluacion",detalleEvaluacion);
         formData.append("tipoEvaluacion",tipoEvaluacion);
         formData.append("resultadoEvaluacion",resultadoEvaluacion);
+        formData.append("archivoAnexo",archivoAnexo);
         formData.append("estados",JSON.stringify(estados));
         await axios.post("api/guardarEvaluacionExperto/",formData,{
             headers: {
@@ -291,12 +291,13 @@ getRequerimiento =async (id) => {
         .catch(console.error);
     }
 
-    guardarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
+    guardarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
         let formData =  new FormData();
         formData.append("id_solicitud",id_solicitud);
         formData.append("detalleEvaluacion",detalleEvaluacion);
         formData.append("tipoEvaluacion",tipoEvaluacion);
         formData.append("resultadoEvaluacion",resultadoEvaluacion);
+        formData.append("archivoAnexo",archivoAnexo);
         formData.append("estados",JSON.stringify(estados));
         await axios.post("api/guardarEvaluacionEvaluador/",formData,{
             headers: {
@@ -305,17 +306,18 @@ getRequerimiento =async (id) => {
         })
         .then(async(response ) => {
             await console.log(response);
-            await location.reload();
+            //await location.reload();
         })
         .catch(console.error);
     }
 
-    finalizarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
+    finalizarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
          let formData =  new FormData();
         formData.append("id_solicitud",id_solicitud);
         formData.append("detalleEvaluacion",detalleEvaluacion);
         formData.append("tipoEvaluacion",tipoEvaluacion);
         formData.append("resultadoEvaluacion",resultadoEvaluacion);
+        formData.append("archivoAnexo",archivoAnexo);
         formData.append("estados",JSON.stringify(estados));
         await axios.post("api/finalizarEvaluacionExperto/",formData,{
             headers: {
@@ -330,12 +332,13 @@ getRequerimiento =async (id) => {
       
     }
 
-    finalizarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,estados) => {
+    finalizarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
         let formData =  new FormData();
        formData.append("id_solicitud",id_solicitud);
        formData.append("detalleEvaluacion",detalleEvaluacion);
        formData.append("tipoEvaluacion",tipoEvaluacion);
        formData.append("resultadoEvaluacion",resultadoEvaluacion);
+       formData.append("archivoAnexo",archivoAnexo);
        formData.append("estados",JSON.stringify(estados));
        await axios.post("api/finalizarEvaluacionEvaluador/",formData,{
            headers: {

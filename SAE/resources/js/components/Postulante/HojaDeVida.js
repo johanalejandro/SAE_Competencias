@@ -330,7 +330,7 @@ export default class HojaDeVida extends Component {
 
     agregarCurso=async() => {
         let curso = {}
-        curso['nombreInstitucion'] = this.state.nombreInstitucionCurso;
+        curso['nombreInstitucionCurso'] = this.state.nombreInstitucionCurso;
         curso['id_sector_requerimiento'] = this.state.reqActual;
         curso['requerimiento'] = this.state.reqItem;
         curso['numeroHoras'] = this.state.numeroHoras;
@@ -543,7 +543,7 @@ export default class HojaDeVida extends Component {
             const element = cursos[index];
             let curso = {
                 id_sector_requerimiento: element.id_sector_requerimiento,
-                nombreInstitucion: element.nombreInstitucion,
+                nombreInstitucionCurso: element.nombreInstitucionCurso,
                 numeroHoras: element.numeroHoras,
                 archivoAnexoCurso: element.archivoAnexoCurso
             }
@@ -674,10 +674,10 @@ export default class HojaDeVida extends Component {
     handleSubmitCursos(curso) {
         const formData = new FormData();
         formData.append("cedula",this.state.identificacion);
-        formData.append("nombreInstitucion", curso.nombreInstitucion);
+        formData.append("nombreInstitucionCurso", curso.nombreInstitucionCurso);
         formData.append("id_sector_requerimiento", curso.id_sector_requerimiento);
         formData.append("numeroHoras", curso.numeroHoras);
-        formData.append("archivoAnexo", curso.archivoAnexoCurso);
+        formData.append("archivoAnexoCurso", curso.archivoAnexoCurso);
 
 
         axios

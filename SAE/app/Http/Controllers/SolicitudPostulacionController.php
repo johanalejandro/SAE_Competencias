@@ -7,6 +7,7 @@ use App\evaluacionPostulacion;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Auth;
 use App\Postulante;
 use App\Cursos_Evaluador;
@@ -142,7 +143,7 @@ class SolicitudPostulacionController extends Controller
                                                         ->first();
                 
                 $experiencia = Experiencia_evaludor::find($experiencia->id_experiencia);
-                $experiencia = $estado->estado;
+                $experiencia->estado = $estado->estado;
                 $experiencia->save();
              
             }
@@ -151,7 +152,9 @@ class SolicitudPostulacionController extends Controller
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
             $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
-            $evaluacion->archivoAnexo = $request->file('archivoAnexo')->store("files");
+            if ($request->hasFile('archivoAnexo')) {
+                $evaluacion->archivoAnexoEvaluacion = $request->file('archivoAnexo')->store("files");
+            }
             $evaluacion->save();
 
         return response()->json('Evaluacion Finalizada!');
@@ -187,33 +190,15 @@ class SolicitudPostulacionController extends Controller
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
             $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
+            if ($request->hasFile('archivoAnexo')) {
+                $evaluacion->archivoAnexoEvaluacion = $request->file('archivoAnexo')->store("files");
+            }
             $evaluacion->save();
 
         return response()->json('Evaluacion Finalizada!');
 
 
     }
-
-    /*
-    public function guardarEvaluacionPostulante(Request $request){
-            //fecha actual
-            $current_date_time = Carbon::now()->toDateTimeString();
-            //obtengo id de la solicitud de evaluacion
-            $solicitud =  DB::table('solicitud_postulacions')->select('id_evaluacion')->where('id_solicitud',$request->id_solicitud)->first();
-            //actualizo campos en evaluacionpostulante
-            $evaluacion = evaluacionPostulacion::find($solicitud->id_evaluacion);
-            $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
-            $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
-            $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
-            $evaluacion->updated_at = $current_date_time;
-            $evaluacion->save();
-
-        return response()->json('Campos guardados!');
-
-
-    }
-    */
-
 
   /* Guardar evaluaciones de expertos y postulantes */
    public function guardarEvaluacionEvaluador(Request $request){
@@ -224,14 +209,16 @@ class SolicitudPostulacionController extends Controller
          $solicitud =  DB::table('solicitud_postulacions')->select('*')->where('id_solicitud',$request->id_solicitud)->first();
 
          foreach(json_decode($request->estados) as $estado){
-              $curso = DB::table('cursos__evaluadors')->select('id_curso_evaluador')
-                                                      ->where('id_postulante',$solicitud->id_postulante)
-                                                      ->where('id_sector_requerimiento', $estado->id_sector_requerimiento)
-                                                      ->first();
-              $cursoActualizado = Cursos_Evaluador::find($curso->id_curso_evaluador);
-              $cursoActualizado ->estado = $estado->estado;
-              $cursoActualizado ->updated_at = $current_date_time;
-              $cursoActualizado->save();
+
+              $experiencia = DB::table('experiencia_evaludors')->select('id_experiencia')
+              ->where('id_postulante',$solicitud->id_postulante)
+              ->where('id_sector', $estado->id_sector)
+              ->first();
+
+                $exp = Experiencia_evaludor::find($experiencia->id_experiencia);
+                $exp->estado = $estado->estado;
+              $exp ->updated_at = $current_date_time;
+              $exp->save();
            
           }
           //actualizo campos en evaluacionpostulante
@@ -240,6 +227,9 @@ class SolicitudPostulacionController extends Controller
           $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
           $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
           $evaluacion->updated_at = $current_date_time;
+          if ($request->hasFile('archivoAnexo')) {
+            $evaluacion->archivoAnexoEvaluacion = $request->file('archivoAnexo')->store("files");
+        }
           $evaluacion->save();
 
       return response()->json('Campos guardados!');
@@ -266,6 +256,9 @@ class SolicitudPostulacionController extends Controller
             $evaluacion->detalleEvaluacion = $request->detalleEvaluacion;
             $evaluacion->tipoEvaluacion = $request->tipoEvaluacion;
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
+            if ($request->hasFile('archivoAnexo')) {
+                $evaluacion->archivoAnexoEvaluacion = $request->file('archivoAnexo')->store("files");
+            }s
             $evaluacion->updated_at = $current_date_time;
             $evaluacion->save();
 

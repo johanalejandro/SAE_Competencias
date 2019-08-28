@@ -21,9 +21,9 @@ class Cursos_Evaluador extends Model
      protected $fillable = [
         'id_postulante', 
         'id_sector_requerimiento', 
-        'nombreInstitucion',
+        'nombreInstitucionCurso',
         'numeroHoras',
-        'archivoAnexo'
+        'archivoAnexoCurso'
         
     ];
 }

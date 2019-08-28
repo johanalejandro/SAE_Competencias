@@ -24,7 +24,7 @@ class CreateExperienciaEvaludorsTable extends Migration
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->boolean('esTrabajoActual');
-            $table->set('estado',['Arobado', 'Pendiente','No aprobado'])->default('Pendiente');
+            $table->set('estado',['Aprobado', 'Pendiente','No aprobado'])->default('Pendiente');
         });
 
         Schema::table('experiencia_evaludors', function($table) {
