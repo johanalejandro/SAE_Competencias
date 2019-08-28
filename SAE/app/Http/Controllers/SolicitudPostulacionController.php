@@ -258,7 +258,7 @@ class SolicitudPostulacionController extends Controller
             $evaluacion->resultadoEvaluacion = $request->resultadoEvaluacion;
             if ($request->hasFile('archivoAnexo')) {
                 $evaluacion->archivoAnexoEvaluacion = $request->file('archivoAnexo')->store("files");
-            }s
+            }
             $evaluacion->updated_at = $current_date_time;
             $evaluacion->save();
 
