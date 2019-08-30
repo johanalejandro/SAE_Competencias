@@ -801,7 +801,7 @@ getSector  =async (id) => {
                                                     Por Habilitar
                                                 </div>
                                                 <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4"} onClick={this.handleChangeTipoPost}>
-                                                    Habilitados
+                                                    Matriz Habilitados
                                                 </div>    
                                             </div>   
                                             <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
@@ -822,7 +822,7 @@ getSector  =async (id) => {
                                                     Por Habilitar
                                                 </div>
                                                 <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4"} onClick={this.handleChangeTipoPost}>
-                                                    Habilitados
+                                                    Matriz Habilitados
                                                 </div>    
                                             </div>   
                                             <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
