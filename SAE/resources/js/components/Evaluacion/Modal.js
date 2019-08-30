@@ -162,7 +162,7 @@ export default class Modal extends Component {
       }
 
       render () {
-        console.log(this.state.estadoSectoresArray);
+        console.log(this.state.estadoAlcancesArray);
         const data = this.props.modalInfo.data!== undefined?this.props.modalInfo.data:[];
         const type = this.props.modalInfo.type;
         const finalizar = this.state.resultadoEvaluacion!=="selec" && this.state.resultadoEvaluacion!=="Pendiente";
@@ -338,12 +338,12 @@ export default class Modal extends Component {
                     {type==="Experto"?(
                         <React.Fragment>
                               <button type="button" className="btn btn-secondary w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                    await this.props.guardarEvaluacionExperto(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoAlcancesArray)
+                                    await this.props.guardarEvaluacionExperto(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.archivoAnexo,this.state.estadoAlcancesArray)
                                     await this.closeModal(e,true);
                                 }}>Guardar</button>
                                 {finalizar && (
                               <button type="button" className="btn btn-secondary bg-danger w-20" disabled={this.state.resultadoEvaluacion==="selec"||this.state.tipoEvaluacion==="selec"} onClick={async(e)=>{
-                                   await this.props.finalizarEvaluacionExperto(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.estadoAlcancesArray);
+                                   await this.props.finalizarEvaluacionExperto(data[11],this.state.detalleEvaluacion,this.state.tipoEvaluacion,this.state.resultadoEvaluacion,this.state.archivoAnexo,this.state.estadoAlcancesArray);
                                    await this.closeModal(e,true);
                                 }}>Finalizar</button>)
                               }
