@@ -238,6 +238,12 @@ h3{
   max-height: 95%;
 }
 
+.modal-exito{
+  max-width: 640px;
+  max-height: 35%;
+  overflow-y: hidden;
+}
+
 .modal-evaluar{
   z-index: 999; /* Overlay effect: positioned over other containers */
   width: 100%; /* Full width */

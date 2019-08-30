@@ -64,21 +64,37 @@ export default class Modal extends Component {
 
       getAnexo(e,id_Curso,sector){
         e.preventDefault();
-        axios.get('/api/getAnexo/'+id_Curso)
-        .then((response)=>{
-          FileDownload(response.data, 'Anexo_'+sector+'.pdf');
-        })
-        .catch(console.error);
+        axios({
+        url: '/api/getAnexo/'+id_Curso,
+        method: 'GET',
+        responseType: 'blob', // important
+        }).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `Anexo-${sector}.pdf`);
+          document.body.appendChild(link);
+          link.click();
+        }).catch(console.error);
+
+
       }
 
       getCV(e,id_Educacion){
         e.preventDefault();
 
-        axios.get('/api/getCV/'+id_Educacion)
-        .then((response) => {
-          FileDownload(response.data, 'Título_'+this.props.modalInfo.data[4]+'.pdf');
-        })
-        .catch(console.error);
+        axios({
+          url: '/api/getCV/'+id_Educacion,
+          method: 'GET',
+          responseType: 'blob', // important
+          }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Título-${this.props.modalInfo.data[4]}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+          }).catch(console.error);
       }
     
        closeModal = (e,prevent = false) => {

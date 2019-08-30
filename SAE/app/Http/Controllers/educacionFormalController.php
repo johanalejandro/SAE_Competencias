@@ -52,7 +52,9 @@ class educacionFormalController extends Controller
     {
         $keyarchivo = educacionFormal::find($id);
         $url = $keyarchivo->archivoAnexo;
-        return Storage::download($url);
+        $urlStore =  Storage::disk('public')->path($url);
+        return response()->download($urlStore);
+        
     }
 
     /**

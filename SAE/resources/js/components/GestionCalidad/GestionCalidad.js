@@ -13,6 +13,8 @@ import findKey from 'lodash/findKey';
 import isEmpty from 'lodash/isEmpty';
 import pull from 'lodash/pull';
 import Label from '../common/Label';
+import ModalAsignado from './ModalAsignado';
+import ModalHabilitado from './ModalHabilitado';
 
 
 export default class GestionCalidad extends Component {
@@ -37,6 +39,8 @@ export default class GestionCalidad extends Component {
         modalAsignarInfo: {},
         successExp: false,
         successEv: false,
+        habilitado: false,
+        asignado: false,
         
     }
       
@@ -144,8 +148,9 @@ export default class GestionCalidad extends Component {
             dataporhabilitarEvaluador: dataporhabilitarEvaluador,
         })
         await axios.get("api/mostrarEvaluadoresHabilitado")
-        .then(async({data} ) => {
-            const postulantes = data.map((postulante)=>{
+        .then(({data} ) => {
+            console.log(data);
+            data.map(async(postulante,i)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
@@ -156,58 +161,25 @@ export default class GestionCalidad extends Component {
                 post['fechaHabilitacion'] = postulante.fechaHabilitacion;
                 post['disponibilidadViajar'] = postulante.disponibilidadViajar;
                 post['cedula'] = postulante.cedula;
-                return post;
-            })
-            const postulantesUnico = uniqBy(postulantes,'id_postulante');
-            const experiencias = data.map((postulante)=>{
-                let experiencia = {};
-                experiencia['id_postulante'] = postulante.id_postulante;
-                experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
-                experiencia['cargoEjercido'] = postulante.cargoEjercido;
-                experiencia['descripcion'] = postulante.descripcion;
-                experiencia['id_sector'] = postulante.id_sector;
-                return experiencia;
-            })
-
-            let postulantesHabilitados = {};
-            for (let i = 0; i < postulantesUnico.length; i++) {
-                const postulante = postulantesUnico[i];
-                postulantesHabilitados['id_postulante'] = postulante.id_postulante;
-                        postulantesHabilitados['nombres'] = postulante.nombres;
-                        postulantesHabilitados['apellidos'] = postulante.apellidos;
-                        postulantesHabilitados['estado']= postulante.estado;
-                        postulantesHabilitados['email'] = postulante.email;
-                        postulantesHabilitados['tipoPostulacion'] = postulante.tipoPostulacion;
-                        postulantesHabilitados['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                        postulantesHabilitados['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                        postulantesHabilitados['cedula'] = postulante.cedula;
-                        postulantesHabilitados['experiencias']=[];
-                for (let index = 0; index < experiencias.length; index++) {
-                    const experiencia = experiencias[index];
-                    let exp = {};
-                    if (postulante.id_postulante===experiencia.id_postulante) {
-                        exp['nombreEmpresa'] = experiencia.nombreEmpresa;
-                        exp['cargoEjercido'] = experiencia.cargoEjercido;
-                        exp['descripcion'] = experiencia.descripcion;
-                        exp['sector'] = await this.getSector(experiencia.id_sector);
-                        exp['tipoPostulacion'] = postulante.tipoPostulacion;
-                        postulantesHabilitados['experiencias'].push(exp)
-                    }
-                    
-                    
-                }
-                console.log(postulantesHabilitados);
-                habilitadosEvaluador[i] = postulantesHabilitados;
+                post['nombreEmpresa'] = postulante.nombreEmpresa;
+                post['cargoEjercido'] = postulante.cargoEjercido;
+                post['fechaInicio'] = postulante.fecha_inicio;
+                post['fechaFin'] = postulante.fecha_fin;
+                post['fechaNacimiento'] = postulante.fechaNacimiento;
+                post['estado'] = postulante.estado;
+                post['ciudad'] = postulante.ciudad;
+                post['provincia'] = postulante.provincia;
+                post['telefono'] = postulante.telefono;
+                post['sector'] = await this.getSector(parseInt(postulante.id_sector));
+                habilitadosEvaluador[i]=clone(post);
+            });
                 
-            }
         })
         .catch(console.error);
-        await this.setState({
-            habilitadosEvaluador: habilitadosEvaluador,
-        })
+        this.setState({habilitadosEvaluador:habilitadosEvaluador});
         await axios.get("api/mostrarExpertosHabilitado")
-        .then(async({data} ) => {
-            const postulantes = data.map((postulante)=>{
+        .then(({data} ) => {
+            data.map(async(postulante,i)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
                 post['nombres'] = postulante.nombres;
@@ -218,56 +190,35 @@ export default class GestionCalidad extends Component {
                 post['fechaHabilitacion'] = postulante.fechaHabilitacion;
                 post['disponibilidadViajar'] = postulante.disponibilidadViajar;
                 post['cedula'] = postulante.cedula;
-                return post;
-            })
-            const postulantesUnico = uniqBy(postulantes,'id_postulante');
-            const experiencias = data.map((postulante)=>{
-                let experiencia = {};
-                experiencia['id_postulante'] = postulante.id_postulante;
-                experiencia['nombreEmpresa'] = postulante.nombreEmpresa;
-                experiencia['cargoEjercido'] = postulante.cargoEjercido;
-                experiencia['descripcion'] = postulante.descripcion;
-                experiencia['id_alcance'] = postulante.id_alcance;
-                return experiencia;
-            })
-
-            let postulantesHabilitados = {};
-            for (let i = 0; i < postulantesUnico.length; i++) {
-                const postulante = postulantesUnico[i];
-                postulantesHabilitados['id_postulante'] = postulante.id_postulante;
-                        postulantesHabilitados['nombres'] = postulante.nombres;
-                        postulantesHabilitados['apellidos'] = postulante.apellidos;
-                        postulantesHabilitados['estado']= postulante.estado;
-                        postulantesHabilitados['email'] = postulante.email;
-                        postulantesHabilitados['tipoPostulacion'] = postulante.tipoPostulacion;
-                        postulantesHabilitados['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                        postulantesHabilitados['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                        postulantesHabilitados['cedula'] = postulante.cedula;
-                        postulantesHabilitados['experiencias']=[];
-                for (let index = 0; index < experiencias.length; index++) {
-                    const experiencia = experiencias[index];
-                    let exp = {};
-                    if (postulante.id_postulante===experiencia.id_postulante) {
-                        exp['nombreEmpresa'] = experiencia.nombreEmpresa;
-                        exp['cargoEjercido'] = experiencia.cargoEjercido;
-                        exp['descripcion'] = experiencia.descripcion;
-                        exp['alcance'] = await this.getAlcance(experiencia.id_alcance);
-                        exp['tipoPostulacion'] = postulante.tipoPostulacion;
-                        postulantesHabilitados['experiencias'].push(exp)
-                    }
-                    
-                   
-                }
-                console.log(postulantesHabilitados);
-                habilitadosExperto[i]=postulantesHabilitados;
+                post['nombreEmpresa'] = postulante.nombreEmpresa;
+                post['cargoEjercido'] = postulante.cargoEjercido;
+                post['fechaInicio'] = postulante.fecha_inicio;
+                post['fechaFin'] = postulante.fecha_fin;
+                post['estado'] = postulante.estado;
+                post['fechaNacimiento'] = postulante.fechaNacimiento;
+                post['ciudad'] = postulante.ciudad;
+                post['provincia'] = postulante.provincia;
+                post['telefono'] = postulante.telefono;
+                post['alcance'] = await this.getAlcance(parseInt(postulante.id_alcance));
+                habilitadosExperto[i]=clone(post);
+            });
                 
-            }
         })
         .catch(console.error);
-        await this.setState({
-            habilitadosExperto: habilitadosExperto,
-        })
+        this.setState({ habilitadosExperto: habilitadosExperto });
 }
+
+selectModalAsignado = () => {
+    this.setState({
+      asignado: !this.state.asignado,
+    })
+  }
+
+  selectModalHabilitado = () => {
+    this.setState({
+      habilitado: !this.state.habilitado,
+    })
+  }
 
 getSector  =async (id) => {
     let sector = "";
@@ -316,7 +267,7 @@ getSector  =async (id) => {
                 await axios.get("api/asignarAPostulante/"+id_postulante)
                 .then(async(response) => {
                     await this.asignado(data);
-                    await location.reload();
+                    await this.selectModalAsignado();
                 })
                 .catch(console.error);
                 console.log(response);
@@ -381,6 +332,7 @@ getSector  =async (id) => {
                 console.log(habilitadosExperto);
                 await this.setState({ dataporhabilitarExperto,habilitadosExperto });
             }
+            await this.selectModalHabilitado();
         })
         .catch(console.error);
     }
@@ -586,6 +538,205 @@ getSector  =async (id) => {
                 },
                },
            ];
+
+           const columnsHabilitados = [
+            {
+                name: "id_postulante",
+                label: "id",
+                options: {
+                 filter: true,
+                 sort: true,
+                 display: false,
+                 customHeadRender: (value) => {
+                    display: false;
+                    filter: false;
+                    sort: false;
+                    searcheable: false;
+                 },
+                 customBodyRender: (value) => {
+                    return (
+                        <span hidden className="w-0">{value}</span>
+                    );
+                  },
+                } 
+            },
+            {
+             name: "apellidos",
+             label: "Apellidos",
+             options: {
+              filter: true,
+              sort: true,
+             }
+            },
+            {
+             name: "nombres",
+             label: "Nombres",
+             options: {
+              filter: true,
+              sort: true,
+             }
+            },
+            {
+                name: "cedula",
+                label: "Cédula",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "sector",
+                label: "Sector Habilitado",
+                options: {
+                 filter: true,
+                 sort: true,
+                 display: this.state.tipo === "habilitadosEv"?true:false,
+                 customBodyRender: (value) => {
+                     if(this.state.tipo === "habilitadosEv"){
+                        return (
+                            <span className="text-normal text-info">{value}</span>
+                        );
+                     }
+                  },
+                },
+               },
+               {
+                name: "alcance",
+                label: "Alcance Habilitado",
+                options: {
+                 filter: true,
+                 sort: true,
+                 display: this.state.tipo === "habilitadosExp"?true:false,
+                 customBodyRender: (value) => {
+                    if(this.state.tipo === "habilitadosExp"){
+                       return (
+                           <span className="text-normal text-info">{value}</span>
+                       );
+                    }
+                 },
+                },
+               },
+               
+            {
+                name: "estado",
+                label: "Estado",
+                options: {
+                 filter: true,
+                 sort: true,
+                 customBodyRender: (value) => {
+                        return (
+                            <span className="text-normal text-success">
+                              {value}
+                            </span>
+                        );
+                  },
+                },
+               },
+               {
+                name: "nombreEmpresa",
+                label: "Empresa de experiencia",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "cargoEjercido",
+                label: "Cargo de Experiencia",
+                options: {
+                 filter: false,
+                 sort: true,
+                },
+               },
+               {
+                name: "fechaInicio",
+                label: "Inicio de Experiencia",
+                options: {
+                 filter: false,
+                 sort: true,
+                },
+               },
+               {
+                name: "fechaFin",
+                label: "Fin de Experiencia",
+                options: {
+                 filter: false,
+                 sort: true,
+                },
+               },
+            {
+             name: "email",
+             label: "Correo",
+             options: {
+              filter: false,
+              sort: true,
+             },
+            },
+            
+            {
+                name: "tipoPostulacion",
+                label: "Tipo de Postulación",
+                options: {
+                 filter: true,
+                 sort: true,
+                }
+               },
+               {
+                name: "fechaHabilitacion",
+                label: "Fecha de Habilitación",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "fechaNacimiento",
+                label: "Fecha de Nacimiento",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "telefono",
+                label: "Teléfono",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "ciudad",
+                label: "Ciudad",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "provincia",
+                label: "Provincia",
+                options: {
+                 filter: true,
+                 sort: true,
+                },
+               },
+               {
+                name: "disponibilidadViajar",
+                label: "Disponibilidad para viajar",
+                options: {
+                 filter: true,
+                 sort: true,
+                 customBodyRender: (value, {rowData}, updateValue) => {
+                        if(value===1){
+                            return <span>Si</span>
+                        }else{
+                            return <span>No</span>
+                        }
+                  },
+                },
+               },
+           ];
             
            const options = {
             selectableRowsOnClick: false,
@@ -628,6 +779,8 @@ getSector  =async (id) => {
                 },
               }
            };
+
+           console.log(this.state.habilitadosEvaluador);
         return (
 
             <React.Fragment>
@@ -807,7 +960,7 @@ getSector  =async (id) => {
                                     <MUIDataTable className="data-table"
                                         title={"Matriz de Expertos habilitados"}
                                         data={this.state.habilitadosExperto}
-                                        columns={columns}
+                                        columns={columnsHabilitados}
                                         options={options}
                                     />
                                     
@@ -850,7 +1003,7 @@ getSector  =async (id) => {
                                     <MUIDataTable className="data-table"
                                         title={"Matriz de Evaluadores habilitados"}
                                         data={this.state.habilitadosEvaluador}
-                                        columns={columns}
+                                        columns={columnsHabilitados}
                                         options={options}
                                     />
                                 )}
@@ -872,6 +1025,16 @@ getSector  =async (id) => {
                         getSector={this.getSector}
                         success={this.state.sccess}
                     />)}
+                    {this.state.asignado&&(
+                    <ModalAsignado
+                        modalInfo={this.state.form}
+                    />)
+                    }
+                     {this.state.habilitado&&(
+                    <ModalHabilitado
+                        modalInfo={this.state.form}
+                    />)
+                    }
                 </React.Fragment>
         )
     }

@@ -9,7 +9,8 @@ import remove from "lodash/remove";
 import uniqBy from "lodash/uniqBy";
 import clone from 'lodash/clone';
 import findKey from 'lodash/findKey';
-
+import ModalGuardado from './ModalGuardado';
+import ModalFinalizado from './ModalFinalizado';
 
 
 export default class Evaluacion extends Component {
@@ -20,6 +21,8 @@ export default class Evaluacion extends Component {
         form: "",
         modal: false,
         modalInfo: {},
+        guardado: false,
+        finalizado: false,
     }
       
       selectModal = (info = {}) => {
@@ -29,12 +32,23 @@ export default class Evaluacion extends Component {
         })
       }
 
+      selectModalGuardado = () => {
+        this.setState({
+          guardado: !this.state.guardado,
+        })
+      }
+
+      selectModalFinalizado = () => {
+        this.setState({
+          finalizado: !this.state.finalizado,
+        })
+      }
+
     componentWillMount= async()=>{
         this.setState({
             form: "expertos",
         });
 
-        let expertosPorEvaluar = [];
         let expertoPorEvaluar = {};
         await axios.get("/verSolicitudPorUsuarioExperto/")
         .then(async({data} ) => {
@@ -108,17 +122,15 @@ export default class Evaluacion extends Component {
                     }
                     
                 }
-                console.log(expertoPorEvaluar.id_postulante,expertoPorEvaluar);
-                expertosPorEvaluar[i] = await expertoPorEvaluar;
+
+                const { expertosPorEvaluar } = this.state;
+                const filterData = expertosPorEvaluar;
+                filterData[i]=clone(expertoPorEvaluar);
+                await this.setState({ expertosPorEvaluar: filterData });
             }
-             console.log(expertosPorEvaluar)
-             await this.setState({
-                expertosPorEvaluar: expertosPorEvaluar,
-            })
         })
         .catch(console.error);
 
-        let evaluadoresPorEvaluar = [];
         let evaluadorPorEvaluar = {};
         await axios.get("/verSolicitudPorUsuarioEvaluador/")
         .then(async({data} ) => {
@@ -218,13 +230,11 @@ export default class Evaluacion extends Component {
                     }
                     
                 }
-                console.log(expertoPorEvaluar.id_postulante,evaluadorPorEvaluar);
-                evaluadoresPorEvaluar[i] = await evaluadorPorEvaluar;
+                const { evaluadoresPorEvaluar } = this.state;
+                const filterData = evaluadoresPorEvaluar;
+                filterData[i]=clone(evaluadorPorEvaluar);
+                await this.setState({ evaluadoresPorEvaluar: filterData });
             }
-             console.log(evaluadoresPorEvaluar)
-             await this.setState({
-                evaluadoresPorEvaluar: evaluadoresPorEvaluar,
-            })
         })
         .catch(console.error);
         
@@ -286,7 +296,7 @@ getRequerimiento =async (id) => {
         })
         .then(async(response ) => {
             await console.log(response);
-            await location.reload();
+            await this.selectModalGuardado();
         })
         .catch(console.error);
     }
@@ -306,7 +316,7 @@ getRequerimiento =async (id) => {
         })
         .then(async(response ) => {
             await console.log(response);
-            //await location.reload();
+            await this.selectModalGuardado();
         })
         .catch(console.error);
     }
@@ -326,7 +336,7 @@ getRequerimiento =async (id) => {
         })
         .then(async(response ) => {
             await console.log(response);
-            await location.reload();
+            await this.selectModalFinalizado();
         })
         .catch(console.error);
       
@@ -347,7 +357,7 @@ getRequerimiento =async (id) => {
        })
        .then(async(response ) => {
         await console.log(response);
-           await location.reload();
+           await this.selectModalFinalizado();
        })
        .catch(console.error);
      
@@ -642,6 +652,16 @@ getRequerimiento =async (id) => {
                         guardarEvaluacionEvaluador={this.guardarEvaluacionEvaluador}
                         finalizarEvaluacionEvaluador={this.finalizarEvaluacionEvaluador}
                         finalizarEvaluacionExperto={this.finalizarEvaluacionExperto}
+                    />)
+                    }
+                     {this.state.guardado&&(
+                    <ModalGuardado
+                        modalInfo={this.state.form}
+                    />)
+                    }
+                     {this.state.finalizado&&(
+                    <ModalFinalizado
+                        modalInfo={this.state.form}
                     />)
                     }
                 </React.Fragment>
