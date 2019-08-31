@@ -20,8 +20,37 @@ export default class Visualizador extends Component {
             form: "expertos",
             tipo: "habilitadosExp",
         });
-        let habilitadosExperto = [];
-        let habilitadosEvaluador = [];
+        await axios.get("api/mostrarExpertosHabilitado")
+        .then(({data} ) => {
+            data.map(async(postulante,i)=>{
+                let post ={};
+                post['id_postulante'] = postulante.id_postulante;
+                post['nombres'] = postulante.nombres;
+                post['apellidos'] = postulante.apellidos;
+                post['estado']= postulante.estado;
+                post['email'] = postulante.email;
+                post['tipoPostulacion'] = postulante.tipoPostulacion;
+                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
+                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
+                post['cedula'] = postulante.cedula;
+                post['nombreEmpresa'] = postulante.nombreEmpresa;
+                post['cargoEjercido'] = postulante.cargoEjercido;
+                post['fechaInicio'] = postulante.fecha_inicio;
+                post['fechaFin'] = postulante.fecha_fin;
+                post['estado'] = postulante.estado;
+                post['fechaNacimiento'] = postulante.fechaNacimiento;
+                post['ciudad'] = postulante.ciudad;
+                post['provincia'] = postulante.provincia;
+                post['telefono'] = postulante.telefono;
+                post['alcance'] = await this.getAlcance(parseInt(postulante.id_alcance));
+                const { habilitadosExperto } = this.state;
+                const filterData = habilitadosExperto;
+                filterData[i]=clone(post);
+                await this.setState({ habilitadosExperto: filterData });
+            });
+                
+        })
+        .catch(console.error);
         await axios.get("api/mostrarEvaluadoresHabilitado")
         .then(({data} ) => {
             console.log(data);
@@ -46,41 +75,15 @@ export default class Visualizador extends Component {
                 post['provincia'] = postulante.provincia;
                 post['telefono'] = postulante.telefono;
                 post['sector'] = await this.getSector(parseInt(postulante.id_sector));
-                habilitadosEvaluador[i]=clone(post);
+                const { habilitadosEvaluador } = this.state;
+                const filterData = habilitadosEvaluador;
+                filterData[i]=clone(post);
+                await this.setState({ habilitadosEvaluador: filterData });
             });
                 
         })
         .catch(console.error);
-        this.setState({habilitadosEvaluador:habilitadosEvaluador});
-        await axios.get("api/mostrarExpertosHabilitado")
-        .then(({data} ) => {
-            data.map(async(postulante,i)=>{
-                let post ={};
-                post['id_postulante'] = postulante.id_postulante;
-                post['nombres'] = postulante.nombres;
-                post['apellidos'] = postulante.apellidos;
-                post['estado']= postulante.estado;
-                post['email'] = postulante.email;
-                post['tipoPostulacion'] = postulante.tipoPostulacion;
-                post['fechaHabilitacion'] = postulante.fechaHabilitacion;
-                post['disponibilidadViajar'] = postulante.disponibilidadViajar;
-                post['cedula'] = postulante.cedula;
-                post['nombreEmpresa'] = postulante.nombreEmpresa;
-                post['cargoEjercido'] = postulante.cargoEjercido;
-                post['fechaInicio'] = postulante.fecha_inicio;
-                post['fechaFin'] = postulante.fecha_fin;
-                post['estado'] = postulante.estado;
-                post['fechaNacimiento'] = postulante.fechaNacimiento;
-                post['ciudad'] = postulante.ciudad;
-                post['provincia'] = postulante.provincia;
-                post['telefono'] = postulante.telefono;
-                post['alcance'] = await this.getAlcance(parseInt(postulante.id_alcance));
-                habilitadosExperto[i]=clone(post);
-            });
-                
-        })
-        .catch(console.error);
-        this.setState({ habilitadosExperto: habilitadosExperto });
+        
 
 }
 

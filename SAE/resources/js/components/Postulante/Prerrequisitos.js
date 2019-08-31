@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Header from '../common/Header'
 import {clone, isEmpty, pull, isEqual} from 'lodash';
 import PrerrequisitoItem from './Items/PrerrequisitoItem';
+import {PREGUNTA_EVALUADOR,PREGUNTA_EXPERTO} from '../common/constants';
 
 export default class Prerrequisitos extends Component {
 
@@ -13,6 +14,7 @@ export default class Prerrequisitos extends Component {
         checkedItems: new Map(),
         validador: false,
         noValidador: false,
+        requisitos: false,
     }
 
     componentDidMount = async () =>{
@@ -47,6 +49,7 @@ export default class Prerrequisitos extends Component {
     renderize = () =>{
         this.setState({
             show:false,
+            requisitos: true,
         })
     }
 
@@ -76,6 +79,26 @@ export default class Prerrequisitos extends Component {
         $('#expertoModal').modal();
     }
 
+    validarEvaluador=(pasa)=>{
+        
+        if (pasa){
+            this.setState({
+                validador: false,
+            });
+        }else{
+            this.setState({
+                validador: true,
+            });
+        }
+        $('#evaluadorModal').modal();
+    }
+
+    handlePregunta = () =>{
+        this.setState({
+            requisitos: false,
+            experiencia: true,
+        })
+    }
 
     handleCheckBoxChange = ({target}) => {
         const reqs = this.state.requerimientos;
@@ -126,7 +149,7 @@ export default class Prerrequisitos extends Component {
                 </React.Fragment>
             ):(
                 <React.Fragment>
-                    {this.props.tipo === "evaluador"?(
+                    {this.props.tipo === "evaluador" && this.state.requisitos?(
                         <React.Fragment>
                             <Header title="Postulación EVALUADOR"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
@@ -171,6 +194,7 @@ export default class Prerrequisitos extends Component {
                             </div>
                         </React.Fragment>
                     ):(
+                        this.props.tipo==="experto" && (
                         <React.Fragment>
                             <Header title="Postulación EXPERTO"/>
                             <div className="containersae d-flex flex-column w-100 h-85">
@@ -182,7 +206,7 @@ export default class Prerrequisitos extends Component {
                                         <div className="flex-row justify-content-between">
 
                                             <div className="card-body">
-                                                <label className="text-center text-normal">¿Al menos tiene 2 años de experiencia en el sector, alcance, ensayo o técnica que desea postular?</label>
+                                                <label className="text-center text-normal">{PREGUNTA_EXPERTO}</label>
                                             </div>
 
                                             
@@ -199,9 +223,40 @@ export default class Prerrequisitos extends Component {
                                             }}>Sí</button>
                                 </div>
                             </div>
-                        </React.Fragment>
+                        </React.Fragment>)
                     )}
                 </React.Fragment>
+            )}
+            {this.state.experiencia && (
+                <React.Fragment>
+                <Header title="Postulación EVALUADOR"/>
+                <div className="containersae d-flex flex-column w-100 h-85">
+                    <div className="d-flex flex-column align-items-center mx-2">
+                        <h2>Requisitos mínimos</h2>
+                        <h3>Lea con atención, debe poseer todos los requisitos para proseguir</h3>
+                        <div className="card w-100 mb-4">
+
+                            <div className="flex-row justify-content-between">
+
+                                <div className="card-body">
+                                    <label className="text-center text-normal">{PREGUNTA_EVALUADOR}</label>
+                                </div>
+
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                    <div className="d-flex flex-row justify-content-end align-items-center w-100 my-2">
+                        <button name="prerrequisitos" className="btn-primary-sae bg-light w-20 mr-2" style={{color:'#6c757d'}} onClick={(evt)=>{
+                                this.validarEvaluador(false);
+                                }}>No</button>
+                        <button name="prerrequisitos" className="btn-primary-sae w-20" onClick={(evt)=>{
+                                this.validarEvaluador(true);
+                                }}>Sí</button>
+                    </div>
+                </div>
+            </React.Fragment>
             )}
                 <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
@@ -221,7 +276,7 @@ export default class Prerrequisitos extends Component {
                     </div>
                     <div className="modal-footer">
                         {this.state.validador?(
-                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
+                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.handlePregunta}>Ok</button>
                         ):(
                             <button type="button" className="btn btn-secondary w-20" data-dismiss="modal">Ok</button>
                         )
@@ -251,6 +306,38 @@ export default class Prerrequisitos extends Component {
                             <a className="w-20" href="/postulacion-formulario?tipo=experto"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
                         ):(
                             <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
+                        )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal fade" id="evaluadorModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className={!this.state.validador?"modal-header text-center":"modal-header  bg-danger text-center"}>
+                      <h5 className={!this.state.validador?"modal-title":"modal-title text-white"}  id="exampleModalLongTitle">Recuerde</h5>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                        {this.state.validador?(
+                            <label className="w-90 text-normal-danger text-justify">No cuenta con la experiencia necesaria. No puede proseguir la postulación</label>
+                        ):(
+                            <label className="w-90 text-normal text-justify">Más adelante deberá anexar documentos que avalen la información proporcionada previamente</label>
+                        )}
+                    </div>
+                    <div className="modal-footer">
+                        {this.state.validador?(
+                            <a className="w-20" href="/postulacion-formulario?tipo=evaluador"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
+                        ):(
+                            <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={
+                                ()=>{
+                                    this.props.handleHojaDeVida();
+                                    this.setState({
+                                        experiencia: false,
+                                    })
+                                }}>Ok</button>
                         )}
                     </div>
                   </div>

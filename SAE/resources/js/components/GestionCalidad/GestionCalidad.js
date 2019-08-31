@@ -171,12 +171,14 @@ export default class GestionCalidad extends Component {
                 post['provincia'] = postulante.provincia;
                 post['telefono'] = postulante.telefono;
                 post['sector'] = await this.getSector(parseInt(postulante.id_sector));
-                habilitadosEvaluador[i]=clone(post);
+                const { habilitadosEvaluador } = this.state;
+                const filterData = habilitadosEvaluador;
+                filterData[i]=clone(post);
+                await this.setState({ habilitadosEvaluador: filterData });
             });
                 
         })
         .catch(console.error);
-        this.setState({habilitadosEvaluador:habilitadosEvaluador});
         await axios.get("api/mostrarExpertosHabilitado")
         .then(({data} ) => {
             data.map(async(postulante,i)=>{
@@ -200,12 +202,14 @@ export default class GestionCalidad extends Component {
                 post['provincia'] = postulante.provincia;
                 post['telefono'] = postulante.telefono;
                 post['alcance'] = await this.getAlcance(parseInt(postulante.id_alcance));
-                habilitadosExperto[i]=clone(post);
+                const { habilitadosExperto } = this.state;
+                const filterData = habilitadosExperto;
+                filterData[i]=clone(post);
+                await this.setState({ habilitadosExperto: filterData });
             });
                 
         })
         .catch(console.error);
-        this.setState({ habilitadosExperto: habilitadosExperto });
 }
 
 selectModalAsignado = () => {
@@ -801,7 +805,7 @@ getSector  =async (id) => {
                                                     Por Habilitar
                                                 </div>
                                                 <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4"} onClick={this.handleChangeTipoPost}>
-                                                    Matriz Habilitados
+                                                    Habilitados
                                                 </div>    
                                             </div>   
                                             <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
@@ -822,7 +826,7 @@ getSector  =async (id) => {
                                                     Por Habilitar
                                                 </div>
                                                 <div id="habilitadosExp" className={" d-flex card-list cardSAE-body text-normal align-items-center w-75 h-4"} onClick={this.handleChangeTipoPost}>
-                                                    Matriz Habilitados
+                                                    Habilitados
                                                 </div>    
                                             </div>   
                                             <div id="evaluadores" className=" d-flex card-list cardSAE-body text-normal align-items-center w-100 h-4" onClick={this.handleChangeTipo}>
