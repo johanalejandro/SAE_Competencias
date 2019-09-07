@@ -22,7 +22,6 @@ export default class Modal extends Component {
             const id = this.props.modalInfo.data[11]
             await axios.get("api/verSolicitudEvaluacion/"+id)
           .then(({data})=>{
-            console.log(data);
             this.setState({
               detalleEvaluacion: data.detalleEvaluacion===null?"":data.detalleEvaluacion,
               resultadoEvaluacion: data.resultadoEvaluacion,
@@ -42,7 +41,6 @@ export default class Modal extends Component {
             const id = this.props.modalInfo.data[11]
             await axios.get("api/verSolicitudEvaluacion/"+id)
           .then(({data})=>{
-            console.log(data);
             this.setState({
               detalleEvaluacion: data.detalleEvaluacion===null?"":data.detalleEvaluacion,
               resultadoEvaluacion: data.resultadoEvaluacion,
@@ -65,7 +63,7 @@ export default class Modal extends Component {
       getAnexo(e,id_Curso,sector){
         e.preventDefault();
         axios({
-        url: '/api/getAnexo/'+id_Curso,
+        url: 'api/getAnexo/'+id_Curso,
         method: 'GET',
         responseType: 'blob', // important
         }).then((response) => {
@@ -84,7 +82,7 @@ export default class Modal extends Component {
         e.preventDefault();
 
         axios({
-          url: '/api/getCV/'+id_Educacion,
+          url: 'api/getCV/'+id_Educacion,
           method: 'GET',
           responseType: 'blob', // important
           }).then((response) => {
@@ -128,7 +126,6 @@ export default class Modal extends Component {
       }
 
       handleChangeFile = async (e) => {
-        console.log(e.target);
         const name = e.target.name;
         const { files } = e.target;
         const file = files[0];
@@ -162,7 +159,6 @@ export default class Modal extends Component {
       }
 
       render () {
-        console.log(this.state.estadoAlcancesArray);
         const data = this.props.modalInfo.data!== undefined?this.props.modalInfo.data:[];
         const type = this.props.modalInfo.type;
         const finalizar = this.state.resultadoEvaluacion!=="selec" && this.state.resultadoEvaluacion!=="Pendiente";

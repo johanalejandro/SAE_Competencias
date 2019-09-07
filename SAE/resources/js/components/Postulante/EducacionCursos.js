@@ -46,7 +46,6 @@ export default class EducacionCursos extends Component {
             sort: false,
             
             customBodyRender: (value)=>{
-                console.log(value)
                 return <span>{String(value)}</span>
              },
            }

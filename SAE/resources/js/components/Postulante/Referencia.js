@@ -12,16 +12,14 @@ export default class Referencia extends Component {
 
     /*componentDidMount(){
 
-        fetch('/api/ambito')
+        fetch('api/ambito')
         .then(response => {
             return response.json();
         })
         .then(ambitos => {
             //Fetched product is stored in the state
             this.setState({ ambitos });
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
     }
 
     handleCheckBoxChange = ({target}) => {
@@ -48,7 +46,6 @@ export default class Referencia extends Component {
     }*/
 
     render() {
-        //console.log("ambitos escogidos: ",this.state.ambitosArray);
         return (
             <React.Fragment>
             <div className="containersae d-flex flex-row justify-content-center align-items-center">

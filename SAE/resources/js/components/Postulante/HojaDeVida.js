@@ -143,7 +143,6 @@ export default class HojaDeVida extends Component {
         const startDateTmp = new Date(date);
         const endDateTmp = new Date(fechaFin);
         if (this.state.tipo==="evaluador"){
-            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
             if(this.dateDiffInDays(endDateTmp,startDateTmp)<730) {
                 await this.setState({fechaValidationEv: true,});
             }else{
@@ -155,7 +154,6 @@ export default class HojaDeVida extends Component {
             
         }
         if (this.state.tipo==="experto"){
-            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
             if(this.dateDiffInDays(endDateTmp,startDateTmp)<730){
                  await this.setState({fechaValidationExp: true,});
                 }
@@ -191,18 +189,14 @@ export default class HojaDeVida extends Component {
         const startDateTmp = new Date(fechaInicio);
         const endDateTmp = new Date(date);
         if (this.state.tipo==="evaluador"){
-            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
-            if(this.dateDiffInDays(endDateTmp,startDateTmp)<1461) {
+            if(this.dateDiffInDays(endDateTmp,startDateTmp)<730) {
                 this.setState({fechaValidationEv: true,}); 
-                return;
             }
             
         }
         if (this.state.tipo==="experto"){
-            console.log(this.dateDiffInDays(endDateTmp,startDateTmp));
             if(this.dateDiffInDays(endDateTmp,startDateTmp)<730){
                  this.setState({fechaValidationExp: true,});
-                  return
                 }
         }
         if (endDateTmp >= startDateTmp) {
@@ -268,7 +262,6 @@ export default class HojaDeVida extends Component {
                     this.state.experiencias.length <1
                 );
             }else{
-                console.log("VALIDAR",this.state.experiencias.length, this.state.alcancesArray.length)
                 validarExperiencia = (
                     this.state.experiencias.length <1
                 );
@@ -375,7 +368,6 @@ export default class HojaDeVida extends Component {
     }
 
     updatePrerrequisitos = (requerimientos) => {
-        console.log("requerimientos que llegan" ,requerimientos);
         this.setState({
             prerrequisitosArray: clone(requerimientos),
             reqs: clone(requerimientos),
@@ -538,7 +530,6 @@ export default class HojaDeVida extends Component {
 
     handleCursos = async () => {
         let cursos =this.state.cursos;
-        console.log(cursos)
         for (let index = 0; index < cursos.length; index++) {
             const element = cursos[index];
             let curso = {
@@ -564,14 +555,12 @@ export default class HojaDeVida extends Component {
     }
 
     clean = async (alcanceActual) => {
-        console.log(alcanceActual);
         const { alcances } = this.state;
         let filterData = [];
         filterData = alcances;
         const alcanceAEliminar = await filterData.find((alcance)=>{
             return alcance.id_alcance === alcanceActual;
-        })
-        console.log("eliminar",alcanceAEliminar)
+        });
         await pull(filterData,alcanceAEliminar);
         await this.setState({ alcances: filterData });
         await this.setState({
@@ -588,14 +577,12 @@ export default class HojaDeVida extends Component {
     }
 
     cleanCurso = async (reqActual) => {
-        console.log(reqActual);
         const { reqs } = this.state;
         let filter = [];
         filter = reqs;
         const reqAEliminar = await filter.find((req)=>{
             return req.id_sector_requerimiento === reqActual;
-        })
-        console.log("eliminar",reqAEliminar)
+        });
         await pull(filter,reqAEliminar);
         await this.setState({ reqs: filter });
         await this.setState({
@@ -607,14 +594,12 @@ export default class HojaDeVida extends Component {
     }
 
     cleanEv = async (sectorActual) => {
-        console.log(sectorActual);
         const { sectores } = this.state;
         let filterData = [];
         filterData = sectores;
         const sectorAEliminar = await filterData.find((sector)=>{
             return sector.id_sector === sectorActual;
-        })
-        console.log("eliminar",sectorAEliminar)
+        });
         await pull(filterData,sectorAEliminar);
         await this.setState({ sectores: filterData });
         await this.setState({
@@ -687,7 +672,6 @@ export default class HojaDeVida extends Component {
                 },
             })
             .then(async(response) => {
-                console.log("agregado");
                 await this.setState({
                     enviado: true,
                 })
@@ -714,7 +698,6 @@ export default class HojaDeVida extends Component {
                 },
             })
             .then(async(response) => {
-                console.log("agregado");
                 await this.setState({
                     enviado: true,
                 })
@@ -740,7 +723,6 @@ export default class HojaDeVida extends Component {
                 },
             })
             .then((response) => {
-                console.log("agregado");
                 
             })
             .catch(console.error);

@@ -9,7 +9,7 @@ export default class SeleccionarSector extends Component {
 
     componentDidMount(){
 
-        fetch('/api/sector')
+        fetch('api/sector')
         .then(response => {
             return response.json();
         })
@@ -29,18 +29,14 @@ export default class SeleccionarSector extends Component {
                     }
                 }
             }
-            console.log("sectores filtrados: ",sectors);
             this.props.setSectores(sectors);
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
 
     }
 
     
 
     render() {
-        console.log("sectores escogidos: ",this.props.sectoresArray);
         return(
         <React.Fragment>
                 <div className="d-flex flex-column align-items-center w-100">

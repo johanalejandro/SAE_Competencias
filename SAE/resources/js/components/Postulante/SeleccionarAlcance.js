@@ -14,7 +14,7 @@ export default class SeleccionarSector extends Component {
 
     componentDidMount(){
     
-        fetch('/api/alcance')
+        fetch('api/alcance')
         .then(response => {
             return response.json();
         })
@@ -33,15 +33,11 @@ export default class SeleccionarSector extends Component {
                     }
                 }
             }
-            console.log("alcances filtrados: ",alcances);
             this.props.setAlcances(alcances);
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
     }
 
     render() {
-        console.log("alcances escogidos: ",this.props.alcancesArray);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center w-100">

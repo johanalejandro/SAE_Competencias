@@ -27,16 +27,14 @@ export default class Prerrequisitos extends Component {
         for (let index = 0; index < ids.length; index++) {
             const sector = ids[index];
             
-            await fetch('/api/requerimientosSector/'+sector)
+            await fetch('api/requerimientosSector/'+sector)
             .then(response => {
                 return response.json();
             })
             .then(requerimientos => {
                 //Fetched product is stored in the state
                 reqs=clone(requerimientos);
-            }).catch(error => {
-                console.log("===ERROR: ",error);
-            });
+            }).catch(console.error);
         }
         await this.setState({
             requerimientos: reqs,
@@ -54,8 +52,6 @@ export default class Prerrequisitos extends Component {
     }
 
     validar=()=>{
-        console.log("requerimientos validador",this.state.requerimientos);
-        console.log("requerimientosArray validador",this.state.requerimientosArray);
         if(isEqual(this.state.requerimientos.length , this.state.requerimientosArray.length)){
             this.setState({
                 validador: true
@@ -123,7 +119,6 @@ export default class Prerrequisitos extends Component {
     }
 
     render() {
-        console.log("requerimientos seleccionados: ",this.state.requerimientosArray);
         return (
             <React.Fragment>
             {this.state.show?(
@@ -303,7 +298,7 @@ export default class Prerrequisitos extends Component {
                     </div>
                     <div className="modal-footer">
                         {this.state.validador?(
-                            <a className="w-20" href="/postulacion-formulario?tipo=experto"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
+                            <a className="w-20" href="/SAE/postulacion-formulario?tipo=experto"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
                         ):(
                             <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={this.props.handleHojaDeVida}>Ok</button>
                         )}
@@ -329,7 +324,7 @@ export default class Prerrequisitos extends Component {
                     </div>
                     <div className="modal-footer">
                         {this.state.validador?(
-                            <a className="w-20" href="/postulacion-formulario?tipo=evaluador"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
+                            <a className="w-20" href="/SAE/postulacion-formulario?tipo=evaluador"><button type="button" className="btn btn-primary-sae w-100">Ok</button></a>
                         ):(
                             <button type="button" className="btn btn-primary-sae w-20" data-dismiss="modal" onClick={
                                 ()=>{

@@ -53,7 +53,6 @@ export default class Visualizador extends Component {
         .catch(console.error);
         await axios.get("api/mostrarEvaluadoresHabilitado")
         .then(({data} ) => {
-            console.log(data);
             data.map(async(postulante,i)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
@@ -117,37 +116,31 @@ export default class Visualizador extends Component {
 
     getSector  =async (id) => {
         let sector = "";
-        await axios.get('/api/sector/')
+        await axios.get('api/sector/')
         .then(({data} )=> {
             const sectoresResponse = clone(data);
                 const key = findKey(sectoresResponse,(sector)=>{
                     return sector.id_sector===id;
                 })
                 sector = sectoresResponse[key].tipoSector;
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
         return sector;
     }
     
         getAlcance = async (id) => {
             let alcance = ""
-            await axios.get('/api/alcance')
+            await axios.get('api/alcance')
             .then(({data}) => {
                 const alcancesResponse = clone(data);
                 const key = findKey(alcancesResponse,(alcance)=>{
                     return alcance.id_alcance===id;
                 })
                 alcance = alcancesResponse[key].nombreAlcance;
-            }).catch(error => {
-                console.log("===ERROR: ",error);
-            });
+            }).catch(console.error);
             return alcance;
         }
    
     render() {
-        console.log("POSTULANTE RESPONSE",this.state.habilitadosEvaluador);
-        console.log("POSTULANTE RESPONSE",this.state.habilitadosExperto);
         const columns = [
             {
                 name: "id_postulante",

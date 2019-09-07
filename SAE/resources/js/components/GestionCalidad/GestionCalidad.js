@@ -149,7 +149,6 @@ export default class GestionCalidad extends Component {
         })
         await axios.get("api/mostrarEvaluadoresHabilitado")
         .then(({data} ) => {
-            console.log(data);
             data.map(async(postulante,i)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
@@ -226,31 +225,27 @@ selectModalAsignado = () => {
 
 getSector  =async (id) => {
     let sector = "";
-    await axios.get('/api/sector/')
+    await axios.get('api/sector/')
     .then(({data} )=> {
         const sectoresResponse = clone(data);
             const key = findKey(sectoresResponse,(sector)=>{
                 return sector.id_sector===id;
             })
             sector = sectoresResponse[key].tipoSector;
-    }).catch(error => {
-        console.log("===ERROR: ",error);
-    });
+    }).catch(console.error);
     return sector;
 }
 
     getAlcance = async (id) => {
         let alcance = ""
-        await axios.get('/api/alcance')
+        await axios.get('api/alcance')
         .then(({data}) => {
             const alcancesResponse = clone(data);
             const key = findKey(alcancesResponse,(alcance)=>{
                 return alcance.id_alcance===id;
             })
             alcance = alcancesResponse[key].nombreAlcance;
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
         return alcance;
     }
 
@@ -274,7 +269,6 @@ getSector  =async (id) => {
                     await this.selectModalAsignado();
                 })
                 .catch(console.error);
-                console.log(response);
             })
             .catch(console.error);
     }
@@ -288,7 +282,6 @@ getSector  =async (id) => {
             const { dataasignarExperto } = this.state;
             let filterData = [];
             filterData = dataasignarExperto;
-            console.log("eliminar",data)
             await pull(filterData,data);
             await this.setState({ dataasignarExperto: filterData });
         }else{
@@ -301,7 +294,6 @@ getSector  =async (id) => {
             const porasginarAEliminar = await filterData.find((postulante)=>{
                 return postulante.id_postulante === parseInt(data[0]);
             })
-            console.log("eliminar",porasginarAEliminar)
             await pull(filterData,porasginarAEliminar);
             await this.setState({ dataasignarEvaluador: filterData });
         }
@@ -330,10 +322,8 @@ getSector  =async (id) => {
                 const  habilitado = await remove(dataporhabilitarExperto,(postulante)=>{
                     return postulante.id_postulante === rowData[0];
                 });
-                console.log(habilitado);
                 const {habilitadosExperto} = await this.state;
-                await habilitadosExperto.push(habilitado)
-                console.log(habilitadosExperto);
+                await habilitadosExperto.push(habilitado);
                 await this.setState({ dataporhabilitarExperto,habilitadosExperto });
             }
             await this.selectModalHabilitado();
@@ -784,7 +774,6 @@ getSector  =async (id) => {
               }
            };
 
-           console.log(this.state.habilitadosEvaluador);
         return (
 
             <React.Fragment>

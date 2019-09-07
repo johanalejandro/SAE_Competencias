@@ -7,20 +7,17 @@ export default class SeleccionarAmbito extends Component {
 
     componentDidMount(){
 
-        fetch('/api/ambito')
+        fetch('api/ambito')
         .then(response => {
             return response.json();
         })
         .then(ambitos => {
             //Fetched product is stored in the state
             this.props.setAmbitos(ambitos);
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
     }
 
     render() {
-        console.log("ambitos escogidos: ",this.props.ambitosArray);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center w-100">

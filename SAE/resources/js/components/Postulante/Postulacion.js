@@ -20,7 +20,7 @@ export default class Postulacion extends Component {
                                 <div className="card-body">
                                     <Img imageType="evaluador"/>
                                 </div>
-                                <a href="/postulacion-formulario?tipo=evaluador"><button className="btn-primary-sae w-75 mb-3">Evaluador</button></a>
+                                <a href="/SAE/postulacion-formulario?tipo=evaluador"><button className="btn-primary-sae w-75 mb-3">Evaluador</button></a>
                                 
                             </div>
                         </div>
@@ -36,7 +36,7 @@ export default class Postulacion extends Component {
                                 <div className="card-body">
                                     <Img imageType="experto"/>
                                 </div>
-                                <a href="/postulacion-formulario?tipo=experto"><button className="btn-primary-sae w-75 mb-3">Experto</button></a>
+                                <a href="/SAE/postulacion-formulario?tipo=experto"><button className="btn-primary-sae w-75 mb-3">Experto</button></a>
                             </div> 
                         </div>
                     </div>

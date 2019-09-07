@@ -32,7 +32,7 @@ export default class ModalAsignar extends Component {
       componentWillMount=async()=>{
         let usuarios = [];
         if(this.props.modalInfo.data[3]==="Experto"){
-            await axios.get('/api/mostrarDetallesExperto/'+this.props.modalInfo.data[0])
+            await axios.get('api/mostrarDetallesExperto/'+this.props.modalInfo.data[0])
             .then(async({data}) => {
                 const experiencias = data.map((postulante)=>{
                     let experiencia = {};
@@ -48,23 +48,18 @@ export default class ModalAsignar extends Component {
                 }
                 for (let index = 0; index < experienciasUniq.length; index++) {
                     const id_alcance = experienciasUniq[index].id_alcance;
-                    await axios.get('/api/obtenerUsuariosPorAlcance/'+id_alcance)
+                    await axios.get('api/obtenerUsuariosPorAlcance/'+id_alcance)
                     .then(({data}) => {
                         usuarios.push(data[0]);
-                        console.log("RECIBO",data)
-                    }).catch(error => {
-                        console.log("===ERROR: ",error);
-                    });
+                    }).catch(console.error);
                 }
                 this.setState({
                     respuesta: {exp: experienciasUniq,usuarios: uniqBy (usuarios,'id_usuario')}
                 })
-            }).catch(error => {
-                console.log("===ERROR: ",error);
-            });
+            }).catch(console.error);
         }
         if(this.props.modalInfo.data[3]==="Evaluador"){
-            await axios.get('/api/mostrarDetallesEvaluador/'+this.props.modalInfo.data[0])
+            await axios.get('api/mostrarDetallesEvaluador/'+this.props.modalInfo.data[0])
         .then(async({data}) => {
             const experiencias = data.map((postulante)=>{
                 let experiencia = {};
@@ -80,21 +75,17 @@ export default class ModalAsignar extends Component {
             }
             for (let index = 0; index < experienciasUniq.length; index++) {
                 const id_sector = experienciasUniq[index].id_sector;
-                await axios.get('/api/obtenerUsuariosPorSector/'+ id_sector)
+                await axios.get('api/obtenerUsuariosPorSector/'+ id_sector)
                     .then(({data}) => {
 
                         usuarios.push(data[0]);
-                    }).catch(error => {
-                        console.log("===ERROR: ",error);
-                    });
+                    }).catch(console.error);
             }
             
             this.setState({
                 respuesta: {exp: experienciasUniq,usuarios: uniqBy(usuarios,'id_usuario')}
             })
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
         }
         let alcances =[];
 
@@ -105,7 +96,6 @@ export default class ModalAsignar extends Component {
             const alcance = await this.props.getAlcance(id_alcance);
             alcances.push({id_alcance: id_alcance,nombreAlcance: alcance});
           }
-          console.log(alcances);
           await this.setState({
             alcances: clone(alcances),
             alcancesValidar: clone(alcances),
@@ -121,7 +111,6 @@ export default class ModalAsignar extends Component {
             const sector = await this.props.getSector(id_sector);
             sectores.push({id_sector: id_sector,tipoSector: sector});
           }
-          console.log(sectores);
           await this.setState({
             sectores: clone(sectores),
             sectoresValidar: clone(sectores),
@@ -137,7 +126,6 @@ export default class ModalAsignar extends Component {
       }
 
       handleChange = (evt) =>{
-        console.log(evt.target)
         const name= evt.target.name;
         const value= evt.target.value;
         let index = evt.nativeEvent.target.selectedIndex;
@@ -152,7 +140,6 @@ export default class ModalAsignar extends Component {
       const val= data[3]==="Evaluador";
       let i =0;
       
-    console.log(this.state.respuesta.usuarios);
       return (
           <div 
           className="modal-sae"
@@ -196,7 +183,6 @@ export default class ModalAsignar extends Component {
                                             {!isEmpty(compact(this.state.respuesta.usuarios))?(
                                               //console.log(compact(this.state.respuesta.usuarios))
                                               compact(this.state.respuesta.usuarios).map((usuario)=>{
-                                                console.log(usuario)
                                                   return <option key={usuario.id_usuario} value={usuario.id_usuario}>{usuario.nombre+" "+usuario.apellido}</option>
                                             })):null}
                                           

@@ -9,7 +9,6 @@ import Label from '../common/Label';
 export default class EducacionFormal extends Component {
 
     render() {
-        console.log("archivo anexo: ",this.props.archivoAnexo);
         return (
             <React.Fragment>
                 <div className="d-flex flex-column align-items-center justify-content-between w-100">

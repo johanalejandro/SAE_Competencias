@@ -9,11 +9,11 @@ export default class Img extends Component {
 
             switch(imageType) {
                 case 'evaluador':
-                  return <img className={className} src={require('./img/evaluador.jpg')} height="200px" width="200px"></img>;
+                  return <img className={className} src={'img/evaluador.jpg'} height="200px" width="200px"></img>;
                 case 'experto':
-                  return <img className={className} src={require('./img/experto.jpg')} height="200px" width="200px"></img> ;
+                  return <img className={className} src={'img/experto.jpg'} height="200px" width="200px"></img> ;
                 case 'header':
-                  return <img className={className} src={require('./img/sae.png')} height="100px" width="200px"></img>;
+                  return <img className={className} src={'img/sae.png'} height="100px" width="200px"></img>;
                 default:
                   return null;
             }

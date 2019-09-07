@@ -127,7 +127,6 @@ export default class FormularioPostulacion extends Component {
         payloadOpciones["ambitosSeleccionados"] = this.state.ambitosArray;
         payloadOpciones["sectoresSeleccionados"]= this.state.sectoresArray;
         payloadOpciones["alcancesSeleccionados"]= this.state.alcancesArray;
-        console.log("Opciones de Postulacion: ",payloadOpciones);
     }
 
     setAmbitos = (ambitos) =>{

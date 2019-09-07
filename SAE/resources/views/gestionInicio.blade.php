@@ -96,6 +96,7 @@
             <div class="bg-light h-100">
 
             <div class="content h-100">
+            {{ csrf_field() }}
 
                 <div id="gestion-calidad" class="h-100"></div>
 

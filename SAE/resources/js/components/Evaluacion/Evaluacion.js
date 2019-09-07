@@ -50,9 +50,8 @@ export default class Evaluacion extends Component {
         });
 
         let expertoPorEvaluar = {};
-        await axios.get("/verSolicitudPorUsuarioExperto/")
+        await axios.get("verSolicitudPorUsuarioExperto/")
         .then(async({data} ) => {
-            console.log(data);
             const postulantes = await data.map((postulante)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
@@ -79,12 +78,13 @@ export default class Evaluacion extends Component {
                 experiencia['cargoEjercido'] = postulante.cargoEjercido;
                 experiencia['descripcion'] = postulante.descripcion;
                 experiencia['id_alcance'] = postulante.id_alcance;
+                experiencia['id_experiencia'] = postulante.id_experiencia;
                 experiencia['estado'] = postulante.estado;
                 experiencia['fecha_inicio'] = postulante.fecha_inicio;
                 experiencia['fecha_fin'] = postulante.fecha_fin;
                 return experiencia;
             })
-            const experiencies = uniqBy(experiencias,'id_alcance')
+            const experiencies = uniqBy(experiencias,'id_experiencia')
             for (let i = 0; i < postulantesUnico.length; i++) {
                 const postul = postulantesUnico[i];
                 expertoPorEvaluar['id_postulante'] = postul.id_postulante;
@@ -132,9 +132,8 @@ export default class Evaluacion extends Component {
         .catch(console.error);
 
         let evaluadorPorEvaluar = {};
-        await axios.get("/verSolicitudPorUsuarioEvaluador/")
+        await axios.get("verSolicitudPorUsuarioEvaluador/")
         .then(async({data} ) => {
-            console.log(data);
             const postulantes = await data.map((postulante)=>{
                 let post ={};
                 post['id_postulante'] = postulante.id_postulante;
@@ -161,12 +160,13 @@ export default class Evaluacion extends Component {
                 experiencia['cargoEjercido'] = postulante.cargoEjercido;
                 experiencia['descripcion'] = postulante.descripcion;
                 experiencia['id_sector'] = postulante.id_sector;
+                experiencia['id_experiencia'] = postulante.id_experiencia;
                 experiencia['estado'] = postulante.estado;
                 experiencia['fecha_inicio'] = postulante.fecha_inicio;
                 experiencia['fecha_fin'] = postulante.fecha_fin;
                 return experiencia;
             });
-            const experiencies = uniqBy(experiencias,'id_sector');
+            const experiencies = uniqBy(experiencias,'id_experiencia');
             const cursos = await data.map((postulante)=>{
                 let curso = {};
                 curso['id_postulante'] = postulante.id_postulante;
@@ -175,7 +175,7 @@ export default class Evaluacion extends Component {
                 curso['id_curso_evaluador'] = postulante.id_curso_evaluador;
                 curso['id_sector_requerimiento'] = postulante.id_sector_requerimiento;
                 return curso;
-            });
+            }); 
             const courses = uniqBy(cursos,'id_sector_requerimiento');
             for (let i = 0; i < postulantesUnico.length; i++) {
                 const postul = postulantesUnico[i];
@@ -197,6 +197,7 @@ export default class Evaluacion extends Component {
                         }
                         evaluadorPorEvaluar['experiencias']=[];
                         evaluadorPorEvaluar['cursos']=[];
+                        
                 for (let index = 0; index < experiencies.length; index++) {
                     const experiencia = experiencies[index];
                     let exp = {};
@@ -242,126 +243,117 @@ export default class Evaluacion extends Component {
 
 getSector  =async (id) => {
     let sector = "";
-    await axios.get('/api/sector/')
+    await axios.get('api/sector/')
     .then(({data} )=> {
         const sectoresResponse = clone(data);
             const key = findKey(sectoresResponse,(sector)=>{
                 return sector.id_sector===id;
             })
             sector = sectoresResponse[key].tipoSector;
-    }).catch(error => {
-        console.log("===ERROR: ",error);
-    });
+    }).catch(console.error);
     return sector;
 }
 
 getRequerimiento =async (id) => {
     let requerimiento = "";
-    await axios.get('/api/sector/'+id)
+    await axios.get('api/sector/'+id)
     .then(({data} )=> {
         requerimiento = data.requerimiento;
-    }).catch(error => {
-        console.log("===ERROR: ",error);
-    });
+    }).catch(console.error);
     return requerimiento;
 }
 
+guardarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
+    let formData =  new FormData();
+    formData.append("id_solicitud",id_solicitud);
+    formData.append("detalleEvaluacion",detalleEvaluacion);
+    formData.append("tipoEvaluacion",tipoEvaluacion);
+    formData.append("resultadoEvaluacion",resultadoEvaluacion);
+    formData.append("archivoAnexo",archivoAnexo);
+    formData.append("estados",JSON.stringify(estados));
+    await axios.post("api/guardarEvaluacionExperto",formData,{
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
+    .then(async(response ) => {
+        await this.selectModalGuardado();
+    })
+    .catch(console.error);
+}
+
+guardarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
+    let formData =  new FormData();
+    formData.append("id_solicitud",id_solicitud);
+    formData.append("detalleEvaluacion",detalleEvaluacion);
+    formData.append("tipoEvaluacion",tipoEvaluacion);
+    formData.append("resultadoEvaluacion",resultadoEvaluacion);
+    formData.append("archivoAnexo",archivoAnexo);
+    formData.append("estados",JSON.stringify(estados));
+    await axios.post("api/guardarEvaluacionEvaluador",formData,{
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
+    .then(async(response ) => {
+        await this.selectModalGuardado();
+    })
+    .catch(console.error);
+}
+
+finalizarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
+     let formData =  new FormData();
+    formData.append("id_solicitud",id_solicitud);
+    formData.append("detalleEvaluacion",detalleEvaluacion);
+    formData.append("tipoEvaluacion",tipoEvaluacion);
+    formData.append("resultadoEvaluacion",resultadoEvaluacion);
+    formData.append("archivoAnexo",archivoAnexo);
+    formData.append("estados",JSON.stringify(estados));
+    await axios.post("api/finalizarEvaluacionExperto",formData,{
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
+    .then(async(response ) => {
+        await this.selectModalFinalizado();
+    })
+    .catch(console.error);
+  
+}
+
+finalizarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
+    let formData =  new FormData();
+   formData.append("id_solicitud",id_solicitud);
+   formData.append("detalleEvaluacion",detalleEvaluacion);
+   formData.append("tipoEvaluacion",tipoEvaluacion);
+   formData.append("resultadoEvaluacion",resultadoEvaluacion);
+   formData.append("archivoAnexo",archivoAnexo);
+   formData.append("estados",JSON.stringify(estados));
+   await axios.post("api/finalizarEvaluacionEvaluador",formData,{
+       headers: {
+           "Content-Type": "multipart/form-data",
+       },
+   })
+   .then(async(response ) => {
+       await this.selectModalFinalizado();
+   })
+   .catch(console.error);
+ 
+}
+
+
     getAlcance = async (id) => {
         let alcance = ""
-        await axios.get('/api/alcance')
+        await axios.get('api/alcance')
         .then(({data}) => {
             const alcancesResponse = clone(data);
             const key = findKey(alcancesResponse,(alcance)=>{
                 return alcance.id_alcance===id;
             })
             alcance = alcancesResponse[key].nombreAlcance;
-        }).catch(error => {
-            console.log("===ERROR: ",error);
-        });
+        }).catch(console.error);
         return alcance;
     }
-
-    guardarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
-        let formData =  new FormData();
-        formData.append("id_solicitud",id_solicitud);
-        formData.append("detalleEvaluacion",detalleEvaluacion);
-        formData.append("tipoEvaluacion",tipoEvaluacion);
-        formData.append("resultadoEvaluacion",resultadoEvaluacion);
-        formData.append("archivoAnexo",archivoAnexo);
-        formData.append("estados",JSON.stringify(estados));
-        await axios.post("api/guardarEvaluacionExperto/",formData,{
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then(async(response ) => {
-            await console.log(response);
-            await this.selectModalGuardado();
-        })
-        .catch(console.error);
-    }
-
-    guardarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
-        let formData =  new FormData();
-        formData.append("id_solicitud",id_solicitud);
-        formData.append("detalleEvaluacion",detalleEvaluacion);
-        formData.append("tipoEvaluacion",tipoEvaluacion);
-        formData.append("resultadoEvaluacion",resultadoEvaluacion);
-        formData.append("archivoAnexo",archivoAnexo);
-        formData.append("estados",JSON.stringify(estados));
-        await axios.post("api/guardarEvaluacionEvaluador/",formData,{
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then(async(response ) => {
-            await console.log(response);
-            await this.selectModalGuardado();
-        })
-        .catch(console.error);
-    }
-
-    finalizarEvaluacionExperto =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
-         let formData =  new FormData();
-        formData.append("id_solicitud",id_solicitud);
-        formData.append("detalleEvaluacion",detalleEvaluacion);
-        formData.append("tipoEvaluacion",tipoEvaluacion);
-        formData.append("resultadoEvaluacion",resultadoEvaluacion);
-        formData.append("archivoAnexo",archivoAnexo);
-        formData.append("estados",JSON.stringify(estados));
-        await axios.post("api/finalizarEvaluacionExperto/",formData,{
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then(async(response ) => {
-            await console.log(response);
-            await this.selectModalFinalizado();
-        })
-        .catch(console.error);
-      
-    }
-
-    finalizarEvaluacionEvaluador =async(id_solicitud,detalleEvaluacion,tipoEvaluacion,resultadoEvaluacion,archivoAnexo,estados) => {
-        let formData =  new FormData();
-       formData.append("id_solicitud",id_solicitud);
-       formData.append("detalleEvaluacion",detalleEvaluacion);
-       formData.append("tipoEvaluacion",tipoEvaluacion);
-       formData.append("resultadoEvaluacion",resultadoEvaluacion);
-       formData.append("archivoAnexo",archivoAnexo);
-       formData.append("estados",JSON.stringify(estados));
-       await axios.post("api/finalizarEvaluacionEvaluador/",formData,{
-           headers: {
-               "Content-Type": "multipart/form-data",
-           },
-       })
-       .then(async(response ) => {
-        await console.log(response);
-           await this.selectModalFinalizado();
-       })
-       .catch(console.error);
-     
-   }
 
     handleChangeTipo = ({target}) => {
         if(target.name){
