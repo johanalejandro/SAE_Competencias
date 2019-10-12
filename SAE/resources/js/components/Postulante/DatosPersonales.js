@@ -61,7 +61,7 @@ export default class DatosPersonales extends Component {
                                     <div className="d-flex flex-column w-30 mr-2">
                                         <Label name="Correo Electrónico"/>
                                         <input type="email" name="correo" className="h-50" defaultValue={this.props.correo} onChange={this.props.handleChange}></input>
-
+                                        {this.props.error && <span className="text-danger small">No es un correo válido</span>}
                                     </div>
                                     <div className="d-flex flex-column w-30 mr-2">
                                         <Label name="Teléfono"/>

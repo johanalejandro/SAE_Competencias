@@ -74,6 +74,7 @@ export default class HojaDeVida extends Component {
         disponibilidad: "selec",
         genero: 'selec',
         agregado: false,
+        error: false,
 
         //Educación Formal
         nombreInstitucion: "",
@@ -271,7 +272,8 @@ export default class HojaDeVida extends Component {
             validarCursos=(
                 this.state.cursos.length !== this.state.requerimientosArray.length
             );
-            if(validarDatos || validarEducacion || validarCursos || validarExperiencia){
+            if(validarDatos || validarEducacion || validarCursos || validarExperiencia || this.state.error){
+                this.state.error?this.setState({correo: ""}):null;
                 $('#camposVacíos').modal();
             }else{
                 $('#verificarDatos').modal();
@@ -374,14 +376,30 @@ export default class HojaDeVida extends Component {
             requerimientos: clone(requerimientos),
             requerimientosArray: clone(requerimientos),
         })
-    } 
+    }
+    
+    verifyMail = (mail) => {
+        return mail.match(/^([\w.%+-]+).{0,}@([\w-]+\.)+([\w]{2,})$/i);
+    };
+
 
     handleChange = ({target}) => {
         const value = target.value;
         const name = target.name;
         this.setState({
             [name] : value,
-        })
+        });
+        if(name==='correo'){
+            if(this.verifyMail(value)){
+                this.setState({
+                    error: false,
+                });
+            }else{
+                this.setState({
+                    error : true,
+                });
+            }
+        }
     }
 
     handleChangeAlcance = (evt) => {
@@ -837,6 +855,7 @@ export default class HojaDeVida extends Component {
                                         genero={this.state.genero}
                                         agregado={this.state.agregado}
                                         handleChangeDate={this.handleChangeDate}
+                                        error={this.state.error}
 
                                     />
                                 )}
